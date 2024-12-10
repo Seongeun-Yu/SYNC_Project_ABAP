@@ -1,0 +1,58 @@
+*&---------------------------------------------------------------------*
+*& Report ZC302RPFI0008
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+
+INCLUDE zc302rpfi0008top                        .    " Global Data
+INCLUDE zc302rpfi0008s01                        .    " Selection
+INCLUDE zc302rpfi0008c01                        .    " Class
+INCLUDE zc302rpfi0008o01                        .  " PBO-Modules
+INCLUDE zc302rpfi0008i01                        .  " PAI-Modules
+INCLUDE zc302rpfi0008f01                        .  " FORM-Routines
+
+*--------------------------------------------------------------------*
+* At Selection Screen
+*--------------------------------------------------------------------*
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR so_bpcde-low.
+  PERFORM on_f4_bpcode_low.
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR so_bpcde-high.
+  PERFORM on_f4_bpcode_high.
+
+*--------------------------------------------------------------------*
+* Selection Screen
+*--------------------------------------------------------------------*
+START-OF-SELECTION.
+  PERFORM get_base_data.
+  PERFORM set_sub_data.
+
+  CALL SCREEN 100.
+
+*GUI Texts
+*----------------------------------------------------------
+* TITLE100 --> [FI] 미승인 전표 조회 및 승인
+
+*Text elements
+*----------------------------------------------------------
+* E01 데이터를 불러오지 못했습니다.
+* E02 하나의 행만 선택하시기 바랍니다.
+* E03 행을 선택하시기 바랍니다.
+* E04 이미 승인된 전표입니다.
+* E05 전표 승인이 취소되었습니다.
+* E06 데이터 저장에 실패했습니다.
+* E07 top-of-page 이벤트 에러
+* I01 조회 조건
+* T01 전체
+* T02 미승인 전표
+* T03  건이 조회되었습니다.
+* T04   전표 승인
+* T05 전표 승인이 완료되었습니다.
+
+
+*Selection texts
+*----------------------------------------------------------
+* SO_BPCDE D       .
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

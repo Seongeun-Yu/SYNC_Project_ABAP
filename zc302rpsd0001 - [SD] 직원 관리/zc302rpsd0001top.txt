@@ -1,0 +1,78 @@
+*&---------------------------------------------------------------------*
+*& Include ZC302RP0001TOP                           - Report ZC302RP0001
+*&---------------------------------------------------------------------*
+REPORT zc302rp0001 MESSAGE-ID k5.
+
+**********************************************************************
+* TABLES
+**********************************************************************
+TABLES : zc302mt0003, sscrfields.
+
+**********************************************************************
+* Class instance
+**********************************************************************
+DATA : go_container TYPE REF TO cl_gui_docking_container,
+       go_alv_grid  TYPE REF TO cl_gui_alv_grid.
+
+**********************************************************************
+* Internal table and Work area
+**********************************************************************
+DATA : BEGIN OF gs_employee.
+         INCLUDE STRUCTURE zc302mt0003.
+DATA :   celltab TYPE lvc_t_styl,
+       END OF gs_employee,
+       gt_employee LIKE TABLE OF gs_employee.
+
+DATA : gt_fcat   TYPE lvc_t_fcat,
+       gs_fcat   TYPE lvc_s_fcat,
+       gs_layout TYPE lvc_s_layo.
+
+*-- ALV Toolbar
+DATA : gs_button TYPE stb_button.
+
+*-- For Delete
+DATA : gt_delt TYPE TABLE OF zc302mt0003,
+       gs_delt TYPE zc302mt0003.
+
+*-- Exclude ALV Toolbar
+DATA : gt_ui_functions TYPE ui_functions.
+
+*-- For Top-of-page
+DATA : go_top_container TYPE REF TO cl_gui_docking_container,
+       go_dyndoc_id     TYPE REF TO cl_dd_document,
+       go_html_cntrl    TYPE REF TO cl_gui_html_viewer.
+
+*-- For Excel
+DATA : BEGIN OF gs_excel,
+         emp_num TYPE zc302mt0003-emp_num,   " 사원번호
+         orgtx   TYPE zc302mt0003-orgtx,     " 부서명
+         ename   TYPE  zc302mt0003-ename,    " 사원이름
+         plstx   TYPE zc302mt0003-plstx,     " 직급
+         telnr   TYPE zc302mt0003-telnr,     " 전화번호
+         email   TYPE zc302mt0003-email,     " 이메일
+       END OF gs_excel,
+       gt_excel LIKE TABLE OF gs_excel.
+
+**********************************************************************
+* Common variable
+**********************************************************************
+DATA : gv_okcode TYPE sy-ucomm,
+       gv_mode   VALUE 'E',
+       gv_dbcnt  TYPE sy-dbcnt.
+
+*-- For Excel
+DATA : gv_file LIKE rlgrap-filename.
+
+DATA : w_pickedfolder  TYPE string,
+       w_initialfolder TYPE string,
+       w_pfolder       TYPE rlgrap-filename.
+
+*-- For 1000 screen application toolbar button
+DATA : w_functxt TYPE smp_dyntxt,
+       it_files  TYPE filetable.
+
+*-- 툴바를 다르게 적용
+DATA : gv_type TYPE c LENGTH 1.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

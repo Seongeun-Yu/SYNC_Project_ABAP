@@ -1,0 +1,36 @@
+*&---------------------------------------------------------------------*
+*& Include          ZC302RP0001S01
+*&---------------------------------------------------------------------*
+SELECTION-SCREEN BEGIN OF BLOCK pa1 WITH FRAME TITLE TEXT-i01.
+  SELECTION-SCREEN SKIP.
+
+*-- 라디오 버튼(직접 입력, Excel 업로드)
+  SELECTION-SCREEN BEGIN OF LINE.
+    PARAMETERS : p_rb3 RADIOBUTTON GROUP g1 USER-COMMAND evt DEFAULT 'X'.
+    SELECTION-SCREEN POSITION 4.
+    SELECTION-SCREEN COMMENT (10) TEXT-r03.
+
+    PARAMETERS : p_rb1 RADIOBUTTON GROUP g1.
+    SELECTION-SCREEN POSITION 18.
+    SELECTION-SCREEN COMMENT (10) TEXT-r01.
+
+    PARAMETERS : p_rb2 RADIOBUTTON GROUP g1.
+    SELECTION-SCREEN POSITION 33.
+    SELECTION-SCREEN COMMENT (10) TEXT-r02.
+
+  SELECTION-SCREEN END OF LINE.
+
+*  SELECTION-SCREEN ULINE.
+  SELECTION-SCREEN SKIP.
+
+  SELECT-OPTIONS : so_emp   FOR zc302mt0003-emp_num NO-EXTENSION NO INTERVALS MODIF ID emp,
+                   so_orgtx FOR zc302mt0003-orgtx   NO-EXTENSION NO INTERVALS MODIF ID org,
+                   so_ename FOR zc302mt0003-ename   NO-EXTENSION NO INTERVALS MODIF ID nam.
+
+*-- 파일 경로 입력 받을 PARAMETERS
+  PARAMETERS : p_path TYPE rlgrap-filename MODIF ID pat.
+
+SELECTION-SCREEN END OF BLOCK pa1.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

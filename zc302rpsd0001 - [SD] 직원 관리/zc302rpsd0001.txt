@@ -1,0 +1,81 @@
+*&---------------------------------------------------------------------*
+*& Report ZC302RP0001
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+
+INCLUDE zc302rpsd0001top.
+INCLUDE zc302rpsd0001s01.
+INCLUDE zc302rpsd0001c01.
+INCLUDE zc302rpsd0001o01.
+INCLUDE zc302rpsd0001i01.
+INCLUDE zc302rpsd0001f01.
+
+SELECTION-SCREEN FUNCTION KEY 1. " Selection Screen Button
+
+**********************************************************************
+* INITIALIZATION
+**********************************************************************
+INITIALIZATION.
+  PERFORM init_value.
+
+**********************************************************************
+* AT SELECTION-SCREEN
+**********************************************************************
+AT SELECTION-SCREEN.
+*-- 탬플릿 다운로드 기능
+  PERFORM button_control.
+
+AT SELECTION-SCREEN OUTPUT.
+  PERFORM modify_screen.
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR p_path.
+*-- 파일 경로 가져오기
+  PERFORM get_filepath.
+
+***********************************************************************
+* START-OF-SELECTION
+***********************************************************************
+START-OF-SELECTION.
+
+  PERFORM get_base_data.
+
+  CASE 'X'.
+    WHEN p_rb1.                       " 직접입력
+      PERFORM make_display_body.
+      CALL SCREEN 100.
+    WHEN p_rb2.                       " 엑셀업로드
+      PERFORM excel_upload.
+      PERFORM make_body.
+      CALL SCREEN 100.
+    WHEN p_rb3.                       " 조회
+      CALL SCREEN 100.
+  ENDCASE.
+
+*GUI Texts
+*----------------------------------------------------------
+* TITLE100 --> [SD] 직원 관리
+
+*Text elements
+*----------------------------------------------------------
+* I01 조회 조건
+* I02 조회<->편집
+* I03 행추가
+* I04 행삭제
+* R01 직접 입력
+* R02 Excel 업로드
+* R03 조회
+* S01 삭제할 행을 선택하세요
+* T01 Save data
+* T02 Save failure
+
+
+*Selection texts
+*----------------------------------------------------------
+* P_PATH         파일경로
+* SO_EMP         사원코드
+* SO_ENAME         이름
+* SO_ORGTX         부서명
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

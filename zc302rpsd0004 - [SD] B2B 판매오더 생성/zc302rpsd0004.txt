@@ -1,0 +1,113 @@
+*&---------------------------------------------------------------------*
+*& Report ZC302RPSD0004
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+
+INCLUDE ZC302RPSD0004TOP.  " Global Data
+INCLUDE ZC302RPSD0004S01.  " Selection Screen
+INCLUDE ZC302RPSD0004C01.  " Local Class
+INCLUDE ZC302RPSD0004O01.  " PBO-Modules
+INCLUDE ZC302RPSD0004I01.  " PAI-Modules
+INCLUDE ZC302RPSD0004F01.  " FORM-Routines
+
+SELECTION-SCREEN FUNCTION KEY 1. " Selection Screen Button
+
+**********************************************************************
+* INITIALIZATION
+**********************************************************************
+INITIALIZATION.
+  PERFORM INIT_VALUE.
+
+**********************************************************************
+* AT SELECTION-SCREEN
+**********************************************************************
+AT SELECTION-SCREEN.
+  PERFORM BUTTON_CONTROL. " Excel 템플릿 다운로드
+
+AT SELECTION-SCREEN OUTPUT.
+  PERFORM MODIFY_SCREEN.  " 라디오버튼 선택에 따른 Selection Screen 입력 필드 변경
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR P_CHNL.
+  PERFORM F4_CHANNEL.     " 유통채널에 Search Help(F4) 설치
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR P_PATH.
+  PERFORM GET_FILEPATH.   " 파일 경로 가져오기
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR P_BP.
+  PERFORM F4_BPCODE.      " BP코드 필드에 Search Help(F4) 설치
+
+**********************************************************************
+* START-OF-SELECTION
+**********************************************************************
+START-OF-SELECTION.
+  PERFORM CHECK_INPUT.    " Selection Screen Input Validation
+  PERFORM CHECK_DUPLICATE.   " 중복 체크 로직
+
+  PERFORM GET_MATERIAL_INFO. " 자재 정보 가져오기
+  PERFORM GET_BP_NAME.       " 입력한 BP코드에 대한 BP명 읽어오기
+
+  CASE 'X'.
+    WHEN P_RB1. " 직접 입력
+      PERFORM SET_HEADER.
+      CALL SCREEN 100.
+    WHEN P_RB2. " Excel 업로드
+      PERFORM EXCEL_UPLOAD.
+      PERFORM SET_HEADER. " 판매오더 헤더 데이터 생성
+      CALL SCREEN 200.
+  ENDCASE.
+
+*GUI Texts
+*----------------------------------------------------------
+* TITLE100 --> [SD] 판매오더 생성 - 직접 입력
+* TITLE101 --> [SD] 판매오더 조회
+* TITLE102 --> 반려 사유 상세
+* TITLE103 --> [SD] 판매오더 조회
+* TITLE200 --> [SD] 판매오더 생성 - Excel 업로드
+* TITLE300 --> [SD] 기존 판매오더 조회
+
+*Text elements
+*----------------------------------------------------------
+* E01 Upload 할 파일을 선택하세요.
+* E02 파일 변환에 실패했습니다.
+* E03 파일 열기에 실패했습니다.
+* E04 입력 조건을 만족하는 데이터가 존재하지 않습니다.
+* E05 이미 생성된 판매오더에 대해서는 수정할 수 없습니다.
+* E06 선택된 셀이 없습니다.
+* E07 판매오더 생성에 실패하였습니다.
+* E08 Top of page 이벤트 에러가 발생했습니다.
+* E09 이미 생성된 판매오더입니다.
+* E10 입력된 아이템이 없습니다.
+* E11 아이템을 추가해주세요.
+* E12 유효한 아이템 입력이 없습니다.
+* E13 자재코드를 입력해주세요.
+* E14 폴더 선택에 오류가 발생했습니다.
+* E15 동일한 조건으로 생성된 판매오더가 이미 존재합니다.
+* E16 모든 필수 필드(영업조직, 유통채널, BP코드, 주문일자)를 입력해주세요.
+* E17 주문일자에는 미래일자를 입력할 수 없습니다.
+* E18 BP코드 Search Help 데이터를 불러오지 못했습니다.
+* E19 판매오더 생성을 위한 자재 정보가 존재하지 않습니다.
+* E20 판매오더 아이템 정보를 불러오지 못했습니다.
+* E21 유통채널과 BP코드가 매칭되지 않습니다.
+* E22 자재명 정보를 불러오지 못했습니다.
+* I01 판매 오더 생성을 취소하였습니다.
+* R01 직접 입력
+* R02 Excel 업로드
+* S01 판매오더가 성공적으로 생성되었습니다.
+* T01 생성 조건
+* T02   추가
+
+
+*Selection texts
+*----------------------------------------------------------
+* P_BP D       .
+* P_CHNL D       .
+* P_INUM         아이템 개수
+* P_PATH         파일 경로
+* P_PDAT D       .
+* P_RB1         직접 입력
+* P_RB2         Excel 업로드
+* P_SORG D       .
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

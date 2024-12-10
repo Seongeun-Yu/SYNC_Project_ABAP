@@ -1,0 +1,70 @@
+*&---------------------------------------------------------------------*
+*& Report ZC302RPPP0002
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+
+INCLUDE zc302rppp0001top.
+
+INCLUDE zc302rppp0001s01.
+INCLUDE zc302rppp0001c01.
+INCLUDE zc302rppp0001o01.
+INCLUDE zc302rppp0001i01.
+INCLUDE zc302rppp0001f01.
+
+**********************************************************************
+*&& INITIALIZATION
+**********************************************************************
+INITIALIZATION.
+  PERFORM set_init_value.
+
+**********************************************************************
+*&& AT SELECTION-SCREEN
+**********************************************************************
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR so_qin-low.
+  PERFORM f4_qinum USING 'LOW'.
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR so_qin-high.
+  PERFORM f4_qinum USING 'HIGH'.
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR so_pon-low.
+  PERFORM f4_ponum USING 'LOW'.
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR so_pon-high.
+  PERFORM f4_ponum USING 'HIGH'.
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR so_mat-low.
+  PERFORM f4_matnr USING 'LOW'.
+
+**********************************************************************
+*&& START-OF-SELECTION
+**********************************************************************
+START-OF-SELECTION.
+  PERFORM get_base_data.
+  PERFORM make_display_body.
+
+  CALL SCREEN 100.
+
+*GUI Texts
+*----------------------------------------------------------
+* TITLE100 --> [PP] 생산실적 조회 및 관리
+
+*Text elements
+*----------------------------------------------------------
+* E01 데이터가 존재하지 않습니다.
+* E02 행을 선택하세요.
+* E03 저장된 데이터가 없습니다.
+* E04 저장을 취소하였습니다.
+* E05 저장을 실패하였습니다.
+* G01 저장을 성공하였습니다.
+
+
+*Selection texts
+*----------------------------------------------------------
+* SO_MAK D       .
+* SO_MAT D       .
+* SO_PON D       .
+* SO_QIN D       .
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

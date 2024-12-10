@@ -1,0 +1,67 @@
+*&---------------------------------------------------------------------*
+*& Report ZC302RPSD0005
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+
+INCLUDE zc302rpsd0005top                        .  " Global Data
+INCLUDE ZC302RPSD0005s01                        .  " Selection Screen
+INCLUDE ZC302RPSD0005c01                        .  " ALV Event
+INCLUDE zc302rpsd0005o01                        .  " PBO-Modules
+INCLUDE zc302rpsd0005i01                        .  " PAI-Modules
+INCLUDE zc302rpsd0005f01                        .  " FORM-Routines
+
+
+**********************************************************************
+* INITIALIZATION
+**********************************************************************
+INITIALIZATION.
+*-- SEARCH HELP에 담길 반품번호 담기
+  PERFORM init_value.
+
+***********************************************************
+* AT SELECTION-SCREEN
+***********************************************************
+*-- 반품번호 SEARCH HELP 세팅
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR so_rfnum-low.
+  PERFORM f4_rfnum.
+
+*-- 판매주문번호 SEARCH HELP 세팅
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR so_sonum-low.
+  PERFORM f4_sonum.
+
+**********************************************************************
+* START-OF-SELECTION
+**********************************************************************
+START-OF-SELECTION.
+*-- MAIN ALV에 띄울 ITAB 구성
+  PERFORM get_base_data.
+  PERFORM make_display_body.
+
+  CALL SCREEN 100.
+
+*GUI Texts
+*----------------------------------------------------------
+* TITLE100 --> [SD] 반품 관리
+* TITLE101 --> 반품 Item
+
+*Text elements
+*----------------------------------------------------------
+* E01 데이터 처리에 실패하였습니다.
+* E02 저장을 실패하였습니다.
+* E03 저장할 데이터가 없습니다.
+* E04 검수결과가 정상인 아이템이 없습니다.
+* E05 모든 검수결과가 끝난 경우에만 데이터 처리가 됩니다.
+* E06 반품번호를 입력하세요.
+* I01 조회 조건
+* I02 저장을 성공하였습니다.
+* I03 건이 조회되었습니다.
+
+
+*Selection texts
+*----------------------------------------------------------
+* SO_RFNUM D       .
+* SO_SONUM D       .
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

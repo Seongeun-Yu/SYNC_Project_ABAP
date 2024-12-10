@@ -1,0 +1,1021 @@
+*&---------------------------------------------------------------------*
+*& Include          ZC302RP0001F01
+*&---------------------------------------------------------------------*
+
+*&---------------------------------------------------------------------*
+*& Form get_base_data
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM get_base_data .
+
+  CLEAR gt_employee.
+  SELECT *
+    INTO CORRESPONDING FIELDS OF TABLE gt_employee
+    FROM zc302mt0003
+   WHERE emp_num IN so_emp
+     AND orgtx   IN so_orgtx
+     AND ename   IN so_ename.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form display_screen
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM display_screen .
+
+  DATA : ls_variant TYPE disvariant.
+
+  IF go_container IS NOT BOUND.
+
+    CLEAR : gs_fcat, gt_fcat.
+    PERFORM set_field_catalog USING : 'X' 'EMP_NUM' 'ZC302MT0003' 'C',
+                                      ' ' 'ORGTX'   'ZC302MT0003' ' ',
+                                      ' ' 'ENAME'   'ZC302MT0003' ' ',
+                                      ' ' 'PLSTX'   'ZC302MT0003' ' ',
+                                      ' ' 'TELNR'   'ZC302MT0003' ' ',
+                                      ' ' 'EMAIL'   'ZC302MT0003' ' '.
+
+    PERFORM set_layout.
+
+    PERFORM create_object.
+    PERFORM exclude_button TABLES gt_ui_functions.
+
+    ls_variant-report = sy-repid.
+
+
+    SET HANDLER : lcl_event_handler=>toolbar      FOR go_alv_grid,
+                  lcl_event_handler=>user_command FOR go_alv_grid,
+                  lcl_event_handler=>top_of_page  FOR go_alv_grid.
+
+    CALL METHOD go_dyndoc_id->initialize_document
+      EXPORTING
+        background_color = cl_dd_area=>col_textarea.
+
+    CALL METHOD go_alv_grid->list_processing_events
+      EXPORTING
+        i_event_name = 'TOP_OF_PAGE'
+        i_dyndoc_id  = go_dyndoc_id.
+
+    CALL METHOD go_alv_grid->set_table_for_first_display
+      EXPORTING
+        is_variant                    = ls_variant
+        i_save                        = 'A'
+        i_default                     = 'X'
+        is_layout                     = gs_layout
+        it_toolbar_excluding          = gt_ui_functions
+      CHANGING
+        it_outtab                     = gt_employee
+        it_fieldcatalog               = gt_fcat
+      EXCEPTIONS
+        invalid_parameter_combination = 1
+        program_error                 = 2
+        too_many_lines                = 3
+        OTHERS                        = 4.
+
+    PERFORM register_event.
+
+  ENDIF.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_field_catalog
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      --> P_
+*&      --> P_
+*&      --> P_
+*&      --> P_
+*&---------------------------------------------------------------------*
+FORM set_field_catalog  USING pv_key pv_field pv_table pv_just.
+
+  CLEAR gs_fcat.
+  gs_fcat-key        = pv_key.
+  gs_fcat-fieldname  = pv_field.
+  gs_fcat-ref_table  = pv_table.
+  gs_fcat-just       = pv_just.
+
+  CASE pv_field.
+    WHEN 'EMP_NUM'.
+      gs_fcat-coltext  = '사원번호'.
+    WHEN 'ORGTX'.
+      gs_fcat-coltext  = '부서명'.
+    WHEN 'PLSTX'.
+      gs_fcat-coltext  = '직급'.
+    WHEN 'TELNR'.
+      gs_fcat-coltext  = '전화번호'.
+  ENDCASE.
+
+  APPEND gs_fcat TO gt_fcat.
+  CLEAR gs_fcat.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_layout
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM set_layout .
+
+  gs_layout-zebra      = abap_true.
+  gs_layout-cwidth_opt = 'A'.
+  gs_layout-sel_mode   = 'D'.
+  gs_layout-stylefname = 'CELLTAB'.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form create_object
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM create_object .
+
+  CREATE OBJECT go_top_container
+    EXPORTING
+      repid     = sy-cprog
+      dynnr     = sy-dynnr
+      side      = go_top_container->dock_at_top
+      extension = 50.
+
+  CREATE OBJECT go_container
+    EXPORTING
+      side      = go_container->dock_at_left
+      extension = 5000.
+
+  CREATE OBJECT go_alv_grid
+    EXPORTING
+      i_parent = go_container.
+
+  CREATE OBJECT go_dyndoc_id
+    EXPORTING
+      style = 'ALV_GRID'.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form handle_toolbar
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      --> E_OBJECT
+*&      --> E_INTERACTIVE
+*&---------------------------------------------------------------------*
+FORM handle_toolbar  USING po_object TYPE REF TO cl_alv_event_toolbar_set
+                           pv_interactive.
+
+  CASE gv_type.
+    WHEN '1'.  " 직접입력일 경우에만
+      PERFORM set_toolbar USING :
+            ' '    ' '                        ' '                   3  ' ' po_object,
+            'TOGL' icon_toggle_display_change 'Display <-> Change' ' ' TEXT-i02 po_object,
+            ' '    ' '                        ' '                   3  ' ' po_object,
+            'IROW' icon_insert_row            'Add row'            ' ' TEXT-i03 po_object,
+            'DROW' icon_delete_row            'Delete row'         ' ' TEXT-i04 po_object.
+    WHEN OTHERS.
+  ENDCASE.
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_toolbar
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      --> P_
+*&      --> P_
+*&      --> P_
+*&      --> P_3
+*&      --> PO_OBJECT
+*&---------------------------------------------------------------------*
+FORM set_toolbar  USING pv_okcode pv_icon pv_info pv_type pv_text
+                        po_object TYPE REF TO cl_alv_event_toolbar_set.
+
+  CLEAR gs_button.
+  gs_button-function  = pv_okcode.
+  gs_button-icon      = pv_icon.
+  gs_button-quickinfo = pv_info.
+  gs_button-butn_type = pv_type.
+  gs_button-text      = pv_text.
+
+  CASE gv_mode.
+    WHEN 'E'.
+      CLEAR gs_button-disabled.
+    WHEN 'D'.
+      gs_button-disabled = abap_true.
+  ENDCASE.
+
+  IF pv_okcode EQ 'TOGL'.
+    CLEAR gs_button-disabled.
+  ENDIF.
+
+  APPEND gs_button TO po_object->mt_toolbar.
+
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form handle_user_command
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      --> E_UCOMM
+*&---------------------------------------------------------------------*
+FORM handle_user_command  USING pv_ucomm.
+
+  CASE pv_ucomm.
+    WHEN 'IROW'.
+      PERFORM process_row USING 'I'.
+    WHEN 'DROW'.
+      PERFORM process_row USING 'D'.
+    WHEN 'TOGL'.
+      PERFORM process_row USING 'T'.
+  ENDCASE.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form make_display_body
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM make_display_body .
+
+  DATA : lv_tabix TYPE sy-tabix,
+         ls_style TYPE lvc_s_styl.
+
+  LOOP AT gt_employee INTO gs_employee.
+
+    lv_tabix = sy-tabix.
+
+*-- PK : Display mode only
+    CLEAR : ls_style, gs_employee-celltab.
+    ls_style-fieldname = 'EMP_NUM'.
+    ls_style-style = cl_gui_alv_grid=>mc_style_disabled.
+    INSERT ls_style INTO TABLE gs_employee-celltab.
+
+    CLEAR : ls_style.
+    ls_style-style = cl_gui_alv_grid=>mc_style_enabled.
+    INSERT ls_style INTO TABLE gs_employee-celltab.
+
+    MODIFY gt_employee FROM gs_employee INDEX lv_tabix
+                                        TRANSPORTING celltab.
+
+  ENDLOOP.
+
+  gv_dbcnt = lines( gt_employee ).
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form register_event
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM register_event .
+
+  CALL METHOD go_alv_grid->set_ready_for_input
+    EXPORTING
+      i_ready_for_input = 1.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form process_row
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      --> P_
+*&---------------------------------------------------------------------*
+FORM process_row  USING pv_job.
+
+  DATA : ls_style TYPE lvc_s_styl,
+         lt_row   TYPE lvc_t_row,
+         ls_row   TYPE lvc_s_row.
+
+  CASE pv_job.
+    WHEN 'I'.
+
+      CLEAR gs_employee.
+      ls_style-style = cl_gui_alv_grid=>mc_style_enabled.
+      INSERT ls_style INTO TABLE gs_employee-celltab.
+
+      APPEND gs_employee TO gt_employee.
+
+      CALL METHOD go_alv_grid->refresh_table_display.
+
+    WHEN 'D'.
+
+      CALL METHOD go_alv_grid->get_selected_rows
+        IMPORTING
+          et_index_rows = lt_row.
+
+      IF lt_row IS INITIAL.
+        MESSAGE s001 WITH TEXT-s01 DISPLAY LIKE 'E'.
+        EXIT.
+      ENDIF.
+
+      SORT lt_row BY index DESCENDING.
+
+      LOOP AT lt_row INTO ls_row.
+        CLEAR : gs_employee, gs_delt.
+        READ TABLE gt_employee INTO gs_employee INDEX ls_row-index.
+        MOVE-CORRESPONDING gs_employee TO gs_delt.
+        APPEND gs_delt TO gt_delt.
+
+        DELETE gt_employee INDEX ls_row-index.
+      ENDLOOP.
+
+      CALL METHOD go_alv_grid->refresh_table_display.
+
+    WHEN 'T'.
+
+      CASE gv_mode.
+        WHEN 'E'.
+          gv_mode = 'D'.
+          CALL METHOD go_alv_grid->set_ready_for_input
+            EXPORTING
+              i_ready_for_input = 0.
+        WHEN 'D'.
+          gv_mode = 'E'.
+          CALL METHOD go_alv_grid->set_ready_for_input
+            EXPORTING
+              i_ready_for_input = 1.
+        WHEN OTHERS.
+      ENDCASE.
+
+  ENDCASE.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form save_data
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM save_data .
+
+  DATA : lt_save   TYPE TABLE OF zc302mt0003,
+         ls_save   TYPE zc302mt0003,
+         lv_tabix  TYPE sy-tabix,
+         lv_answer.
+
+  CALL METHOD go_alv_grid->check_changed_data.
+
+  MOVE-CORRESPONDING gt_employee TO lt_save.
+
+  IF ( lt_save IS INITIAL ) AND
+     ( gt_delt IS INITIAL ).
+    MESSAGE s001 WITH TEXT-e02 DISPLAY LIKE 'E'.
+    EXIT.
+  ENDIF.
+
+  PERFORM confirm CHANGING lv_answer.
+
+  IF lv_answer NE '1'.
+    MESSAGE w101.
+    EXIT.
+  ENDIF.
+
+  LOOP AT lt_save INTO ls_save.
+
+    lv_tabix = sy-tabix.
+
+    IF ls_save-erdat IS INITIAL.
+      ls_save-erdat = sy-datum.
+      ls_save-ernam = sy-uname.
+      ls_save-erzet = sy-uzeit.
+    ELSE.
+      ls_save-aedat = sy-datum.
+      ls_save-aenam = sy-uname.
+      ls_save-aezet = sy-uzeit.
+    ENDIF.
+
+    MODIFY lt_save FROM ls_save INDEX lv_tabix
+                                TRANSPORTING erdat ernam erzet
+                                             aedat aenam aezet.
+
+  ENDLOOP.
+
+  IF gt_delt IS NOT INITIAL.
+    DELETE zc302mt0003 FROM TABLE gt_delt.
+    CLEAR gt_delt.
+  ENDIF.
+
+  MODIFY zc302mt0003 FROM TABLE lt_save.
+  IF sy-subrc EQ 0.
+    COMMIT WORK AND WAIT.
+    PERFORM make_display_body.
+    CALL METHOD go_alv_grid->refresh_table_display.
+    MESSAGE s001(k5) WITH TEXT-t01.
+  ELSE.
+    ROLLBACK WORK.
+    MESSAGE s001(k5) WITH TEXT-t02 DISPLAY LIKE 'E'.
+  ENDIF.
+
+
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form confirm
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      <-- LV_ANSWER
+*&---------------------------------------------------------------------*
+FORM confirm  CHANGING pv_answer.
+
+  CALL FUNCTION 'POPUP_TO_CONFIRM'
+    EXPORTING
+      titlebar              = 'Save dialog'
+      text_question         = 'Are you sure?'
+      text_button_1         = 'Yes'(001)
+      icon_button_1         = 'ICON_OKAY'
+      text_button_2         = 'No'(002)
+      icon_button_2         = 'ICON_CANCEL'
+      default_button        = '1'
+      display_cancel_button = 'X'
+    IMPORTING
+      answer                = pv_answer.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form exclude_button
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      --> GT_UI_FUNCTIONS
+*&---------------------------------------------------------------------*
+FORM exclude_button  TABLES pt_ui_functions TYPE ui_functions.
+
+  pt_ui_functions = cl_gui_alv_grid=>mc_fc_loc_undo.
+  APPEND pt_ui_functions.
+  pt_ui_functions = cl_gui_alv_grid=>mc_fc_loc_copy.
+  APPEND pt_ui_functions.
+  pt_ui_functions = cl_gui_alv_grid=>mc_fc_loc_copy_row.
+  APPEND pt_ui_functions.
+  pt_ui_functions = cl_gui_alv_grid=>mc_fc_loc_cut.
+  APPEND pt_ui_functions.
+  pt_ui_functions = cl_gui_alv_grid=>mc_fc_loc_delete_row.
+  APPEND pt_ui_functions.
+  pt_ui_functions = cl_gui_alv_grid=>mc_fc_loc_insert_row.
+  APPEND pt_ui_functions.
+  pt_ui_functions = cl_gui_alv_grid=>mc_fc_loc_append_row.
+  APPEND pt_ui_functions.
+  pt_ui_functions = cl_gui_alv_grid=>mc_fc_loc_paste.
+  APPEND pt_ui_functions.
+  pt_ui_functions = cl_gui_alv_grid=>mc_fc_loc_paste_new_row.
+  APPEND pt_ui_functions.
+  pt_ui_functions = cl_gui_alv_grid=>mc_fc_refresh.
+  APPEND pt_ui_functions.
+  pt_ui_functions = cl_gui_alv_grid=>mc_fc_auf.
+  APPEND pt_ui_functions.
+  pt_ui_functions = cl_gui_alv_grid=>mc_fc_average.
+  APPEND pt_ui_functions.
+  pt_ui_functions = cl_gui_alv_grid=>mc_fc_print.
+  APPEND pt_ui_functions.
+  pt_ui_functions = cl_gui_alv_grid=>mc_fc_graph.
+  APPEND pt_ui_functions.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form get_file
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      <-- PA_FILE
+*&---------------------------------------------------------------------*
+FORM get_file  CHANGING pa_file.
+
+  CALL FUNCTION 'WS_FILENAME_GET'
+    EXPORTING
+      mask             = ' '
+      mode             = ' '
+      title            = ' '
+    IMPORTING
+      filename         = pa_file
+    EXCEPTIONS
+      inv_winsys       = 1
+      no_batch         = 2
+      selection_cancel = 3
+      selection_error  = 4
+      OTHERS           = 5.
+
+  IF sy-subrc = 0.
+    MESSAGE '엑셀 파일을 선택하셨습니다.' TYPE 'S'.
+  ELSE.
+    MESSAGE '선택한 파일을 확인해주세요.' TYPE 'I'.
+  ENDIF.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form event_top_of_page
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM event_top_of_page .
+
+  DATA : lr_dd_table TYPE REF TO cl_dd_table_element, " 테이블
+         col_field   TYPE REF TO cl_dd_area,          " 필드
+         col_value   TYPE REF TO cl_dd_area.          " 값
+
+  DATA : lv_text TYPE sdydo_text_element.
+
+  DATA : lv_temp TYPE string.
+
+*-------------------------------------------------------------------
+* Top of Page의 레이아웃 세팅
+*-------------------------------------------------------------------
+*-- Create Table
+  CALL METHOD go_dyndoc_id->add_table
+    EXPORTING
+      no_of_columns = 2
+      border        = '0'
+    IMPORTING
+      table         = lr_dd_table.
+
+*-- Set column(Add Column to Table)
+  CALL METHOD lr_dd_table->add_column
+    IMPORTING
+      column = col_field.
+
+  CALL METHOD lr_dd_table->add_column
+    IMPORTING
+      column = col_value.
+
+*-------------------------------------------------------------------
+* Top of Page 레이아웃에 맞춰 값 세팅
+*-------------------------------------------------------------------
+*-- 영업 조직(P_SORG) & 유통 채널(S_CHNL)
+
+  so_emp = VALUE #( so_emp[ 1 ] OPTIONAL ).
+  CLEAR : lv_temp.
+  IF so_emp-low IS NOT INITIAL.
+    lv_temp = so_emp-low.
+    IF so_emp-high IS NOT INITIAL.
+      CONCATENATE lv_temp ' ~ ' so_emp-high INTO lv_temp.
+    ENDIF.
+  ELSE.
+    lv_temp = '전체'.
+  ENDIF.
+  PERFORM add_row USING lr_dd_table col_field col_value '사원코드' lv_temp.
+
+  so_orgtx = VALUE #( so_orgtx[ 1 ] OPTIONAL ).
+  CLEAR : lv_temp.
+  IF so_orgtx-low IS NOT INITIAL.
+    lv_temp = so_orgtx-low.
+    IF so_orgtx-high IS NOT INITIAL.
+      CONCATENATE lv_temp ' ~ ' so_orgtx-high INTO lv_temp.
+    ENDIF.
+  ELSE.
+    lv_temp = '전체'.
+  ENDIF.
+  PERFORM add_row USING lr_dd_table col_field col_value '부서명' lv_temp.
+
+  so_ename = VALUE #( so_ename[ 1 ] OPTIONAL ).
+  CLEAR : lv_temp.
+  IF so_ename-low IS NOT INITIAL.
+    lv_temp = so_ename-low.
+    IF so_ename-high IS NOT INITIAL.
+      CONCATENATE lv_temp ' ~ ' so_ename-high INTO lv_temp.
+    ENDIF.
+  ELSE.
+    lv_temp = '전체'.
+  ENDIF.
+  PERFORM add_row USING lr_dd_table col_field col_value '이름' lv_temp.
+
+  PERFORM set_top_of_page.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form add_row
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      --> LR_DD_TABLE
+*&      --> COL_FIELD
+*&      --> COL_VALUE
+*&      --> P_
+*&      --> LV_TEMP
+*&---------------------------------------------------------------------*
+FORM add_row  USING pr_dd_table  TYPE REF TO cl_dd_table_element
+                    pv_col_field TYPE REF TO cl_dd_area
+                    pv_col_value TYPE REF TO cl_dd_area
+                    pv_field
+                    pv_text.
+
+  DATA : lv_text TYPE sdydo_text_element.
+
+*-- Field에 값  세팅
+  lv_text = pv_field.
+
+  CALL METHOD pv_col_field->add_text
+    EXPORTING
+      text         = lv_text
+      sap_emphasis = cl_dd_document=>strong
+      sap_color    = cl_dd_document=>list_heading_inv.
+
+  CALL METHOD pv_col_field->add_gap
+    EXPORTING
+      width = 3.
+
+*-- Value에 값 세팅
+  lv_text = pv_text.
+
+  CALL METHOD pv_col_value->add_text
+    EXPORTING
+      text         = lv_text
+      sap_emphasis = cl_dd_document=>heading
+      sap_color    = cl_dd_document=>list_negative_inv.
+
+  CALL METHOD pv_col_value->add_gap
+    EXPORTING
+      width = 3.
+
+  CALL METHOD pr_dd_table->new_row.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_top_of_page
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM set_top_of_page .
+
+* Creating html control object
+  IF go_html_cntrl IS INITIAL.
+    CREATE OBJECT go_html_cntrl
+      EXPORTING
+        parent = go_top_container.
+  ENDIF.
+
+* Merge HTML Document : Top of Page의 내용을 HTML로 랜더링
+  CALL METHOD go_dyndoc_id->merge_document.
+  go_dyndoc_id->html_control = go_html_cntrl.
+
+* Display document
+  CALL METHOD go_dyndoc_id->display_document
+    EXPORTING
+      reuse_control      = 'X'
+      parent             = go_top_container
+    EXCEPTIONS
+      html_display_error = 1.
+
+  IF sy-subrc NE 0.
+    MESSAGE s001(k5) WITH 'Top of page event error' DISPLAY LIKE 'E'.
+  ENDIF.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form init_value
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM init_value .
+
+  " For function key(Template Download)
+  MOVE : 'TEMPLATE'           TO w_functxt-quickinfo,
+          icon_xls            TO w_functxt-icon_id,      " 버튼 아이콘
+          '템플릿 다운로드'    TO w_functxt-icon_text,   " 버튼 텍스트
+          w_functxt           TO sscrfields-functxt_01.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form BUTTON_CONTROL
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM button_control .
+
+  CASE sscrfields-ucomm.
+    WHEN 'FC01'.
+      PERFORM template_download.
+  ENDCASE.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form template_download
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM template_download .
+
+**********************************************************************
+* Create excel upload application form
+**********************************************************************
+  DATA : lv_filename LIKE rlgrap-filename,
+         lv_msg(100).
+
+*-- Call windows browse
+  CLEAR w_pfolder.
+  PERFORM get_browser_info. " 다운로드 위치에 대한 경로명 생성
+
+  IF w_pfolder IS INITIAL.
+    EXIT.
+  ENDIF.
+
+  CLEAR lv_filename.
+  CONCATENATE w_pfolder '\' 'upload_template' '.XLS' INTO lv_filename. " 다운로드 파일명 세팅해줌
+
+  PERFORM download_template USING lv_filename. " 템플릿 다운로드
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form get_browser_info
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM get_browser_info .
+
+  IF w_pfolder IS NOT INITIAL.
+    w_initialfolder = w_pfolder.
+  ELSE.
+    CALL METHOD cl_gui_frontend_services=>get_temp_directory
+      CHANGING
+        temp_dir = w_initialfolder.
+  ENDIF.
+
+  CALL METHOD cl_gui_frontend_services=>directory_browse
+    EXPORTING
+      window_title    = 'Download path'
+      initial_folder  = w_initialfolder
+    CHANGING
+      selected_folder = w_pickedfolder.
+
+  IF sy-subrc = 0.
+    w_pfolder = w_pickedfolder.
+  ELSE.
+    MESSAGE i001 WITH '폴더 선택에 오류가 발생했습니다.' DISPLAY LIKE 'E'.
+    EXIT.
+  ENDIF.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form download_template
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      --> LV_FILENAME
+*&---------------------------------------------------------------------*
+FORM download_template  USING    pv_filename.
+
+  DATA : wwwdata_item LIKE wwwdatatab,
+         rc           TYPE i.
+
+  gv_file = pv_filename.
+
+  CALL FUNCTION 'WS_FILE_DELETE'
+    EXPORTING
+      file   = gv_file
+    IMPORTING
+      return = rc.
+
+  SELECT SINGLE * FROM wwwdata
+    INTO CORRESPONDING FIELDS OF wwwdata_item
+   WHERE objid = 'ZC324_XLS_FORM_EMPLOYEE'. " <<- SMW0에서 생성한 오브젝트 이름 입력
+
+  CALL FUNCTION 'DOWNLOAD_WEB_OBJECT'
+    EXPORTING
+      key         = wwwdata_item
+      destination = gv_file.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form get_filepath
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM get_filepath .
+
+  DATA : lt_files  TYPE filetable,
+         ls_files  LIKE LINE OF lt_files,
+         lv_filter TYPE string,
+         lv_path   TYPE string,
+         lv_rc     TYPE i.
+
+  " 확장자가 .xlsx인 파일만 필터링
+  CONCATENATE cl_gui_frontend_services=>filetype_excel
+              'Excel 통합 문서(*.XLSX)|*.XLSX|'
+              INTO lv_filter.
+
+  " 파일 경로 가져오기
+  CALL METHOD cl_gui_frontend_services=>file_open_dialog
+    EXPORTING
+      window_title            = 'File open'
+      file_filter             = lv_filter
+      initial_directory       = lv_path
+    CHANGING
+      file_table              = lt_files
+      rc                      = lv_rc
+    EXCEPTIONS
+      file_open_dialog_failed = 1
+      cntl_error              = 2
+      error_no_gui            = 3
+      not_supported_by_gui    = 4
+      OTHERS                  = 5.
+
+  CHECK sy-subrc EQ 0.
+  ls_files = VALUE #( lt_files[ 1 ] OPTIONAL ).
+
+  " 파일 경로명 Selection Screen에 세팅
+  CLEAR p_path.
+  p_path = ls_files-filename.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form excel_upload
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM excel_upload .
+
+  TYPES: truxs_t_text_data(4096)   TYPE c OCCURS 0.
+
+  DATA: lt_raw_data  TYPE truxs_t_text_data,
+        lt_excel     LIKE TABLE OF alsmex_tabline WITH HEADER LINE,
+        lv_index     LIKE sy-tabix,
+        lv_waers     TYPE bkpf-waers,
+        lv_dmbtr(20).
+
+  FIELD-SYMBOLS:  <field>.
+
+  IF p_path IS INITIAL.
+    MESSAGE s001 WITH 'Upload 할 파일을 선택하세요' DISPLAY LIKE 'E'.
+    STOP.
+  ENDIF.
+
+  CLEAR : gt_excel, gs_excel, lv_index.
+
+  CALL FUNCTION 'ALSM_EXCEL_TO_INTERNAL_TABLE'
+    EXPORTING
+      filename                = p_path
+      i_begin_col             = 1
+      i_begin_row             = 2
+      i_end_col               = 100
+      i_end_row               = 50000
+    TABLES
+      intern                  = lt_excel
+    EXCEPTIONS
+      inconsistent_parameters = 1
+      upload_ole              = 2
+      OTHERS                  = 3.
+
+  IF sy-subrc = 1.
+    MESSAGE s001(k5) WITH TEXT-e01.
+    STOP.
+  ELSEIF sy-subrc <> 0.
+    MESSAGE s001(k5) WITH TEXT-e02.
+    STOP.
+  ENDIF.
+
+  CHECK NOT ( lt_excel[] IS INITIAL ).
+
+  SORT lt_excel BY row col.
+
+  LOOP AT lt_excel.
+
+    lv_index = lt_excel-col.
+    ASSIGN COMPONENT lv_index OF STRUCTURE gs_excel TO <field>.
+    <field> = lt_excel-value.
+
+    AT END OF row.
+      APPEND gs_excel TO gt_excel.
+      CLEAR gs_excel.
+    ENDAT.
+
+  ENDLOOP.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form make_body
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM make_body .
+
+  CLEAR : gt_employee, gs_employee.
+  LOOP AT gt_excel INTO gs_excel.
+
+    gs_employee = CORRESPONDING #( gs_excel ).
+
+    APPEND gs_employee TO gt_employee.
+    CLEAR gs_employee.
+
+  ENDLOOP.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form modify_screen
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM modify_screen .
+
+  LOOP AT SCREEN.
+
+    CASE screen-group1.
+      WHEN 'PAT'.
+        CASE 'X'.
+          WHEN p_rb1.                       " 직접입력
+            screen-active = 0.
+          WHEN p_rb2.                       " 엑셀업로드
+            screen-active = 1.
+          WHEN p_rb3.                       " 조회
+            screen-active = 0.
+        ENDCASE.
+      WHEN 'EMP'.
+        CASE 'X'.
+          WHEN p_rb1.                       " 직접입력
+            screen-active = 0.
+          WHEN p_rb2.                       " 엑셀업로드
+            screen-active = 0.
+          WHEN p_rb3.                       " 조회
+            screen-active = 1.
+        ENDCASE.
+      WHEN 'ORG'.
+        CASE 'X'.
+          WHEN p_rb1.                       " 직접입력
+            screen-active = 0.
+          WHEN p_rb2.                       " 엑셀업로드
+            screen-active = 0.
+          WHEN p_rb3.                       " 조회
+            screen-active = 1.
+        ENDCASE.
+      WHEN 'NAM'.
+        CASE 'X'.
+          WHEN p_rb1.                       " 직접입력
+            screen-active = 0.
+          WHEN p_rb2.                       " 엑셀업로드
+            screen-active = 0.
+          WHEN p_rb3.                       " 조회
+            screen-active = 1.
+        ENDCASE.
+    ENDCASE.
+
+
+    " 라디오 버튼에 따라 ALV 툴바 버튼 변경
+    IF p_rb1 = 'X'.
+      gv_type = '1'. " 조회 선택
+    ELSEIF p_rb2 = 'X'.
+      gv_type = '2'. " 직접입력 선택
+    ELSEIF p_rb3 = 'X'.
+      gv_type = '3'. " 파일첨부 선택
+    ENDIF.
+
+    MODIFY SCREEN.
+
+  ENDLOOP.
+
+ENDFORM.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

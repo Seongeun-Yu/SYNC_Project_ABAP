@@ -1,0 +1,59 @@
+*&---------------------------------------------------------------------*
+*& Report ZC302RPFI0009
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+
+INCLUDE zc302rpfi0009top                        .    " Global Data
+INCLUDE zc302rpfi0009s01                        .    " Selection Screen
+INCLUDE zc302rpfi0009c01                        .    " Class
+INCLUDE ZC302RPFI0009O01                        .    " PBO-Modules
+INCLUDE ZC302RPFI0009I01                        .    " PAI-Modules
+INCLUDE ZC302RPFI0009F01                        .    " FORM-Routines
+
+*--------------------------------------------------------------------*
+* Selection Screen F4 Help
+*--------------------------------------------------------------------*
+  AT SELECTION-SCREEN ON VALUE-REQUEST FOR so_bpcd-low.
+    PERFORM on_f4_bpcode USING 'low'.
+
+  AT SELECTION-SCREEN ON VALUE-REQUEST FOR so_bpcd-high.
+    PERFORM on_f4_bpcode using 'high'.
+
+*--------------------------------------------------------------------*
+* Selection Screen
+*--------------------------------------------------------------------*
+START-OF-SELECTION.
+  PERFORM get_base_data.
+  PERFORM set_sub_data.
+
+  call screen 100.
+
+*GUI Texts
+*----------------------------------------------------------
+* TITLE100 --> [FI] 미결 전표 조회 및 반제
+
+*Text elements
+*----------------------------------------------------------
+* E01 데이터가 존재하지 않습니다.
+* E02 반제 처리 완료된 전표입니다.
+* E03 반제를 취소했습니다.
+* E04 하나의 행만 선택해주시기 바랍니다.
+* E05 하나의 행을 선택해주시기 바랍니다.
+* E06 전표 헤더에 대한 상세 내역이 존재하지 않습니다.
+* E07 반제 전표가 생성되지 못했습니다.
+* I01 조회 조건
+* T01 전체
+* T02 미결
+* T03 건이 조회 되었습니다.
+* T04 반제 전표가 생성되었습니다.
+* T05   반제 전표 생성
+
+
+*Selection texts
+*----------------------------------------------------------
+* SO_BPCD D       .
+* SO_DATE         미결 전표 전기일
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754
