@@ -1,0 +1,46 @@
+function-pool si18n_cal.
+
+types: begin of cal_list_struc,
+         week(2)     type n,
+         year(4)     type n,
+         month(2)    type n,
+         month_name  type calend_line1-month_name,
+         year_month  type calend_line1-year_month,
+         day1        type calend_line1-day1,
+         day2        type calend_line1-day2,
+         day3        type calend_line1-day3,
+         day4        type calend_line1-day4,
+         day5        type calend_line1-day5,
+         day6        type calend_line1-day6,
+         day7        type calend_line1-day7,
+         rowcolor(4) type c,
+         cell_colors type lvc_t_scol,
+         cellstyles  type lvc_t_styl,
+         isselected  type abap_bool,
+       end of cal_list_struc.
+
+types: ext_date_t(8)   type n, " external date without delimiters,
+       "                         for example 14380201
+       disp_date_t(10) type c.
+
+include lsi18n_cald01.                    " Local class definition
+
+data: ok_code            type sy-ucomm,
+      g_grid             type ref to cl_gui_alv_grid,
+      g_custom_container type ref to cl_gui_custom_container,
+      g_event_receiver   type ref to lcl_event_receiver,
+      g_io_handler       type ref to lcl_io_handler,
+      g_data             type ref to lcl_picker_data,
+      g_data_alt         type ref to lcl_picker_data,
+      g_data_org         type ref to lcl_picker_data,
+      g_data_alt_org     type ref to lcl_picker_data,
+
+      g_dateval          type d,           "selected date in internal format
+      g_dateval_disp     type disp_date_t, "selected date in external format, used in the
+                                           "date input field on the dynpro
+      g_dateval_disp_s   type disp_date_t, "copy to check if input field was edited
+
+      g_test             type abap_bool value abap_false. "global unit test flag
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

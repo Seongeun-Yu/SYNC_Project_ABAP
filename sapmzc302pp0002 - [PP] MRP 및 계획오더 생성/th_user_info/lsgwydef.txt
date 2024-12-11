@@ -1,0 +1,341 @@
+*----------------------------------------------------------------------*
+*   INCLUDE LSGWYDEF                                                   *
+*----------------------------------------------------------------------*
+
+*****************************************************************
+*
+*     SAP AG Walldorf
+*     Systeme, Anwendungen und Produkte in der Datenverarbeitung
+*
+*     (C) Copyright SAP AG 1991
+*
+*****************************************************************
+*
+*  Project:          R/3 Gateway Monitor
+*  Entwickl.-Stand:  BIN-Datenbank
+*
+*  Source-Typ:       Include
+*
+*  Autor:            Werner Rehm , Basis
+*
+*****************************************************************
+*
+*  Entwicklungslog:
+*  25.09.1995 rehm Erste Implementierung
+*  17.01.1995 rehm Defines fuer NI Puffer dumpen/flushen
+*   6.02.1996 rehm Defines für Externer Trace und Connection Trace
+*  19.02.1996 rehm Defines für Trace reseten und Gateway Stoppen
+*  02.10.1996 rehm Defines für Register Status
+*  04.10.1996 rehm Defines für Systemtype
+*  22.10.1996 rehm Define für SecInfo2 ( mit SNC Namen )
+*  13.11.1996 rehm DATA durch CONSTANTS ersetzt
+*  17.06.1997 rehm Neuer Opcode GWY_CANCEL_REG_TP definiert
+*  24.10.1997 rehm Neuer Opcode GWY_DUMP, GWY_READ_GWSYS_TBL2
+*                  Konstanten fuer die Dump-Aktionen, Dump-Destinations
+*  29.04.1998 rehm Neuer Opcode GWY_CHANGE_PARAMETER
+*  22.05.1998 rehm Memory-Id für Export/Import Memory-Id
+*   8.02.1999 rehm Neue Opcode GWY_CONN_PARTNER, GWY_DELETE_CLIENT und
+*                  GWY_DELETE_REMGW
+*  07.02.1999 rehm new dump opcode CMD_DUMP_REGLOADTBL
+*  04.05.2001 rehm new dump opcode CMD_DUMP_PROGRAMS &
+*                  new opcode GWY_ENABLE_RESTART, GWY_DISABLE_RESTART
+*  02.08.2001 rehm new dump opcode CMD_DUMP_OWNIPADR
+*  14.06.2002 rehm new dump opcode CMD_DUMP_SWP
+*  12.12.2002 rehm new dump opcode CMD_DUMP_CVID_TBL
+*   6.02.2003 rehm new opcode CMD_CONVID_INFO
+*  22.07.2003 rehm new opcode CMD_GET_NO_REG_TP added
+*  22.09.2003 rehm new opcode GWY_GET_CV_INFO added
+*  10.12.2003 rehm new dump opcode CMD_DUMP_STRUCTLN added
+*  14.02.2004 rehm new dump opcode CMD_DUMP_REGINFO added
+*  18.03.2004 rehm new dump opcode CMD_DUMP_SECINFO added
+*  19.08.2005 rehm new dump opcode CMD_DUMP_PROFILE_VALUE added
+*   5.12.2006 rehm protocol types fixed (GWY_REG_COMMUNIVATION)
+*  19.11.2009 rehm new opcode CMD_PUSH_IPADR[_INC] added
+*  28.04.2010 rehm new opcode CMD_DUMP_ACL_FILE added
+*****************************************************************
+*
+*  Beschreibung:
+*
+*   Allgemeine Makros
+*
+*****************************************************************
+
+*---------------------------------------------------------------------
+* Operation codes
+* Sind mit gwxxmon.h abzustimmen
+* GWY_NOOP -> CMD_NOOP
+* ...
+*---------------------------------------------------------------------
+CONSTANTS GWY_NOOP               TYPE I VALUE 1  ##NEEDED.
+CONSTANTS GWY_DELETE_CONN        TYPE I VALUE 2  ##NEEDED.
+CONSTANTS GWY_CANCEL_CONN        TYPE I VALUE 3  ##NEEDED.
+CONSTANTS GWY_RST_SINGLE_ERR_CNT TYPE I VALUE 4  ##NEEDED.
+CONSTANTS GWY_RST_ALL_ERR_CNT    TYPE I VALUE 5  ##NEEDED.
+CONSTANTS GWY_INCREASE_TRACE     TYPE I VALUE 6  ##NEEDED.
+CONSTANTS GWY_DECREASE_TRACE     TYPE I VALUE 7  ##NEEDED.
+CONSTANTS GWY_READ_SEC_INFO      TYPE I VALUE 8  ##NEEDED.
+CONSTANTS GWY_REFRESH_SEC_INFO   TYPE I VALUE 9  ##NEEDED.
+CONSTANTS GWY_READ_GWSYS_TBL     TYPE I VALUE 10 ##NEEDED.
+CONSTANTS GWY_READ_CONN_TBL      TYPE I VALUE 11 ##NEEDED.
+CONSTANTS GWY_READ_PROC_TBL      TYPE I VALUE 12 ##NEEDED.
+CONSTANTS GWY_READ_CONN_ATTR     TYPE I VALUE 13 ##NEEDED.
+CONSTANTS GWY_READ_MEMORY        TYPE I VALUE 14 ##NEEDED.
+CONSTANTS GWY_READ_REQ_BLK       TYPE I VALUE 15 ##NEEDED.
+CONSTANTS GWY_ACT_STATISTIC      TYPE I VALUE 16 ##NEEDED.
+CONSTANTS GWY_DEACT_STATISTIC    TYPE I VALUE 17 ##NEEDED.
+CONSTANTS GWY_READ_STATISTIC     TYPE I VALUE 18 ##NEEDED.
+CONSTANTS GWY_RESET_STATISTIC    TYPE I VALUE 19 ##NEEDED.
+CONSTANTS GWY_READ_PARAMETER     TYPE I VALUE 20 ##NEEDED.
+CONSTANTS GWY_SET_GWHOST         TYPE I VALUE 21 ##NEEDED.
+CONSTANTS GWY_READ_RD_FILE       TYPE I VALUE 22 ##NEEDED.
+CONSTANTS GWY_READ_WP_FILE       TYPE I VALUE 23 ##NEEDED.
+CONSTANTS GWY_GET_GWHOST         TYPE I VALUE 24 ##NEEDED.
+CONSTANTS GWY_DUMP_NIBUFFER      TYPE I VALUE 25 ##NEEDED.
+CONSTANTS GWY_RESET_NIBUFFER     TYPE I VALUE 26 ##NEEDED.
+CONSTANTS GWY_ACT_EXTPGM_TRACE   TYPE I VALUE 27 ##NEEDED.
+CONSTANTS GWY_DEACT_EXTPGM_TRACE TYPE I VALUE 28 ##NEEDED.
+CONSTANTS GWY_ACT_CONN_TRACE     TYPE I VALUE 29 ##NEEDED.
+CONSTANTS GWY_DEACT_CONN_TRACE   TYPE I VALUE 30 ##NEEDED.
+CONSTANTS GWY_RESET_TRACE        TYPE I VALUE 31 ##NEEDED.
+CONSTANTS GWY_SUICIDE            TYPE I VALUE 32 ##NEEDED.
+CONSTANTS GWY_READ_SEC_INFO2     TYPE I VALUE 33 ##NEEDED.
+CONSTANTS GWY_CANCEL_REG_TP      TYPE I VALUE 34 ##NEEDED.
+CONSTANTS GWY_DUMP               TYPE I VALUE 35 ##NEEDED.
+CONSTANTS GWY_READ_GWSYS_TBL2    TYPE I VALUE 36 ##NEEDED.
+CONSTANTS GWY_CHANGE_PARAMETER   TYPE I VALUE 37 ##NEEDED.
+CONSTANTS GWY_GET_CONN_PARTNER   TYPE I VALUE 38 ##NEEDED.
+CONSTANTS GWY_DELETE_CLIENT      TYPE I VALUE 39 ##NEEDED.
+CONSTANTS GWY_DELETE_REMGW       TYPE I VALUE 40 ##NEEDED.
+CONSTANTS GWY_DISCONNECT         TYPE I VALUE 41 ##NEEDED.
+CONSTANTS GWY_ENABLE_RESTART     TYPE I VALUE 42 ##NEEDED.
+CONSTANTS GWY_DISABLE_RESTART    TYPE I VALUE 43 ##NEEDED.
+CONSTANTS GWY_NI_TRACE           TYPE I VALUE 44 ##NEEDED.
+CONSTANTS GWY_GET_CLI_INFO       TYPE I VALUE 45 ##NEEDED.
+CONSTANTS GWY_GET_GW_INFO        TYPE I VALUE 46 ##NEEDED.
+CONSTANTS GWY_CONVID_INFO        TYPE I VALUE 47 ##NEEDED.
+CONSTANTS GWY_GET_NO_REG_TP      TYPE I VALUE 48 ##NEEDED.
+CONSTANTS GWY_GET_CV_INFO        TYPE I VALUE 49 ##NEEDED.
+CONSTANTS GWY_SO_KEEPALIVE       TYPE I VALUE 50 ##NEEDED.
+CONSTANTS GWY_READ_CONN_TBL2     TYPE I VALUE 51 ##NEEDED.
+CONSTANTS GWY_READ_GWSYS_TBL3    TYPE I VALUE 52 ##NEEDED.
+CONSTANTS GWY_RELOAD_ACL         TYPE I VALUE 53 ##NEEDED.
+
+*---------------------------------------------------------------------
+* only used from WebAS, not send to gw
+*---------------------------------------------------------------------
+CONSTANTS GWY_SET_NI_TIMEOUT     TYPE I VALUE 1000 ##NEEDED.
+CONSTANTS GWY_GET_NI_TIMEOUT     TYPE I VALUE 1001 ##NEEDED.
+CONSTANTS GWY_SET_NICO_TIMEOUT   TYPE I VALUE 1002 ##NEEDED.
+CONSTANTS GWY_GET_NICO_TIMEOUT   TYPE I VALUE 1003 ##NEEDED.
+CONSTANTS GWY_GET_ADM            TYPE I VALUE 1004 ##NEEDED.
+CONSTANTS GWY_FLUSH_LOGFILE      TYPE I VALUE 1006 ##NEEDED.
+CONSTANTS GWY_SET_TRUSTED_IPADR  TYPE I VALUE 1007 ##NEEDED.
+
+*---------------------------------------------------------------------
+* special dump option to get profile parameter value
+*---------------------------------------------------------------------
+CONSTANTS GWY_GET_PROFILE_VALUE  TYPE I VALUE 1005 ##NEEDED.
+
+*---------------------------------------------------------------------
+* Konstanten für Client oder Gateway Status
+*---------------------------------------------------------------------
+CONSTANTS GWY_FREE               TYPE I VALUE 1 ##NEEDED.
+CONSTANTS GWY_CONN_PENDING       TYPE I VALUE 2 ##NEEDED.
+CONSTANTS GWY_CONNECTED          TYPE I VALUE 3 ##NEEDED.
+
+*---------------------------------------------------------------------
+* Konstanten für Status der CPIC/RFC-Verbindung
+*---------------------------------------------------------------------
+CONSTANTS GWY_CONN_FREE          TYPE I VALUE 0 ##NEEDED.
+CONSTANTS GWY_CONN_INIT          TYPE I VALUE 1 ##NEEDED.
+CONSTANTS GWY_CONN_INITIALIZED   TYPE I VALUE 2 ##NEEDED.
+CONSTANTS GWY_CONN_CONNECT       TYPE I VALUE 3 ##NEEDED.
+CONSTANTS GWY_CONN_CONNECTED     TYPE I VALUE 4 ##NEEDED.
+CONSTANTS GWY_CONN_DISCONNECT    TYPE I VALUE 5 ##NEEDED.
+CONSTANTS GWY_CONN_DISCONNECTED  TYPE I VALUE 6 ##NEEDED.
+
+*---------------------------------------------------------------------
+* Konstanten für Verbindungtyp
+*---------------------------------------------------------------------
+CONSTANTS GWY_R2_PRESENTATION      TYPE I VALUE 1 ##NEEDED.
+CONSTANTS GWY_INT_COMMUNICATION    TYPE I VALUE 2 ##NEEDED.
+CONSTANTS GWY_EXT_COMMUNICATION    TYPE I VALUE 3 ##NEEDED.
+CONSTANTS GWY_CPIC_COMMUNICATION   TYPE I VALUE 4 ##NEEDED.
+CONSTANTS GWY_EXT_NE_COMMUNICATION TYPE I VALUE 6 ##NEEDED.
+CONSTANTS GWY_REG_COMMUNICATION    TYPE I VALUE 7 ##NEEDED.
+
+*---------------------------------------------------------------------
+* Konstanten fuer Dump-Optionen
+* Sind mit gwxxmon.h abzustimmen
+* CMD_DUMP_... -> GWY_DUMP_...
+*---------------------------------------------------------------------
+CONSTANTS GWY_DUMP_WPTBL         TYPE I VALUE 1 ##NEEDED.
+CONSTANTS GWY_DUMP_GWTBL         TYPE I VALUE 2 ##NEEDED.
+CONSTANTS GWY_DUMP_CONNTBL       TYPE I VALUE 3 ##NEEDED.
+CONSTANTS GWY_DUMP_SYSTBL        TYPE I VALUE 4 ##NEEDED.
+CONSTANTS GWY_DUMP_RELINFO       TYPE I VALUE 5 ##NEEDED.
+CONSTANTS GWY_DUMP_REGLOADTBL    TYPE I VALUE 6 ##NEEDED.
+CONSTANTS GWY_DUMP_NIBUFFER2     TYPE I VALUE 7 ##NEEDED.
+CONSTANTS GWY_DUMP_PROGRAMS      TYPE I VALUE 8 ##NEEDED.
+CONSTANTS GWY_DUMP_OWNIPADR      TYPE I VALUE 9 ##NEEDED.
+CONSTANTS GWY_DUMP_STATISTICS    TYPE I VALUE 10 ##NEEDED.
+CONSTANTS GWY_DUMP_SWP           TYPE I VALUE 11 ##NEEDED.
+CONSTANTS GWY_DUMP_CVID_TBL      TYPE I VALUE 12 ##NEEDED.
+CONSTANTS GWY_DUMP_STRUCTLN      TYPE I VALUE 13 ##NEEDED.
+CONSTANTS GWY_DUMP_REGINFO       TYPE I VALUE 14 ##NEEDED.
+CONSTANTS GWY_DUMP_SECINFO       TYPE I VALUE 15 ##NEEDED.
+CONSTANTS GWY_DUMP_ADM           TYPE I VALUE 16 ##NEEDED.
+CONSTANTS GWY_DUMP_PRXYINFO      TYPE I VALUE 17 ##NEEDED.
+CONSTANTS CMD_DUMP_TRUSTED_IPADR TYPE I VALUE 18 ##NEEDED.
+CONSTANTS CMD_DUMP_ACL_FILE      TYPE I VALUE 19 ##NEEDED.
+CONSTANTS GWY_DUMP_MAX           TYPE I VALUE 19 ##NEEDED.
+
+*---------------------------------------------------------------------
+* Konstanten fuer Dump-Destination
+* Sind mit gwxxmon.h abzustimmen
+* CMD_DUMP_... -> GWY_DUMP_...
+*---------------------------------------------------------------------
+CONSTANTS GWY_DUMP_TO_FILE       TYPE I VALUE 1 ##NEEDED.
+CONSTANTS GWY_DUMP_BUFFER        TYPE I VALUE 2 ##NEEDED.
+CONSTANTS GWY_DUMP_BOTH          TYPE I VALUE 3 ##NEEDED.
+
+*---------------------------------------------------------------------
+* Return values
+* Sind mit thxxgmon.h abzustimmen
+* GWY_OK ->  THXXGMON_GWY_OK
+* ...
+*---------------------------------------------------------------------
+CONSTANTS GWY_OK                     LIKE SY-SUBRC VALUE 0 ##NEEDED.
+CONSTANTS GWY_GET_OPCODE_FAILED      LIKE SY-SUBRC VALUE 1 ##NEEDED.
+CONSTANTS GWY_GET_TAB_FAILED         LIKE SY-SUBRC VALUE 2 ##NEEDED.
+CONSTANTS GWY_NEWLINE_FAILED         LIKE SY-SUBRC VALUE 3 ##NEEDED.
+CONSTANTS GWY_GET_CONN_FAILED        LIKE SY-SUBRC VALUE 4 ##NEEDED.
+CONSTANTS GWY_TABLEN_TOO_SHORT       LIKE SY-SUBRC VALUE 5 ##NEEDED.
+CONSTANTS GWY_GET_IN_USE_FAILED      LIKE SY-SUBRC VALUE 6 ##NEEDED.
+CONSTANTS GWY_GET_BLOCK_NO_FAILED    LIKE SY-SUBRC VALUE 7 ##NEEDED.
+CONSTANTS GWY_GET_STAT_ACTIVE_FAILED LIKE SY-SUBRC VALUE 8 ##NEEDED.
+CONSTANTS GWY_GET_GWHOST_FAILED      LIKE SY-SUBRC VALUE 9 ##NEEDED.
+CONSTANTS GWY_GET_GWSERV_FAILED      LIKE SY-SUBRC VALUE 10 ##NEEDED.
+CONSTANTS GWY_GET_STAT_FAILED        LIKE SY-SUBRC VALUE 11 ##NEEDED.
+CONSTANTS GWY_GET_CONNATTR_FAILED    LIKE SY-SUBRC VALUE 12 ##NEEDED.
+CONSTANTS GWY_CONNATTR_TOO_SHORT     LIKE SY-SUBRC VALUE 13 ##NEEDED.
+CONSTANTS GWY_CONNECT_FAILED         LIKE SY-SUBRC VALUE 14 ##NEEDED.
+CONSTANTS GWY_STAT_TOO_SHORT         LIKE SY-SUBRC VALUE 15 ##NEEDED.
+CONSTANTS GWY_OPEN_FAILED            LIKE SY-SUBRC VALUE 16 ##NEEDED.
+CONSTANTS GWY_GWHOST_NOT_SET         LIKE SY-SUBRC VALUE 17 ##NEEDED.
+CONSTANTS GWY_GET_TP_FAILED          LIKE SY-SUBRC VALUE 18 ##NEEDED.
+CONSTANTS GWY_GET_NAME_FAILED        LIKE SY-SUBRC VALUE 19 ##NEEDED.
+CONSTANTS GWY_GET_VALUE_FAILED       LIKE SY-SUBRC VALUE 20 ##NEEDED.
+CONSTANTS GWY_GET_IDX_FAILED         LIKE SY-SUBRC VALUE 21 ##NEEDED.
+CONSTANTS GWY_GET_FIELD_FAILED       LIKE SY-SUBRC VALUE 98 ##NEEDED.
+CONSTANTS GWY_UNKNOWN_OPCODE         LIKE SY-SUBRC VALUE 99 ##NEEDED.
+CONSTANTS GWY_NOT_ATTACHED           LIKE SY-SUBRC VALUE 100 ##NEEDED.
+CONSTANTS GWY_NOT_RUNNING            LIKE SY-SUBRC VALUE 101 ##NEEDED.
+CONSTANTS GWY_MONITOR_DISABLED       LIKE SY-SUBRC VALUE 735 ##NEEDED.
+CONSTANTS GWY_PARAM_NOT_FOUND        LIKE SY-SUBRC VALUE 749 ##NEEDED.
+CONSTANTS GWY_NOT_STOPPED            LIKE SY-SUBRC VALUE 996 ##NEEDED.
+CONSTANTS GWY_CONVID_NOT_FOUND       LIKE SY-SUBRC VALUE 997 ##NEEDED.
+CONSTANTS GWY_CONVID_NOT_FOUND2      LIKE SY-SUBRC VALUE 728 ##NEEDED.
+CONSTANTS GWY_NOT_AUTHORIZED         LIKE SY-SUBRC VALUE 998 ##NEEDED.
+* Return values < 0 , returned from underlaying NI laye r
+CONSTANTS GWY_COMMUNICATION_FAILURE  LIKE SY-SUBRC VALUE 999 ##NEEDED.
+
+*---------------------------------------------------------------------
+* Defines fuer Returnwert auf CMD_DELETE_CLIENT und REMGW
+*---------------------------------------------------------------------
+CONSTANTS RET_INDEX_OUTOFRANGE       LIKE SY-SUBRC VALUE 200 ##NEEDED.
+CONSTANTS RET_INDEX_EINVAL           LIKE SY-SUBRC VALUE 201 ##NEEDED.
+CONSTANTS RET_UNKNOWN_CLIENT         LIKE SY-SUBRC VALUE 202 ##NEEDED.
+
+*---------------------------------------------------------------------
+* Defines fuer Returnwert auf CMD_RELOAD_ACL
+*---------------------------------------------------------------------
+CONSTANTS RET_ACL_CREATE_FAILED      LIKE SY-SUBRC VALUE 300 ##NEEDED.
+CONSTANTS RET_ACL_SYNTAX_ERROR       LIKE SY-SUBRC VALUE 301 ##NEEDED.
+
+*---------------------------------------------------------------------
+* Defines fuer Gateway-Status in der gw_adm
+*---------------------------------------------------------------------
+CONSTANTS GW_STATE_INIT     TYPE I VALUE 0 ##NEEDED.
+CONSTANTS GW_STATE_RUNNING  TYPE I VALUE 1 ##NEEDED.
+CONSTANTS GW_STATE_SHUTDOWN TYPE I VALUE 2 ##NEEDED.
+CONSTANTS GW_STATE_STOP     TYPE I VALUE 3 ##NEEDED.
+CONSTANTS GW_STATE_MISMATCH TYPE I VALUE 4 ##NEEDED.
+
+*---------------------------------------------------------------------
+* Defines fuer Registerstatus wie in gwint.h definiert
+*---------------------------------------------------------------------
+CONSTANTS REG_NOT_USED(16) VALUE 'NOT_USED' ##NEEDED.
+CONSTANTS REG_INIT(16)     VALUE 'INIT'     ##NEEDED.
+CONSTANTS REG_WAITING(16)  VALUE 'WAITING'  ##NEEDED.
+CONSTANTS REG_RUNNING(16)  VALUE 'RUNNING'  ##NEEDED.
+
+*---------------------------------------------------------------------
+* Defines fuer Registerstatus wie in gwext.h definiert
+*---------------------------------------------------------------------
+CONSTANTS GW_REG_NOT_USED    TYPE I VALUE 0 ##NEEDED.
+CONSTANTS GW_REG_INIT        TYPE I VALUE 1 ##NEEDED.
+CONSTANTS GW_REG_WAITING     TYPE I VALUE 2 ##NEEDED.
+CONSTANTS GW_REG_RUNNING     TYPE I VALUE 3 ##NEEDED.
+CONSTANTS GW_REG_SECU_ERROR  TYPE I VALUE 4 ##NEEDED.
+CONSTANTS GW_REG_NOREG_ERROR TYPE I VALUE 5 ##NEEDED.
+
+*---------------------------------------------------------------------
+* Defines fuer Systemtype wie in gwext.h definiert
+*---------------------------------------------------------------------
+CONSTANTS GW_UNDEF_TYPE          TYPE I VALUE 0 ##NEEDED.
+CONSTANTS GW_CHECK_GATEWAY       TYPE I VALUE 1 ##NEEDED.
+CONSTANTS GW_CONNECT_GWWP        TYPE I VALUE 2 ##NEEDED.
+CONSTANTS GW_NORMAL_CLIENT       TYPE I VALUE 3 ##NEEDED.
+CONSTANTS GW_REMOTE_GATEWAY      TYPE I VALUE 4 ##NEEDED.
+CONSTANTS GW_STOP_GATEWAY        TYPE I VALUE 5 ##NEEDED.
+CONSTANTS GW_LOCAL_R3            TYPE I VALUE 6 ##NEEDED.
+CONSTANTS GW_SEND_INTERNAL_ERROR TYPE I VALUE 7 ##NEEDED.
+CONSTANTS GW_SEND_INFO           TYPE I VALUE 8 ##NEEDED.
+CONSTANTS GW_SEND_CMD            TYPE I VALUE 9 ##NEEDED.
+CONSTANTS GW_WORKPROCESS_DIED    TYPE I VALUE 10 ##NEEDED.
+CONSTANTS GW_REGISTER_TP         TYPE I VALUE 11 ##NEEDED.
+CONSTANTS GW_UNREGISTER_TP       TYPE I VALUE 12 ##NEEDED.
+CONSTANTS GW_CONNECT_DISP        TYPE I VALUE 13 ##NEEDED.
+CONSTANTS GW_GET_NO_REGISTER_TP  TYPE I VALUE 14 ##NEEDED.
+CONSTANTS GW_SAP_WP_CLIENT       TYPE I VALUE 15 ##NEEDED.
+CONSTANTS GW_CANCEL_REGISTER_TP  TYPE I VALUE 16 ##NEEDED.
+CONSTANTS GW_FROM_REMOTE_GATEWAY TYPE I VALUE 17 ##NEEDED.
+
+*---------------------------------------------------------------------
+* Memory-Id mit der über Export/Import Daten ausgetauscht werden
+* können.
+* Wenn RSMONGWY_CHANGE_PARAMETER vom Report RSMONGWY gerufen wird,
+* dann werden GWHOST und GWSERV in das Memory geschrieben.
+*---------------------------------------------------------------------
+CONSTANTS SMGW_MEMORY_ID(4) VALUE 'SMGW'  ##NEEDED.
+DATA: ACTGWHOST     LIKE GWY_STRUCT-GWHOST ##NEEDED,
+      ACTGWSERV     LIKE GWY_STRUCT-GWSERV ##NEEDED.
+
+*---------------------------------------------------------------------
+* Status des Gateway in der Admin-Struktur gwext.h definiert
+*---------------------------------------------------------------------
+CONSTANTS GWADM_STATE_INIT     TYPE I VALUE 0 ##NEEDED.
+CONSTANTS GWADM_STATE_RUNNING  TYPE I VALUE 1 ##NEEDED.
+CONSTANTS GWADM_STATE_SHUTDOWN TYPE I VALUE 2 ##NEEDED.
+CONSTANTS GWADM_STATE_STOP     TYPE I VALUE 3 ##NEEDED.
+CONSTANTS GWADM_STATE_MISMATCH TYPE I VALUE 4 ##NEEDED.
+
+*---------------------------------------------------------------------
+* constant for special parameter
+* see gwxxreg.h
+*---------------------------------------------------------------------
+CONSTANTS GW_SEC_2_FILE  TYPE C LENGTH 10 VALUE '$gw/sec$'  ##NEEDED.
+CONSTANTS GW_REG_2_FILE  TYPE C LENGTH 10 VALUE '$gw/reg$'  ##NEEDED.
+CONSTANTS GW_PRXY_2_FILE TYPE C LENGTH 10 VALUE '$gw/prxy$' ##NEEDED.
+
+CONSTANTS GW_ACL_SEC  TYPE I VALUE 1 ##NEEDED.
+CONSTANTS GW_ACL_REG  TYPE I VALUE 2 ##NEEDED.
+CONSTANTS GW_ACL_PRXY TYPE I VALUE 3 ##NEEDED.
+
+data: acl_error_count type i                                ##NEEDED.
+
+*
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

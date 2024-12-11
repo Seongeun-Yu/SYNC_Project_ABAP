@@ -1,0 +1,62 @@
+FUNCTION TH_USER_INFO.
+*"----------------------------------------------------------------------
+*"*"Lokale Schnittstelle:
+*"  IMPORTING
+*"     REFERENCE(CLIENT) LIKE  SY-MANDT OPTIONAL
+*"     REFERENCE(USER) LIKE  SY-UNAME OPTIONAL
+*"     REFERENCE(CHECK_GUI) LIKE  SY-INDEX DEFAULT 0
+*"  EXPORTING
+*"     VALUE(HOSTADDR) LIKE  MSXXLIST-HOSTADR
+*"     VALUE(TERMINAL)
+*"     VALUE(ACT_SESSIONS) LIKE  SM04DIC-COUNTER
+*"     VALUE(MAX_SESSIONS) LIKE  SM04DIC-COUNTER
+*"     VALUE(MY_SESSION) LIKE  SM04DIC-COUNTER
+*"     VALUE(MY_INTERNAL_SESSION) LIKE  SM04DIC-COUNTER
+*"     VALUE(TASK_STATE) LIKE  SM04DIC-COUNTER
+*"     VALUE(UPDATE_REC_EXIST) TYPE  THFB_BOOL
+*"     VALUE(TID) LIKE  SY-INDEX
+*"     VALUE(GUI_CHECK_FAILED) LIKE  SY-INDEX OPTIONAL
+*"     VALUE(ADDRSTR) TYPE  NI_NODEADDR OPTIONAL
+*"     VALUE(RC) TYPE  I
+*"----------------------------------------------------------------------
+
+  CALL 'ThUsrInfo' ID 'OPCODE' FIELD OPCODE_USR_ATTR
+    id 'CLIENT' field client
+    id 'USR' field user
+    ID 'TERMINAL' FIELD TERMINAL
+    ID 'TID' FIELD TID
+    ID 'HOSTADDR' FIELD HOSTADDR
+    ID 'ACT_SESSIONS' FIELD ACT_SESSIONS
+    ID 'MAX_SESSIONS' FIELD MAX_SESSIONS
+    ID 'MY_SESSION' FIELD MY_SESSION
+    ID 'MY_INTERNAL_SESSION' FIELD MY_INTERNAL_SESSION
+    ID 'TASK_STATUS' FIELD TASK_STATE
+    id 'UPD_REC' field update_rec_exist
+    id 'CHECK_GUI' field check_gui
+    id 'ADDRSTR' field addrstr.
+
+  rc = sy-subrc.
+
+  if gui_check_failed is requested.
+    gui_check_failed = sy-subrc.
+  endif.
+ENDFUNCTION.
+
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: 00
+*172   You are not authorized to use transaction &
+*626   The update data cannot be displayed (RC: &)
+*980   VB module does not contain any data
+*
+* Message class: 14
+*125   RFC user is invalid
+*173   No authorization to execute function module &1.
+*
+* Message class: RLFW
+*000   Server list of the remote subsystem is not defined.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

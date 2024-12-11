@@ -1,0 +1,138 @@
+function dynp_values_update.
+*"----------------------------------------------------------------------
+*"*"Lokale Schnittstelle:
+*"       IMPORTING
+*"             VALUE(DYNAME) LIKE  D020S-PROG
+*"             VALUE(DYNUMB) LIKE  D020S-DNUM
+*"       TABLES
+*"              DYNPFIELDS STRUCTURE  DYNPREAD
+*"       EXCEPTIONS
+*"              INVALID_ABAPWORKAREA
+*"              INVALID_DYNPROFIELD
+*"              INVALID_DYNPRONAME
+*"              INVALID_DYNPRONUMMER
+*"              INVALID_REQUEST
+*"              NO_FIELDDESCRIPTION
+*"              UNDEFIND_ERROR
+*"----------------------------------------------------------------------
+
+perform fill_dpovtab_upd tables dynpfields.
+
+endfunction.
+
+
+
+
+
+
+
+
+*  data: hstepl(4).
+*
+*  data: begin of idynpfields occurs 0,
+*          fieldname like dpov-fldname,
+*          stepl like dynpread-stepl,
+*          fieldvalue like dynpread-fieldvalue,
+*        end of idynpfields.
+*
+*  clear: dpovtab, dpovtab[].
+*
+*  loop at dynpfields.
+*    move-corresponding dynpfields to idynpfields.
+*    move idynpfields-fieldname to dpovtab-fldname.
+*    if idynpfields-stepl gt 0.
+*      move '('      to idynpfields-fieldname+126.             "29.
+*      move idynpfields-stepl to hstepl.
+*      move hstepl to idynpfields-fieldname+127.               "30.
+*      move ')'      to idynpfields-fieldname+131.             "34.
+*      condense idynpfields-fieldname no-gaps.
+*      move idynpfields-fieldname to dpovtab-fldname.
+*
+*    endif.
+*    move 'E'                  to dpovtab-flduse .
+*    move idynpfields-fieldvalue to dpovtab-fldinh.
+*    append dpovtab.
+*  endloop.
+
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: 00
+*172   You are not authorized to use transaction &
+*398   & & & &
+*401   Maximum number of internal sessions reached
+*
+* Message class: 14
+*027   Maximum number of GUI sessions reached
+*
+* Message class: 1R
+*004   Front-end functions cannot be executed in the background
+*
+* Message class: 42
+*328   You do not have authorization for this function
+*
+* Message class: B~
+*019   Action canceled by user
+*020   Customizing for feedback functions missing
+*021   Error in feedback
+*030   You do not have authorization to create support messages
+*
+* Message class: HL
+*108   This function is not currently available
+*
+* Message class: NR
+*401   The transaction cannot be executed
+*
+* Message class: SD
+*005   Function cannot be executed
+*008   An unanticipated error has occurred
+*059   Documentation does not exist
+*116   Document & is not available in language &
+*138   This function can only be used for data elements
+*505   Extended help display was canceled
+*601   No documentation available
+*602   This operating system & is not supported
+*776   Document does not exist in language &
+*
+* Message class: SH
+*001   Place the cursor on a valid line
+*002   Matchcode help is not possible for display fields
+*003   The selection string you entered is invalid
+*006   No language specified
+*007   The system cannot display possible entries here
+*008   No possible entries exist
+*011   Last selected value does not exist for this input field
+*013   No values have been selected for this entry field
+*014   The term searched for does not exist.
+*015   The term searched for no longer exists
+*016   The column of the field selected cannot be deleted
+*024   Lower limit greater than upper limt; enter it again
+*025   Use the date format in the user master
+*026   Either choose "Generic search" or do not enter value generically
+*027   Do not make a generic search in the value range
+*028   Specify value generically or choose another search criterion
+*029   There are no texts for the domain
+*030   Navigation is only possible for ABAP Workbench objects
+*031   Only the first 100 values are displayed
+*032   A default matchcode ID has not yet been defined
+*033   The private list of values does not fulfill the selection condition &
+*034   Search procedure & is used as the new standard
+*035   All displayed values are marked.
+*036   Only the first & values are displayed.
+*037   View &1 does not contain entry &2.
+*038   Error calling maintenance transaction
+*039   Detail screen display not possible because of reuse of table &.
+*040   Table & has no maintenance dialog
+*511   Glossary entry & was not found
+*512   No glossary list could be generated for this application area
+*513   Position the cursor on a valid line
+*710   No documentation available for field &
+*720   No documentation available
+*760   No link to term '&'
+*
+* Message class: TK
+*107   Objects could not be added to request/task &1
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

@@ -1,0 +1,139 @@
+FUNCTION sapgui_progress_indicator.
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  IMPORTING
+*"     VALUE(PERCENTAGE) DEFAULT 0
+*"     VALUE(TEXT) DEFAULT SPACE
+*"----------------------------------------------------------------------
+  DATA : out_text LIKE sy-ucomm,
+         perc     TYPE i,
+         modno    TYPE i,
+         is_htmlgui TYPE c.
+
+  DATA: task_state TYPE i,
+        task_state_raw(4) TYPE x.
+
+  IF sy-batch <> space.
+    EXIT.    "do nothing in batch
+  ENDIF.
+
+  IF prog_indi_checked = space.
+    GET PARAMETER ID 'SIN' FIELD prog_indi_mode.
+    prog_indi_checked = 'X'.
+  ENDIF.
+  IF prog_indi_mode = '0'.
+    EXIT.    "do nothing if turned off via SPA/GPA
+  ENDIF.
+
+
+  IF apc_progress_indicator_active = abap_true AND
+     go_apc_progress_indicator     IS BOUND.
+
+    out_text = text.
+    perc     = percentage.
+    modno    = syst-modno.
+    IF perc < 0.   perc = 0.   ENDIF.
+    IF perc > 100. perc = 100. ENDIF.
+
+    TRY.
+
+        CALL METHOD go_apc_progress_indicator->send
+          EXPORTING
+            i_percentage = perc
+            i_text       = out_text.
+
+      CATCH cx_sy_dyn_call_illegal_class
+            cx_sy_dyn_call_illegal_method
+            cx_sy_dyn_call_param_missing
+            cx_sy_ref_is_initial
+            cx_apc_ws_progress_indicator.
+    ENDTRY.
+  ENDIF.
+
+* dont call progress indicator is HTML-GUI is running
+  CALL FUNCTION 'GUI_IS_ITS'
+    IMPORTING
+      return = is_htmlgui.
+
+  IF NOT is_htmlgui IS INITIAL.
+    DATA: lv_webgui_registration TYPE c LENGTH 255.
+    GET PARAMETER ID 'SAPC_PROGRESS_INDI' FIELD lv_webgui_registration.
+    IF lv_webgui_registration IS NOT INITIAL.
+      out_text = text.
+      perc     = percentage.
+      IF perc < 0.   perc = 0.   ENDIF.
+      IF perc > 100. perc = 100. ENDIF.
+      PERFORM send_webgui_progress_indicator USING perc out_text.
+    ENDIF.
+    EXIT.
+  ENDIF.
+
+* Masoud / Edgar
+* -- Kein Progress-Indikator im Falle von asynchronem RFC und wenn
+* -- zuvor kein Dynpro gesendet wurde
+*
+  IF async_type = ' '.
+    CALL FUNCTION 'RFC_GET_ATTRIBUTES'
+      IMPORTING
+        caller_async_type         = async_type
+      EXCEPTIONS
+        system_call_not_supported = 1
+        no_rfc_communication      = 2
+        internal_error            = 3
+        OTHERS                    = 4.
+
+    IF sy-subrc = 0 AND async_type <> '0'.
+      CALL FUNCTION 'TH_USER_INFO'
+        IMPORTING
+          task_state = task_state.
+      task_state_raw = task_state.
+
+      IF NOT ( task_state_raw O task_term_output_sent ).
+        EXIT.
+      ENDIF.
+    ENDIF.
+  ELSEIF async_type <> '0'.
+    CALL FUNCTION 'TH_USER_INFO'
+      IMPORTING
+        task_state = task_state.
+    task_state_raw = task_state.
+    IF NOT ( task_state_raw O task_term_output_sent ).
+      EXIT.
+    ENDIF.
+  ENDIF.
+
+  out_text = text.
+  perc     = percentage.
+  modno    = syst-modno.
+  IF perc < 0.   perc = 0.   ENDIF.
+  IF perc > 100. perc = 100. ENDIF.
+
+  CALL 'RFCControl' ID 'CODE' FIELD 'n'. "set NonBlockingGUIRFC
+
+* if there is no gui attached to this session RFCControl will return
+* with an error (sy-subrc = 8 or sy-subrc = 16)
+  IF sy-subrc = 0.
+    CALL FUNCTION 'SAPGUI_PROGRESS_INDICATOR'  ##FM_RFC_OK
+      DESTINATION 'SAPGUI'
+      KEEPING LOGICAL UNIT OF WORK
+      EXPORTING
+        text       = out_text
+        percentage = perc
+        modn       = modno
+                     EXCEPTIONS
+                     system_failure
+                     communication_failure.
+  ENDIF.
+
+  syst-subrc = 0.
+ENDFUNCTION.
+
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: SGUI
+*001   Shortcut &1 could not be created (error number &2)
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

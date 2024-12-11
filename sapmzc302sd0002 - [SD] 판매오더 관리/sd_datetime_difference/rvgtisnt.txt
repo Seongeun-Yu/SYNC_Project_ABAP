@@ -1,0 +1,261 @@
+*----------------------------------------------------------------------*
+*   INCLUDE RVGTISNT                                                   *
+*----------------------------------------------------------------------*
+
+* Memory for ABAP-Command
+DATA: ABAP_CMD_SAVE LIKE ABAP_CMD.
+
+* CNET-Structure for network settings network
+DATA: BEGIN OF NET_SETTINGS.
+        INCLUDE STRUCTURE NET_SET.
+DATA: END OF NET_SETTINGS.
+
+
+************************************************************************
+** Tables for storage of complete network (nodes, segments, clusters) **
+* CNET-Table for all clusters of the network
+DATA: BEGIN OF ALL_CLUST_TAB OCCURS 0. "all clusters
+        INCLUDE STRUCTURE CNG_CLUSTR.
+DATA: END OF ALL_CLUST_TAB.
+
+* CNET-Table for all cluster attributes of the network
+DATA: BEGIN OF ALL_CVALS_TAB OCCURS 0. "Attributes for all clusters
+        INCLUDE STRUCTURE NET_CVALS.
+DATA: END OF ALL_CVALS_TAB.
+
+* CNET-Table for all nodes of the network
+DATA: BEGIN OF ALL_NODES_TAB OCCURS 0. "all Nodes
+        INCLUDE STRUCTURE CNG_NODES.
+DATA:   SELKZ LIKE RV56A-SELKZ.
+DATA: END OF ALL_NODES_TAB.
+
+* CNET-Table for all node attributes of the network
+DATA: BEGIN OF ALL_NVALS_TAB OCCURS 0. "Attributesfor all nodes
+        INCLUDE STRUCTURE NET_NVALS.
+DATA:   SELKZ LIKE RV56A-SELKZ.
+DATA: END OF ALL_NVALS_TAB.
+
+* CNET-Table for all lines of the network
+DATA: BEGIN OF ALL_LINES_TAB OCCURS 0. "All vertices (segments)
+        INCLUDE STRUCTURE CNG_LINES.
+DATA:   SELKZ LIKE RV56A-SELKZ.
+DATA: END OF ALL_LINES_TAB.
+
+* CNET-Table for all line attributes of the network
+DATA: BEGIN OF ALL_LVALS_TAB OCCURS 0. "Attributes for all vertices
+        INCLUDE STRUCTURE NET_LVALS.
+DATA:   SELKZ LIKE RV56A-SELKZ.
+DATA: END OF ALL_LVALS_TAB.
+
+* CNET-Table for all positions of the network nodes
+DATA: BEGIN OF ALL_POS_TAB OCCURS 0. "Positions for all nodes
+        INCLUDE STRUCTURE NET_POS.
+DATA: END OF ALL_POS_TAB.
+
+
+************************************************************************
+** Tables for storage of output network (netw. visible on screen)
+* CNET-Table for visible nodes of the network
+DATA: BEGIN OF VIS_NODES_TAB OCCURS 0. "all Nodes
+        INCLUDE STRUCTURE CNG_NODES.
+DATA: END OF VIS_NODES_TAB.
+
+* CNET-Table for visible node attributes of the network
+DATA: BEGIN OF VIS_NVALS_TAB OCCURS 0. "Attributesfor all nodes
+        INCLUDE STRUCTURE NET_NVALS.
+DATA: END OF VIS_NVALS_TAB.
+
+* CNET-Table for visible lines of the network
+DATA: BEGIN OF VIS_LINES_TAB OCCURS 0. "All vertices (segments)
+        INCLUDE STRUCTURE CNG_LINES.
+DATA: END OF VIS_LINES_TAB.
+
+* CNET-Table for visible line attributes of the network
+DATA: BEGIN OF VIS_LVALS_TAB OCCURS 0. "Attributes for all vertices
+        INCLUDE STRUCTURE NET_LVALS.
+DATA: END OF VIS_LVALS_TAB.
+
+
+************************************************************************
+** Tables for temporary storage network for screen output
+* CNET-Table for all displayed clusters of the network
+DATA: BEGIN OF DISP_CLUST_TAB OCCURS 0. "all clusters
+        INCLUDE STRUCTURE CNG_CLUSTR.
+DATA: END OF DISP_CLUST_TAB.
+
+* CNET-Table for all displayed cluster attributes of the network
+DATA: BEGIN OF DISP_CVALS_TAB OCCURS 0. "Attributes for all clusters
+        INCLUDE STRUCTURE NET_CVALS.
+DATA: END OF DISP_CVALS_TAB.
+
+* CNET-Table for displayed nodes of the network
+DATA: BEGIN OF DISP_NODES_TAB OCCURS 0. "displayed Nodes
+        INCLUDE STRUCTURE CNG_NODES.
+DATA: END OF DISP_NODES_TAB.
+DATA: DNOT_SAVE LIKE DISP_NODES_TAB OCCURS 0.
+
+* CNET-Table for displayed node attributes of the network
+DATA: BEGIN OF DISP_NVALS_TAB OCCURS 0. "Attributes for displ. nodes
+        INCLUDE STRUCTURE NET_NVALS.
+DATA: END OF DISP_NVALS_TAB.
+DATA: DNVT_SAVE LIKE DISP_NVALS_TAB OCCURS 0.
+
+* CNET-Table for displayed lines of the network
+DATA: BEGIN OF DISP_LINES_TAB OCCURS 0. "displayed vertices (segments)
+        INCLUDE STRUCTURE CNG_LINES.
+DATA: END OF DISP_LINES_TAB.
+DATA: DLIT_SAVE LIKE DISP_LINES_TAB OCCURS 0.
+
+* CNET-Table for all line attributes of the network
+DATA: BEGIN OF DISP_LVALS_TAB OCCURS 0. "Attributes for disp. vertices
+        INCLUDE STRUCTURE NET_LVALS.
+DATA: END OF DISP_LVALS_TAB.
+DATA: DLVT_SAVE LIKE DISP_LVALS_TAB OCCURS 0.
+
+
+
+** Further tables related to network ***********************************
+* Internal lines table with standardized node representation (node,type)
+DATA: BEGIN OF SHIPNET OCCURS 0,
+      IDNUM(10) TYPE N,                 "Internal ID number
+      SELKZ LIKE RV56A-SELKZ,        "Selection mark
+      TKNUM LIKE VTTS-TKNUM,         "Shipment ID
+      TSNUM LIKE VTTS-TSNUM,         "Transport segment number
+      TSTYP LIKE VTTS-TSTYP,         "Segment type
+      TSRFO LIKE VTTS-TSRFO,         "Sequence number of segment
+      ROUTE LIKE VTTS-ROUTE,         "Route ID
+      VSART LIKE VTTS-VSART,         "Shipment type
+      LAUFK LIKE VTTS-LAUFK,         "Identification of segm. hierarchy
+      SEPKN LIKE RV56A-SELKZ,        "Identification for separated nodes
+      KNOTA LIKE VTTS-KNOTA,         "Segment start node
+      LSTEL LIKE VTTS-LSTEL,         "Load terminal sender
+      KNATX(40),                     "Load terminal text
+      KTYPA LIKE RV56A-SELKZ,        "Type of start node
+      ADRNA LIKE VTTS-ADRNA,         "Adress of start node
+      DPTBG LIKE VTTS-DPTBG,         "Planned date for begin
+      UPTBG LIKE VTTS-UPTBG,         "Time planned for begin
+      DATBG LIKE VTTS-DATBG,         "Actual date for begin
+      UATBG LIKE VTTS-UATBG,         "Actual time for begin
+      KNOTZ LIKE VTTS-KNOTZ,         "Segment end node
+      LSTEZ LIKE VTTS-LSTEZ,         "Load terminal receiver
+      KNZTX(40),                     "Load terminal text
+      KTYPZ LIKE RV56A-SELKZ,        "Type of end node
+      ADRNZ LIKE VTTS-ADRNZ,         "Adress of end node
+      DPTEN LIKE VTTS-DPTEN,         "Planned date for end
+      UPTEN LIKE VTTS-UPTEN,         "Time planned for end
+      DATEN LIKE VTTS-DATEN,         "Actual date for end
+      UATEN LIKE VTTS-UATEN,         "Actual time for end
+      TDLNR LIKE VTTS-TDLNR,         "Carrier ID
+END OF SHIPNET.
+
+* Table providing relation between internal segment ID and
+* transport number / transport segment plus all attributes
+DATA: BEGIN OF SEGM_RELATION OCCURS 0,
+      ID LIKE CNG_LINES-ID,          "Internal segment ID
+      SELKZ LIKE RV56A-SELKZ,        "Selection mark
+      TKNUM LIKE VTTS-TKNUM,         "Transport number
+      TSNUM LIKE VTTS-TSNUM,         "Transport segment
+      VKTRA LIKE TVTR-VKTRA,         "
+      BTGEW LIKE LIKP-BTGEW,         "Sum of gros weights
+      NTGEW LIKE LIKP-NTGEW,         "Sum of net weights
+      GEWEI LIKE LIKP-GEWEI,         "Unit of weight
+      VOLUM LIKE LIKP-VOLUM,         "Volume
+      VOLEH LIKE LIKP-VOLEH,         "Volume unit
+      ANZPK LIKE LIKP-ANZPK,         "Number of pieces
+    END OF SEGM_RELATION.
+
+* Table providing data (node ids) on node connections to be bundled.
+* All node pairs listed here will be bundled by bundling routine
+DATA: BEGIN OF BUNDL_TAB OCCURS 0.
+        INCLUDE STRUCTURE CNG_LINES.
+DATA: END OF BUNDL_TAB.
+
+* Table referencing bundled and unbundled node connections
+DATA: BEGIN OF BUNDL_REF OCCURS 0,
+      BUNDLE LIKE CNG_LINES-ID,
+      MEMBER LIKE CNG_LINES-ID,
+END OF BUNDL_REF.
+
+* Table for deliveries and related data on a route segment
+DATA: BEGIN OF DELIV_SEGM OCCURS 0,
+      ID LIKE CNG_LINES-ID,              "Net segment id
+      SELKZ LIKE RV56A-SELKZ,            "Selection mark
+      VBELN LIKE LIKP-VBELN,             "Delivery number
+      LFDAT LIKE LIKP-LFDAT,             "Delivery date
+      BTGEW LIKE LIKP-BTGEW,             "Sum of gros weights
+      NTGEW LIKE LIKP-NTGEW,             "Sum of net weights
+      GEWEI LIKE LIKP-GEWEI,             "Unit of weight
+      VOLUM LIKE LIKP-VOLUM,             "Volume
+      VOLEH LIKE LIKP-VOLEH,             "Volume unit
+      ANZPK LIKE LIKP-ANZPK,             "Number of pieces
+      INCO1 LIKE LIKP-INCO1,             "Inco-Term 1
+      INCO2 LIKE LIKP-INCO2,             "Inco-Term 2
+END OF DELIV_SEGM.
+* ..and a copy of this for dynpro 200 screen output...
+DATA: BEGIN OF DELSEG_TMP OCCURS 0,
+      TKNUM LIKE VTTS-TKNUM,             "Transport number
+      VBELN LIKE LIKP-VBELN,             "Delivery number
+      VSTEL LIKE LIKP-VSTEL,
+      LSTEL LIKE LIKP-LSTEL,
+      LFDAT LIKE LIKP-LFDAT,             "Delivery date
+      BTGEW TYPE P DECIMALS 0,           "Sum of gros weights
+      NTGEW TYPE P DECIMALS 0,           "Sum of net weights
+      GEWEI LIKE LIKP-GEWEI,             "Unit of weight
+      VOLUM TYPE P DECIMALS 1,           "Volume
+      VOLEH LIKE LIKP-VOLEH,             "Volume unit
+      ANZPK LIKE LIKP-ANZPK,             "Number of pieces
+      NAME1 LIKE KNA1-NAME1,
+      LAND1 LIKE KNA1-LAND1,
+      PSTLZ LIKE KNA1-PSTLZ,
+      ORT01 LIKE KNA1-ORT01.
+DATA: END OF DELSEG_TMP.
+
+* Information on nodes
+DATA: BEGIN OF NODEINFO OCCURS 0,
+      KNOTN LIKE VTTS-KNOTA,         "Node ID
+      STUFE TYPE I,                  "Hierarchy stage in country
+      LSTEN LIKE VTTS-LSTEL,         "Terminal
+      KNNTX LIKE VTTS-BELAD,         "Terminal text
+      KTYPN LIKE RV56A-SELKZ,        "Type of node
+      ADRNN LIKE VTTS-ADRNA,         "Adress of node
+      NAME1 LIKE KNA1-NAME1,         "Name
+      LAND1 LIKE KNA1-LAND1,         "Country
+      PSTLZ LIKE KNA1-PSTLZ,         "Zip code
+      ORT01 LIKE KNA1-ORT01,         "Place
+      PRENUM TYPE I,                 "Number of predecessors in country
+      SUCNUM TYPE I,                 "Number of successors in country
+    END OF NODEINFO.
+
+* Country hierarchy information
+DATA: BEGIN OF COUNTRYINFO OCCURS 0,
+      LAND1 LIKE KNA1-LAND1,  "Country code
+      STUFN TYPE I,           "Hierarchy stages
+      STUFB TYPE I,           "Width of widest stage (members)
+      POS_X TYPE I,           "Graphic x position of leftmost stage
+    END OF COUNTRYINFO.
+
+* Country stage information
+DATA: BEGIN OF COUNTRYSTAGE OCCURS 0,
+      LAND1 LIKE KNA1-LAND1,  "Country code
+      STUFE TYPE I,           "Hierarchy stage number in country
+      STUFB TYPE I,           "Width of stage (members)
+      STUFA TYPE I,           "Memory for stage width counter
+    END OF COUNTRYSTAGE.
+
+* Node neighbours structure
+DATA: BEGIN OF NODE_NEIGHBOURS,
+      ID LIKE CNG_NODES-ID,
+      PID LIKE CNG_NODES-ID,
+      SID LIKE CNG_NODES-ID,
+      LAND1 LIKE KNA1-LAND1,
+   END OF NODE_NEIGHBOURS.
+
+* Translation table for nodes
+DATA: BEGIN OF NODE_TRANSLAT OCCURS 0,
+      KNOTN LIKE VTTS-KNOTA,
+      KTYPN LIKE RV56A-SELKZ,
+      NEWID LIKE VTTS-KNOTA,
+    END OF NODE_TRANSLAT.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

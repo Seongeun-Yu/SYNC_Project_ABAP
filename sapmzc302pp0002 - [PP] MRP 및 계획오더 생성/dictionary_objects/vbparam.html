@@ -1,0 +1,2416 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=EUC-KR" />
+<title>Dictionary object- VBPARAM</title>
+<style type="text/css">
+  th{text-align:left}
+  .cell{
+     font-family:"Courier New", Courier, monospace;
+     color:#000;
+     font-size:12px;
+     background-color:#F2F4F7;
+  }
+  .cell td { border: thin solid #ccc; }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Table: VBPARAM</h2>
+  <h3>Description: Update parameters</h3></td>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Row</th>
+  <th>Field name</th>
+  <th>Position</th>
+  <th>Key</th>
+  <th>Data element</th>
+  <th>Domain</th>
+  <th>Datatype</th>
+  <th>Length</th>
+  <th>Lowercase</th>
+  <th>Domain text</th>
+</tr>
+<tr class="cell">
+  <td> 1</td>
+  <td>SERVERNAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>PFEINSTNAM</td>
+  <td>TEXT20</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>X</td>
+  <td>SAP Instance Name</td>
+</tr>
+<tr class="cell">
+  <td> 2</td>
+  <td>SERVERGRP</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>PFEINSTGRP</td>
+  <td>PFEINSTGRP</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Group of SAP instances</td>
+</tr>
+<tr class="cell">
+  <td> 3</td>
+  <td>NAME</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>MSNAME2</td>
+  <td>MSNAME2</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>X</td>
+  <td>Application Server Instance</td>
+</tr>
+<tr class="cell">
+  <td> 4</td>
+  <td>HOST</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>MSHOST2</td>
+  <td>MSHOST2</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>X</td>
+  <td>Name of the Host Server</td>
+</tr>
+<tr class="cell">
+  <td> 5</td>
+  <td>SERV</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>MSSERV</td>
+  <td>MSSERV</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>X</td>
+  <td>Service</td>
+</tr>
+<tr class="cell">
+  <td> 6</td>
+  <td>MSGTYPES</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>MSTYPES</td>
+  <td>MSTYPES</td>
+  <td>RAW</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Services of the Application Server Instance</td>
+</tr>
+<tr class="cell">
+  <td> 7</td>
+  <td>HOSTADR</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>MSHOSTADR</td>
+  <td>RAW4</td>
+  <td>RAW</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Host IP address</td>
+</tr>
+<tr class="cell">
+  <td> 8</td>
+  <td>SERVNO</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>MSSERVNO</td>
+  <td>RAW2</td>
+  <td>RAW</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Service port number</td>
+</tr>
+<tr class="cell">
+  <td> 9</td>
+  <td>STATE</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>MSSTATE</td>
+  <td>MSSTATE</td>
+  <td>RAW</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Server Status</td>
+</tr>
+<tr class="cell">
+  <td>10</td>
+  <td>MANDT1</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>MANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Client</td>
+</tr>
+<tr class="cell">
+  <td>11</td>
+  <td>MANDT2</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>MANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Client</td>
+</tr>
+<tr class="cell">
+  <td>12</td>
+  <td>BNAME1</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>UBNAME</td>
+  <td>UBNAME</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>User Name</td>
+</tr>
+<tr class="cell">
+  <td>13</td>
+  <td>BNAME2</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>UBNAME</td>
+  <td>UBNAME</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>User Name</td>
+</tr>
+<tr class="cell">
+  <td>14</td>
+  <td>TCODE1</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>TCODE</td>
+  <td>TCODE</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Transaction Code</td>
+</tr>
+<tr class="cell">
+  <td>15</td>
+  <td>TCODE2</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>TCODE</td>
+  <td>TCODE</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Transaction Code</td>
+</tr>
+<tr class="cell">
+  <td>16</td>
+  <td>USER_KEY</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>USER_KEY</td>
+  <td>USER_KEY</td>
+  <td>CHAR</td>
+  <td>512</td>
+  <td>&nbsp;</td>
+  <td>User Key for Remote Logon</td>
+</tr>
+<tr class="cell">
+  <td>17</td>
+  <td>CONVID</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>CONVID2</td>
+  <td>CHAR8</td>
+  <td>CHAR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>CPIC conversation ID</td>
+</tr>
+<tr class="cell">
+  <td>18</td>
+  <td>SECUID</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>SECUID</td>
+  <td>CHAR10</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Security user ID</td>
+</tr>
+<tr class="cell">
+  <td>19</td>
+  <td>SECPWD</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>SECPWD</td>
+  <td>CHAR10</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Security password</td>
+</tr>
+<tr class="cell">
+  <td>20</td>
+  <td>SECTYPE</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>SECTYPE</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Security Type</td>
+</tr>
+<tr class="cell">
+  <td>21</td>
+  <td>VBSINFO</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>VBSINFO</td>
+  <td>CHAR50</td>
+  <td>CHAR</td>
+  <td>50</td>
+  <td>&nbsp;</td>
+  <td>VB info in string form</td>
+</tr>
+<tr class="cell">
+  <td>22</td>
+  <td>VBGETINFO</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>VBSTAT1</td>
+  <td>INT1</td>
+  <td>INT1</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>1 byte value</td>
+</tr>
+<tr class="cell">
+  <td>23</td>
+  <td>VBDELINFO</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>VBSINFO</td>
+  <td>CHAR50</td>
+  <td>CHAR</td>
+  <td>50</td>
+  <td>&nbsp;</td>
+  <td>VB info in string form</td>
+</tr>
+<tr class="cell">
+  <td>24</td>
+  <td>VBV2INFO</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>VBSINFO</td>
+  <td>CHAR50</td>
+  <td>CHAR</td>
+  <td>50</td>
+  <td>&nbsp;</td>
+  <td>VB info in string form</td>
+</tr>
+<tr class="cell">
+  <td>25</td>
+  <td>COUNTER</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>STA_CNTRE</td>
+  <td>STAT_CNTI0</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Statistics, counter field in raw statistical record</td>
+</tr>
+<tr class="cell">
+  <td>26</td>
+  <td>TRACECOMPS</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>TRACECOMPS</td>
+  <td>TRACECOMPS</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Trace components</td>
+</tr>
+<tr class="cell">
+  <td>27</td>
+  <td>POPUPMSG</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>TH_POPUP</td>
+  <td>CHAR128</td>
+  <td>CHAR</td>
+  <td>128</td>
+  <td>&nbsp;</td>
+  <td>PopUp text</td>
+</tr>
+<tr class="cell">
+  <td>28</td>
+  <td>WP_TYPE</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>WPTYPE</td>
+  <td>WPTYPE</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Work Process Type</td>
+</tr>
+<tr class="cell">
+  <td>29</td>
+  <td>FLAG</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>FLAG</td>
+  <td>FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>General Flag</td>
+</tr>
+<tr class="cell">
+  <td>30</td>
+  <td>CLIENT</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>MANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Client</td>
+</tr>
+<tr class="cell">
+  <td>31</td>
+  <td>USER</td>
+  <td>22</td>
+  <td>&nbsp;</td>
+  <td>UBNAME</td>
+  <td>UBNAME</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>User Name</td>
+</tr>
+<tr class="cell">
+  <td>32</td>
+  <td>POOLED</td>
+  <td>23</td>
+  <td>&nbsp;</td>
+  <td>FLAG</td>
+  <td>FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>General Flag</td>
+</tr>
+<tr class="cell">
+  <td>33</td>
+  <td>GLOBAL</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>FLAG</td>
+  <td>FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>General Flag</td>
+</tr>
+<tr class="cell">
+  <td>34</td>
+  <td>WEBSOCKET</td>
+  <td>25</td>
+  <td>&nbsp;</td>
+  <td>SSI_WEBSOCKET_HANDLE_TRACE</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>64</td>
+  <td>&nbsp;</td>
+  <td>WebSocket Handle for Trace</td>
+</tr>
+<tr class="cell">
+  <td>35</td>
+  <td>SPRSL</td>
+  <td>1</td>
+  <td>X</td>
+  <td>SPRAS</td>
+  <td>SPRAS</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Language Key</td>
+</tr>
+<tr class="cell">
+  <td>36</td>
+  <td>ARBGB</td>
+  <td>2</td>
+  <td>X</td>
+  <td>ARBGB</td>
+  <td>ARBGB</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Application Area</td>
+</tr>
+<tr class="cell">
+  <td>37</td>
+  <td>MSGNR</td>
+  <td>3</td>
+  <td>X</td>
+  <td>MSGNR</td>
+  <td>MSGNR</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Message number</td>
+</tr>
+<tr class="cell">
+  <td>38</td>
+  <td>TEXT</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>NATXT</td>
+  <td>NATXT</td>
+  <td>CHAR</td>
+  <td>73</td>
+  <td>X</td>
+  <td>Message Text</td>
+</tr>
+<tr class="cell">
+  <td>39</td>
+  <td>DATUM</td>
+  <td>1</td>
+  <td>X</td>
+  <td>SYCHAR08</td>
+  <td>SYCHAR08</td>
+  <td>CHAR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>CHAR08 data element for SYST</td>
+</tr>
+<tr class="cell">
+  <td>40</td>
+  <td>UZEIT</td>
+  <td>2</td>
+  <td>X</td>
+  <td>SYCHAR06</td>
+  <td>SYCHAR06</td>
+  <td>CHAR</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>CHAR06 data element for SYST</td>
+</tr>
+<tr class="cell">
+  <td>41</td>
+  <td>COUNTER</td>
+  <td>3</td>
+  <td>X</td>
+  <td>SYCHAR04</td>
+  <td>SYCHAR04</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>CHAR04 data element for SYST</td>
+</tr>
+<tr class="cell">
+  <td>42</td>
+  <td>SUBRC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>SYCHAR04</td>
+  <td>SYCHAR04</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>CHAR04 data element for SYST</td>
+</tr>
+<tr class="cell">
+  <td>43</td>
+  <td>STATUS</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>SYCHAR04</td>
+  <td>SYCHAR04</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>CHAR04 data element for SYST</td>
+</tr>
+<tr class="cell">
+  <td>44</td>
+  <td>DATAI</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>SYCHAR04</td>
+  <td>SYCHAR04</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>CHAR04 data element for SYST</td>
+</tr>
+<tr class="cell">
+  <td>45</td>
+  <td>BUFFER</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>SYCHAR40</td>
+  <td>SYCHAR40</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>CHAR40 for SYST</td>
+</tr>
+<tr class="cell">
+  <td>46</td>
+  <td>FUNCNAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>RS38L_FNAM</td>
+  <td>FUNCNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Name of Function Module</td>
+</tr>
+<tr class="cell">
+  <td>47</td>
+  <td>PNAME</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>PNAME</td>
+  <td>PROGNAME</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>Program Name</td>
+</tr>
+<tr class="cell">
+  <td>48</td>
+  <td>INCLUDE</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>INCLUDENR</td>
+  <td>INCLUDENR</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>INCLUDE number of function module</td>
+</tr>
+<tr class="cell">
+  <td>49</td>
+  <td>FREEDATE</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>FREEDATE</td>
+  <td>FREEDATE</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Release date of function module</td>
+</tr>
+<tr class="cell">
+  <td>50</td>
+  <td>APPL</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>RS38L_APPL</td>
+  <td>PAPPL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Application to which function module is assigned</td>
+</tr>
+<tr class="cell">
+  <td>51</td>
+  <td>MAND</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>MANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Client</td>
+</tr>
+<tr class="cell">
+  <td>52</td>
+  <td>FMODE</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>FMODE</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Type of function module (local, remote, ...)</td>
+</tr>
+<tr class="cell">
+  <td>53</td>
+  <td>HOST</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+</tr>
+<tr class="cell">
+  <td>54</td>
+  <td>UTASK</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>UTASK</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Update</td>
+</tr>
+<tr class="cell">
+  <td>55</td>
+  <td>PNAME_MAIN</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>PNAME</td>
+  <td>PROGNAME</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>Program Name</td>
+</tr>
+<tr class="cell">
+  <td>56</td>
+  <td>RFCSCOPE</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>RFCSCOPE</td>
+  <td>RFCSCOPE</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Scope of RFC Function Module</td>
+</tr>
+<tr class="cell">
+  <td>57</td>
+  <td>RFCVERS</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>RFCVERS</td>
+  <td>RFCVERS</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>RFC Version</td>
+</tr>
+<tr class="cell">
+  <td>58</td>
+  <td>SERVERGRP</td>
+  <td>1</td>
+  <td>X</td>
+  <td>PFEINSTGRP</td>
+  <td>PFEINSTGRP</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Group of SAP instances</td>
+</tr>
+<tr class="cell">
+  <td>59</td>
+  <td>TABNAME</td>
+  <td>2</td>
+  <td>X</td>
+  <td>TABNAME</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Table Name</td>
+</tr>
+<tr class="cell">
+  <td>60</td>
+  <td>MAPSTATE</td>
+  <td>3</td>
+  <td>X</td>
+  <td>AS4LOCAL</td>
+  <td>AS4LOCAL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation State of Repository Object</td>
+</tr>
+<tr class="cell">
+  <td>61</td>
+  <td>ACTSTATE</td>
+  <td>4</td>
+  <td>X</td>
+  <td>ACTFLAG</td>
+  <td>ACTFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation flag</td>
+</tr>
+<tr class="cell">
+  <td>62</td>
+  <td>LOCAL_NAME</td>
+  <td>5</td>
+  <td>X</td>
+  <td>TABNAME</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Table Name</td>
+</tr>
+<tr class="cell">
+  <td>63</td>
+  <td>CHG_DATE</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>SYDATUM</td>
+  <td>SYDATS</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>System Date</td>
+</tr>
+<tr class="cell">
+  <td>64</td>
+  <td>CHG_TIME</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>SYUZEIT</td>
+  <td>SYTIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>System Time</td>
+</tr>
+<tr class="cell">
+  <td>65</td>
+  <td>MXUSER</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>SYUNAME</td>
+  <td>SYCHAR12</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>User Name</td>
+</tr>
+<tr class="cell">
+  <td>66</td>
+  <td>NAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>PROGNAME</td>
+  <td>PROGNAME</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>ABAP Program Name</td>
+</tr>
+<tr class="cell">
+  <td>67</td>
+  <td>SQLX</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>SQLX</td>
+  <td>SYCHAR01</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Source code protection</td>
+</tr>
+<tr class="cell">
+  <td>68</td>
+  <td>EDTX</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>EDTX</td>
+  <td>RDIR_FUNC</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Editor lock flag</td>
+</tr>
+<tr class="cell">
+  <td>69</td>
+  <td>VARCL</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>VARCL</td>
+  <td>SYCHAR01</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Case-Sensitive</td>
+</tr>
+<tr class="cell">
+  <td>70</td>
+  <td>DBAPL</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>DBAPL</td>
+  <td>APPL_KUERZ</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Application database</td>
+</tr>
+<tr class="cell">
+  <td>71</td>
+  <td>DBNA</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>DBNA</td>
+  <td>SYCHAR02</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Logical database</td>
+</tr>
+<tr class="cell">
+  <td>72</td>
+  <td>CLAS</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>CLAS</td>
+  <td>CLAS</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Program class</td>
+</tr>
+<tr class="cell">
+  <td>73</td>
+  <td>TYPE</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>RDIR_TYPE</td>
+  <td>SYCHAR03</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Selection screen version</td>
+</tr>
+<tr class="cell">
+  <td>74</td>
+  <td>OCCURS</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>OCCU</td>
+  <td>SYCHAR01</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Automatically generated program</td>
+</tr>
+<tr class="cell">
+  <td>75</td>
+  <td>SUBC</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>SUBC</td>
+  <td>SUBC</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Program type</td>
+</tr>
+<tr class="cell">
+  <td>76</td>
+  <td>APPL</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>RDIR_APPL</td>
+  <td>PAPPL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Application</td>
+</tr>
+<tr class="cell">
+  <td>77</td>
+  <td>SECU</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>SECU</td>
+  <td>SYCHAR08</td>
+  <td>CHAR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Authorization Group</td>
+</tr>
+<tr class="cell">
+  <td>78</td>
+  <td>CNAM</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>CNAM</td>
+  <td>SYCHAR12</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Author</td>
+</tr>
+<tr class="cell">
+  <td>79</td>
+  <td>CDAT</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>RDIR_CDATE</td>
+  <td>SYDATS</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Created On</td>
+</tr>
+<tr class="cell">
+  <td>80</td>
+  <td>UNAM</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>UNAM</td>
+  <td>SYCHAR12</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Last changed by</td>
+</tr>
+<tr class="cell">
+  <td>81</td>
+  <td>UDAT</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>RDIR_UDATE</td>
+  <td>SYDATS</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Changed On</td>
+</tr>
+<tr class="cell">
+  <td>82</td>
+  <td>VERN</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>VERN</td>
+  <td>SYCHAR06</td>
+  <td>CHAR</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Version number</td>
+</tr>
+<tr class="cell">
+  <td>83</td>
+  <td>LEVL</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>RDIR_LEVL</td>
+  <td>SYCHAR04</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Level</td>
+</tr>
+<tr class="cell">
+  <td>84</td>
+  <td>RSTAT</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>RDIR_RSTAT</td>
+  <td>RSTAT</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Status</td>
+</tr>
+<tr class="cell">
+  <td>85</td>
+  <td>RMAND</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>RMAND</td>
+  <td>SYCHAR03</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Client</td>
+</tr>
+<tr class="cell">
+  <td>86</td>
+  <td>RLOAD</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>RLOAD</td>
+  <td>LANG</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Master Language</td>
+</tr>
+<tr class="cell">
+  <td>87</td>
+  <td>FIXPT</td>
+  <td>22</td>
+  <td>&nbsp;</td>
+  <td>FIXPT</td>
+  <td>RDIR_FUNC</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Fixed point arithmetic</td>
+</tr>
+<tr class="cell">
+  <td>88</td>
+  <td>SSET</td>
+  <td>23</td>
+  <td>&nbsp;</td>
+  <td>SSET</td>
+  <td>RDIR_FUNC</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Start Using Variant Only</td>
+</tr>
+<tr class="cell">
+  <td>89</td>
+  <td>SDATE</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>RDIR_SDATE</td>
+  <td>SYDATS</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Standard selection screen generation: Date</td>
+</tr>
+<tr class="cell">
+  <td>90</td>
+  <td>STIME</td>
+  <td>25</td>
+  <td>&nbsp;</td>
+  <td>RDIR_STIME</td>
+  <td>SYCHAR06</td>
+  <td>CHAR</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Standard selection screen generation: Time</td>
+</tr>
+<tr class="cell">
+  <td>91</td>
+  <td>IDATE</td>
+  <td>26</td>
+  <td>&nbsp;</td>
+  <td>RDIR_IDATE</td>
+  <td>SYDATS</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Selection screen generation: Date</td>
+</tr>
+<tr class="cell">
+  <td>92</td>
+  <td>ITIME</td>
+  <td>27</td>
+  <td>&nbsp;</td>
+  <td>RDIR_ITIME</td>
+  <td>SYCHAR06</td>
+  <td>CHAR</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Selection screen generation: Time</td>
+</tr>
+<tr class="cell">
+  <td>93</td>
+  <td>LDBNAME</td>
+  <td>28</td>
+  <td>&nbsp;</td>
+  <td>LDBNAM</td>
+  <td>LDBNAME</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>LDB name</td>
+</tr>
+<tr class="cell">
+  <td>94</td>
+  <td>UCCHECK</td>
+  <td>29</td>
+  <td>&nbsp;</td>
+  <td>UCCHECK</td>
+  <td>ABAPVRS</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>X</td>
+  <td>ABAP Version</td>
+</tr>
+<tr class="cell">
+  <td>95</td>
+  <td>TID</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>UTID</td>
+  <td>UTID</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Terminal ID</td>
+</tr>
+<tr class="cell">
+  <td>96</td>
+  <td>MANDT</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>MANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Client</td>
+</tr>
+<tr class="cell">
+  <td>97</td>
+  <td>BNAME</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>UBNAME</td>
+  <td>UBNAME</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>User Name</td>
+</tr>
+<tr class="cell">
+  <td>98</td>
+  <td>TCODE</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>UTCODE</td>
+  <td>TCODE</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>TCODE</td>
+</tr>
+<tr class="cell">
+  <td>99</td>
+  <td>TERM</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>UTERM</td>
+  <td>CHAR20</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Terminal ID</td>
+</tr>
+<tr class="cell">
+  <td>100</td>
+  <td>ZEIT</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>UDTIME</td>
+  <td>UDTIME</td>
+  <td>CHAR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Dialog time in SM04</td>
+</tr>
+<tr class="cell">
+  <td>101</td>
+  <td>MASTER</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>UMASTER</td>
+  <td>UMASTER</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Master</td>
+</tr>
+<tr class="cell">
+  <td>102</td>
+  <td>HOSTADR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>MSHOSTADR</td>
+  <td>RAW4</td>
+  <td>RAW</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Host IP address</td>
+</tr>
+<tr class="cell">
+  <td>103</td>
+  <td>TRACE</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>USER_TRACE</td>
+  <td>USER_TRACE</td>
+  <td>INT1</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>User trace</td>
+</tr>
+<tr class="cell">
+  <td>104</td>
+  <td>EXTMODI</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>UMODE</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Task Handler: Number of External or Internal Modes</td>
+</tr>
+<tr class="cell">
+  <td>105</td>
+  <td>INTMODI</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>UMODE</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Task Handler: Number of External or Internal Modes</td>
+</tr>
+<tr class="cell">
+  <td>106</td>
+  <td>TYPE</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>INT4</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>4 Byte Signed Integer</td>
+</tr>
+<tr class="cell">
+  <td>107</td>
+  <td>STAT</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>INT4</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>4 Byte Signed Integer</td>
+</tr>
+<tr class="cell">
+  <td>108</td>
+  <td>PROTOCOL</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>INT4</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>4 Byte Signed Integer</td>
+</tr>
+<tr class="cell">
+  <td>109</td>
+  <td>GUIVERSION</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>CHAR10</td>
+  <td>CHAR10</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Character Field with Length 10</td>
+</tr>
+<tr class="cell">
+  <td>110</td>
+  <td>RFC_TYPE</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>CHAR1</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Single-Character Flag</td>
+</tr>
+<tr class="cell">
+  <td>111</td>
+  <td>VBKEY</td>
+  <td>1</td>
+  <td>X</td>
+  <td>VBKEY_D</td>
+  <td>VBKEY</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Key for Update and Enqueue/Dequeue</td>
+</tr>
+<tr class="cell">
+  <td>112</td>
+  <td>VBMODCNT</td>
+  <td>2</td>
+  <td>X</td>
+  <td>VBMODCNT</td>
+  <td>VBMODCNT</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Update module ID</td>
+</tr>
+<tr class="cell">
+  <td>113</td>
+  <td>VBBLKNO</td>
+  <td>3</td>
+  <td>X</td>
+  <td>VBBLKNO</td>
+  <td>VBBLKNO</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>No. of update data block</td>
+</tr>
+<tr class="cell">
+  <td>114</td>
+  <td>VBLEN</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>VBLEN</td>
+  <td>VBLEN</td>
+  <td>INT2</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Length of Update Data</td>
+</tr>
+<tr class="cell">
+  <td>115</td>
+  <td>VBDATA</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>VBDATA_D</td>
+  <td>VBDATA</td>
+  <td>LRAW</td>
+  <td>30000</td>
+  <td>&nbsp;</td>
+  <td>Update data</td>
+</tr>
+<tr class="cell">
+  <td>116</td>
+  <td>VBKEY</td>
+  <td>1</td>
+  <td>X</td>
+  <td>VBKEY_D</td>
+  <td>VBKEY</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Key for Update and Enqueue/Dequeue</td>
+</tr>
+<tr class="cell">
+  <td>117</td>
+  <td>VBMODCNT</td>
+  <td>2</td>
+  <td>X</td>
+  <td>VBMODCNT</td>
+  <td>VBMODCNT</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Update module ID</td>
+</tr>
+<tr class="cell">
+  <td>118</td>
+  <td>VBFUNC</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>VBFUNC</td>
+  <td>FUNCNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Update function module</td>
+</tr>
+<tr class="cell">
+  <td>119</td>
+  <td>VBREPORT</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>WPREPORT</td>
+  <td>WPREPORT</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>Report now running</td>
+</tr>
+<tr class="cell">
+  <td>120</td>
+  <td>VBLINE</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>VBLINE</td>
+  <td>VBLINE</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Line error</td>
+</tr>
+<tr class="cell">
+  <td>121</td>
+  <td>ARBGB</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>ARBGB</td>
+  <td>ARBGB</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Application Area</td>
+</tr>
+<tr class="cell">
+  <td>122</td>
+  <td>MSGNR</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>MSGNR</td>
+  <td>MSGNR</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Message number</td>
+</tr>
+<tr class="cell">
+  <td>123</td>
+  <td>VARMSGNO</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>VARMSGNO</td>
+  <td>VARMSGNO</td>
+  <td>INT1</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Number of variable message parts</td>
+</tr>
+<tr class="cell">
+  <td>124</td>
+  <td>VARMSGVAL</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>VARMSGVAL</td>
+  <td>VARMSGVAL</td>
+  <td>CHAR</td>
+  <td>210</td>
+  <td>&nbsp;</td>
+  <td>Variable message parts (length + text)</td>
+</tr>
+<tr class="cell">
+  <td>125</td>
+  <td>VBKEY</td>
+  <td>1</td>
+  <td>X</td>
+  <td>VBKEY_D</td>
+  <td>VBKEY</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Key for Update and Enqueue/Dequeue</td>
+</tr>
+<tr class="cell">
+  <td>126</td>
+  <td>VBMANDT</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>VBMANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Client for update request</td>
+</tr>
+<tr class="cell">
+  <td>127</td>
+  <td>VBUSR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>VBBNAME</td>
+  <td>UBNAME</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>User name in update request</td>
+</tr>
+<tr class="cell">
+  <td>128</td>
+  <td>VBACCNT</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>VBACCNT</td>
+  <td>VBACCNT</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Update accounting</td>
+</tr>
+<tr class="cell">
+  <td>129</td>
+  <td>VBREPORT</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>VBREPORT</td>
+  <td>WPREPORT</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>Report that created the update request</td>
+</tr>
+<tr class="cell">
+  <td>130</td>
+  <td>VBTCODE</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>VBTCODE</td>
+  <td>VBTCODE</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Transaction which has created the update request</td>
+</tr>
+<tr class="cell">
+  <td>131</td>
+  <td>VBENQKEY</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>ENQKEY</td>
+  <td>ENQKEY</td>
+  <td>CHAR</td>
+  <td>58</td>
+  <td>&nbsp;</td>
+  <td>Enqueue key</td>
+</tr>
+<tr class="cell">
+  <td>132</td>
+  <td>VBRC</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>VBRC</td>
+  <td>VBRC</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Update return code</td>
+</tr>
+<tr class="cell">
+  <td>133</td>
+  <td>VBNAME</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>VBNAME</td>
+  <td>VBNAME</td>
+  <td>CHAR</td>
+  <td>64</td>
+  <td>&nbsp;</td>
+  <td>Name of the Executing Update Server</td>
+</tr>
+<tr class="cell">
+  <td>134</td>
+  <td>VBCONTEXT</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>VBCONTEXT</td>
+  <td>VBCONTEXT</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Update context (Code-page, DB node, ..)</td>
+</tr>
+<tr class="cell">
+  <td>135</td>
+  <td>VBSTATE</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>VBSTATE</td>
+  <td>INT1</td>
+  <td>INT1</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Global State of Update Request</td>
+</tr>
+<tr class="cell">
+  <td>136</td>
+  <td>VBCLIINFO</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>THRAW1</td>
+  <td>THRAW1</td>
+  <td>RAW</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Byte Value</td>
+</tr>
+<tr class="cell">
+  <td>137</td>
+  <td>VBLANG</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>XULANGU</td>
+  <td>LANG</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Logon Language</td>
+</tr>
+<tr class="cell">
+  <td>138</td>
+  <td>VBDATFM</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>CHAR1</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Single-Character Flag</td>
+</tr>
+<tr class="cell">
+  <td>139</td>
+  <td>VBDCPFM</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>CHAR1</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Single-Character Flag</td>
+</tr>
+<tr class="cell">
+  <td>140</td>
+  <td>VBDATE</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>VBDATE</td>
+  <td>CHAR14</td>
+  <td>CHAR</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>Date and time of update record (sort)</td>
+</tr>
+<tr class="cell">
+  <td>141</td>
+  <td>VBTRANSID</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>PFTRANSID</td>
+  <td>CHAR32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>SAP Statistics: Transaction ID</td>
+</tr>
+<tr class="cell">
+  <td>142</td>
+  <td>VBETRANSID</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>PFTRANSID</td>
+  <td>CHAR32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>SAP Statistics: Transaction ID</td>
+</tr>
+<tr class="cell">
+  <td>143</td>
+  <td>VBETRANSLN</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>TXETRANSLN</td>
+  <td>TXETRANSLN</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Length of External Transaction ID</td>
+</tr>
+<tr class="cell">
+  <td>144</td>
+  <td>VBCLINAME</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>VBNAME</td>
+  <td>VBNAME</td>
+  <td>CHAR</td>
+  <td>64</td>
+  <td>&nbsp;</td>
+  <td>Name of the Executing Update Server</td>
+</tr>
+<tr class="cell">
+  <td>145</td>
+  <td>VBZONLO</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>VBZONLO</td>
+  <td>VBZONLO</td>
+  <td>CHAR</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Name of Local Time Zone</td>
+</tr>
+<tr class="cell">
+  <td>146</td>
+  <td>VBTIMOFF</td>
+  <td>22</td>
+  <td>&nbsp;</td>
+  <td>VBTIMOFF</td>
+  <td>VBTIMOFF</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Offset Local to System Time</td>
+</tr>
+<tr class="cell">
+  <td>147</td>
+  <td>TEMPERATURE</td>
+  <td>23</td>
+  <td>&nbsp;</td>
+  <td>DATA_TEMPERATURE</td>
+  <td>DATA_TEMPERATURE</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Data Filter Value for Data Aging</td>
+</tr>
+<tr class="cell">
+  <td>148</td>
+  <td>MEMORY_EXEMPTION</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>CHAR1</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Single-Character Flag</td>
+</tr>
+<tr class="cell">
+  <td>149</td>
+  <td>LTABNAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>TABNAME</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Table Name</td>
+</tr>
+<tr class="cell">
+  <td>150</td>
+  <td>VBKEY</td>
+  <td>2</td>
+  <td>X</td>
+  <td>VBKEY_D</td>
+  <td>VBKEY</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Key for Update and Enqueue/Dequeue</td>
+</tr>
+<tr class="cell">
+  <td>151</td>
+  <td>VBMANDT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>VBMANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Client for update request</td>
+</tr>
+<tr class="cell">
+  <td>152</td>
+  <td>VBUSR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>VBBNAME</td>
+  <td>UBNAME</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>User name in update request</td>
+</tr>
+<tr class="cell">
+  <td>153</td>
+  <td>VBACCNT</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>VBACCNT</td>
+  <td>VBACCNT</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Update accounting</td>
+</tr>
+<tr class="cell">
+  <td>154</td>
+  <td>VBREPORT</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>VBREPORT</td>
+  <td>WPREPORT</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>Report that created the update request</td>
+</tr>
+<tr class="cell">
+  <td>155</td>
+  <td>VBTCODE</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>VBTCODE</td>
+  <td>VBTCODE</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Transaction which has created the update request</td>
+</tr>
+<tr class="cell">
+  <td>156</td>
+  <td>VBENQKEY</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>ENQKEY</td>
+  <td>ENQKEY</td>
+  <td>CHAR</td>
+  <td>58</td>
+  <td>&nbsp;</td>
+  <td>Enqueue key</td>
+</tr>
+<tr class="cell">
+  <td>157</td>
+  <td>VBRC</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>VBRC</td>
+  <td>VBRC</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Update return code</td>
+</tr>
+<tr class="cell">
+  <td>158</td>
+  <td>VBNAME</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>VBNAME</td>
+  <td>VBNAME</td>
+  <td>CHAR</td>
+  <td>64</td>
+  <td>&nbsp;</td>
+  <td>Name of the Executing Update Server</td>
+</tr>
+<tr class="cell">
+  <td>159</td>
+  <td>VBCONTEXT</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>VBCONTEXT</td>
+  <td>VBCONTEXT</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Update context (Code-page, DB node, ..)</td>
+</tr>
+<tr class="cell">
+  <td>160</td>
+  <td>VBSTATE</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>VBSTATE</td>
+  <td>INT1</td>
+  <td>INT1</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Global State of Update Request</td>
+</tr>
+<tr class="cell">
+  <td>161</td>
+  <td>VBCLIINFO</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>THRAW1</td>
+  <td>THRAW1</td>
+  <td>RAW</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Byte Value</td>
+</tr>
+<tr class="cell">
+  <td>162</td>
+  <td>VBLANG</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>XULANGU</td>
+  <td>LANG</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Logon Language</td>
+</tr>
+<tr class="cell">
+  <td>163</td>
+  <td>VBDATFM</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>CHAR1</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Single-Character Flag</td>
+</tr>
+<tr class="cell">
+  <td>164</td>
+  <td>VBDCPFM</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>CHAR1</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Single-Character Flag</td>
+</tr>
+<tr class="cell">
+  <td>165</td>
+  <td>VBDATE</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>VBDATE</td>
+  <td>CHAR14</td>
+  <td>CHAR</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>Date and time of update record (sort)</td>
+</tr>
+<tr class="cell">
+  <td>166</td>
+  <td>VBTRANSID</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>PFTRANSID</td>
+  <td>CHAR32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>SAP Statistics: Transaction ID</td>
+</tr>
+<tr class="cell">
+  <td>167</td>
+  <td>VBETRANSID</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>PFTRANSID</td>
+  <td>CHAR32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>SAP Statistics: Transaction ID</td>
+</tr>
+<tr class="cell">
+  <td>168</td>
+  <td>VBETRANSLN</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>TXETRANSLN</td>
+  <td>TXETRANSLN</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Length of External Transaction ID</td>
+</tr>
+<tr class="cell">
+  <td>169</td>
+  <td>VBCLINAME</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>VBNAME</td>
+  <td>VBNAME</td>
+  <td>CHAR</td>
+  <td>64</td>
+  <td>&nbsp;</td>
+  <td>Name of the Executing Update Server</td>
+</tr>
+<tr class="cell">
+  <td>170</td>
+  <td>VBZONLO</td>
+  <td>22</td>
+  <td>&nbsp;</td>
+  <td>VBZONLO</td>
+  <td>VBZONLO</td>
+  <td>CHAR</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Name of Local Time Zone</td>
+</tr>
+<tr class="cell">
+  <td>171</td>
+  <td>VBTIMOFF</td>
+  <td>23</td>
+  <td>&nbsp;</td>
+  <td>VBTIMOFF</td>
+  <td>VBTIMOFF</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Offset Local to System Time</td>
+</tr>
+<tr class="cell">
+  <td>172</td>
+  <td>TEMPERATURE</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>DATA_TEMPERATURE</td>
+  <td>DATA_TEMPERATURE</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Data Filter Value for Data Aging</td>
+</tr>
+<tr class="cell">
+  <td>173</td>
+  <td>MEMORY_EXEMPTION</td>
+  <td>25</td>
+  <td>&nbsp;</td>
+  <td>CHAR1</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Single-Character Flag</td>
+</tr>
+<tr class="cell">
+  <td>174</td>
+  <td>VBKEY</td>
+  <td>1</td>
+  <td>X</td>
+  <td>VBKEY_D</td>
+  <td>VBKEY</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Key for Update and Enqueue/Dequeue</td>
+</tr>
+<tr class="cell">
+  <td>175</td>
+  <td>VBMODCNT</td>
+  <td>2</td>
+  <td>X</td>
+  <td>VBMODCNT</td>
+  <td>VBMODCNT</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Update module ID</td>
+</tr>
+<tr class="cell">
+  <td>176</td>
+  <td>VBFUNC</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>VBFUNC</td>
+  <td>FUNCNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Update function module</td>
+</tr>
+<tr class="cell">
+  <td>177</td>
+  <td>VBMODE</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>VBMODE</td>
+  <td>VBMODE</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Execution Mode of an Update Module</td>
+</tr>
+<tr class="cell">
+  <td>178</td>
+  <td>VBRC</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>VBRC</td>
+  <td>VBRC</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Update return code</td>
+</tr>
+<tr class="cell">
+  <td>179</td>
+  <td>VBDATE</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>VBDATE</td>
+  <td>CHAR14</td>
+  <td>CHAR</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>Date and time of update record (sort)</td>
+</tr>
+<tr class="cell">
+  <td>180</td>
+  <td>VBKEY</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>VBKEY_D</td>
+  <td>VBKEY</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Key for Update and Enqueue/Dequeue</td>
+</tr>
+<tr class="cell">
+  <td>181</td>
+  <td>VBMODCNT</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>VBNMODCNT</td>
+  <td>VBNMODCNT</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Update module ID in network configuration</td>
+</tr>
+<tr class="cell">
+  <td>182</td>
+  <td>VBFUNC</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>VBFUNC</td>
+  <td>FUNCNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Update function module</td>
+</tr>
+<tr class="cell">
+  <td>183</td>
+  <td>VBUSR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>UBNAME</td>
+  <td>UBNAME</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>User Name</td>
+</tr>
+<tr class="cell">
+  <td>184</td>
+  <td>VBMANDT</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>UMANDT</td>
+  <td>CHAR3</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Client</td>
+</tr>
+<tr class="cell">
+  <td>185</td>
+  <td>VBMODE</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>VBMODE1</td>
+  <td>VBMODE1</td>
+  <td>INT1</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Global update status</td>
+</tr>
+<tr class="cell">
+  <td>186</td>
+  <td>VBPHASE</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>VBPHASE</td>
+  <td>VBPHASE</td>
+  <td>INT1</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Update phase</td>
+</tr>
+<tr class="cell">
+  <td>187</td>
+  <td>VBDEBUG</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>VBDEBUG</td>
+  <td>VBDEBUG</td>
+  <td>INT1</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Display whether update is in debugging mode</td>
+</tr>
+<tr class="cell">
+  <td>188</td>
+  <td>VBDATANF</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>VBDATUM</td>
+  <td>VBDATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Date in selection template of SM13</td>
+</tr>
+<tr class="cell">
+  <td>189</td>
+  <td>VBZEITANF</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>VBZEIT</td>
+  <td>VBZEIT</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Time in selection template of SM13</td>
+</tr>
+<tr class="cell">
+  <td>190</td>
+  <td>VBDATEND</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>VBDATUM</td>
+  <td>VBDATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Date in selection template of SM13</td>
+</tr>
+<tr class="cell">
+  <td>191</td>
+  <td>VBZEITEND</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>VBZEIT</td>
+  <td>VBZEIT</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Time in selection template of SM13</td>
+</tr>
+<tr class="cell">
+  <td>192</td>
+  <td>VBERRONLY</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>VBSELSTAT</td>
+  <td>VBSELSTAT</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Status selection in SM13</td>
+</tr>
+<tr class="cell">
+  <td>193</td>
+  <td>VBV2START</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>VBV2START</td>
+  <td>INT1</td>
+  <td>INT1</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Start session for V2 update</td>
+</tr>
+<tr class="cell">
+  <td>194</td>
+  <td>VBDELETE</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>VBDELETE</td>
+  <td>INT1</td>
+  <td>INT1</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Delete mode for update requests</td>
+</tr>
+<tr class="cell">
+  <td>195</td>
+  <td>VBWRKID</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>ENQKEY64</td>
+  <td>CHAR64</td>
+  <td>CHAR</td>
+  <td>64</td>
+  <td>&nbsp;</td>
+  <td>Enqueue Key 64 (future extensions)</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754</td>
+   </tr>
+</table>
+</body>
+</html>

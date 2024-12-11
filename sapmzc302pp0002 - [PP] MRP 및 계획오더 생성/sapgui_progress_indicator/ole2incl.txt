@@ -1,0 +1,5 @@
+***INCLUDE OLE2INCL.
+TYPE-POOLS OLE2 .
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

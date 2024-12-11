@@ -1,0 +1,593 @@
+FUNCTION GFW_PRES_SHOW_MULT.
+*"----------------------------------------------------------------------
+*"*"Local interface:
+*"  IMPORTING
+*"     VALUE(CONTAINER) TYPE  C OPTIONAL
+*"     VALUE(TOP) TYPE  I OPTIONAL
+*"     VALUE(LEFT) TYPE  I OPTIONAL
+*"     VALUE(HEIGHT) TYPE  I OPTIONAL
+*"     VALUE(WIDTH) TYPE  I OPTIONAL
+*"     VALUE(PRESENTATION_TYPE) TYPE  I
+*"     VALUE(HEADER) TYPE  C OPTIONAL
+*"     VALUE(ORIENTATION) TYPE  I DEFAULT 1
+*"     VALUE(SHOW) TYPE  GFW_BOOLEAN DEFAULT GFW_TRUE
+*"     REFERENCE(PARENT) TYPE  ANY OPTIONAL
+*"     REFERENCE(X_AXIS_TITLE) TYPE  GFWLABEL OPTIONAL
+*"     REFERENCE(Y_AXIS_TITLE) TYPE  GFWLABEL OPTIONAL
+*"     VALUE(FORMAT) TYPE  I OPTIONAL
+*"  EXPORTING
+*"     VALUE(RETVAL) TYPE  SYMSGNO
+*"     VALUE(CONTENT_TYPE) TYPE  CHAR120
+*"     VALUE(CONTENT_LENGTH) TYPE  I
+*"  TABLES
+*"      VALUES STRUCTURE  GPRVAL
+*"      COLUMN_TEXTS STRUCTURE  GPRTXT
+*"      ROW_LABELS STRUCTURE  GPRTXTLA OPTIONAL
+*"      COLUMN_LABELS STRUCTURE  GPRTXTLA OPTIONAL
+*"      CONTENT STRUCTURE  W3MIME OPTIONAL
+*"  EXCEPTIONS
+*"      ERROR_OCCURRED
+*"----------------------------------------------------------------------
+
+
+*"     REFERENCE(Y_AXIS_MIN_VALUE_AUTO) TYPE  GFW_BOOLEAN DEFAULT
+*"       GFW_TRUE
+*"     REFERENCE(Y_AXIS_MIN_VALUE) TYPE  GFWYVAL OPTIONAL
+*"     REFERENCE(Y_AXIS_MAX_VALUE_AUTO) TYPE  GFW_BOOLEAN DEFAULT
+*"       GFW_TRUE
+*"     REFERENCE(Y_AXIS_MAX_VALUE) TYPE  GFWYVAL OPTIONAL
+
+* customizing objects
+  DATA: BUNDLE_DRAWING         TYPE REF TO CL_CU_DRAWING_AREA,
+        BUNDLE_DISPLAY         TYPE REF TO CL_CU_DISPLAY_CONTEXT,
+        BUNDLE_VALUES          TYPE REF TO CL_CU_VALUES,
+        BUNDLE_DATA_SHEET      TYPE REF TO CL_CU_DATA_SHEET,
+        BUNDLE_AXIS            TYPE REF TO CL_CU_AXIS,
+        BUNDLE_X_AXIS          TYPE REF TO CL_CU_AXIS,
+        BUNDLE_GRID            TYPE REF TO CL_CU_GRID,
+        BUNDLE_POINT           TYPE REF TO CL_CU_POINT,
+        BUNDLE_TITLE           TYPE REF TO CL_CU_DISPLAY_CONTEXT,
+        BUNDLE_DIAGRAM_CONTEXT TYPE REF TO CL_CU_DISPLAY_CONTEXT,
+        COLOR                  TYPE I,
+        set_grpid_cu           TYPE GFW_BOOLEAN,
+        set_XVAL_cu            TYPE GFW_BOOLEAN,
+        INDEX                  TYPE SY-INDEX,
+        VALUES_STYLE           TYPE i.
+*        EVTCODE_LIST           TYPE CNTL_SIMPLE_EVENTS,
+*        SIMPLE_EVENT           TYPE CNTL_SIMPLE_EVENT.
+
+* ***** DESTROY OLD objects
+  IF GRAPHICS_SHOWN = GFW_TRUE.
+*   destroy old graphics
+    LOOP AT GP_TAB INTO GRAPHIC_PROXY.
+      IF NOT GRAPHIC_PROXY-AUTO_CONTAINER IS INITIAL.
+*       free automatic created container (will free gp, too)
+        CALL METHOD GRAPHIC_PROXY-AUTO_CONTAINER->Free.
+      ELSEIF NOT GRAPHIC_PROXY-REF IS INITIAL.
+        CALL METHOD GRAPHIC_PROXY-REF->FREE
+                           IMPORTING RETVAL = LOCAL_RETVAL.
+        IF LOCAL_RETVAL <> CL_GFW=>OK.
+          GFW_WRITE LOCAL_RETVAL 'GFW_PRES_SHOW_MULT' 'W'. "#EC NOTEXT
+        ENDIF.
+      ENDIF.
+    ENDLOOP.
+    REFRESH GP_TAB. CLEAR GRAPHIC_PROXY.
+*   destroy old data container
+    LOOP AT DC_MANAGE_TAB INTO DC_MANAGE.
+      IF NOT DC_MANAGE-REF IS INITIAL.
+        CALL METHOD DC_MANAGE-REF->FREE
+                           IMPORTING RETVAL = LOCAL_RETVAL.
+        IF LOCAL_RETVAL <> CL_GFW=>OK.
+          GFW_WRITE LOCAL_RETVAL 'GFW_PRES_SHOW_MULT' 'W'. "#EC NOTEXT
+        ENDIF.
+      ENDIF.
+    ENDLOOP.
+    REFRESH DC_MANAGE_TAB. CLEAR DC_MANAGE.
+  ENDIF. "//graphics_shown = gfw_true
+
+  LOCAL_RETVAL = CL_GFW=>OK.
+  clear parent_container.
+
+* ***** create, initialize and fill DATA CONTAINER
+  CREATE OBJECT DC_INST_PRES.
+  DC_MANAGE-REF = DC_INST_PRES.
+  CALL METHOD DC_MANAGE-REF->INIT
+                              IMPORTING ID = MY_ID_AT_DC
+                                        RETVAL = LOCAL_RETVAL.
+  IF LOCAL_RETVAL <> CL_GFW=>OK.
+    GFW_WRITE LOCAL_RETVAL 'GFW_PRES_SHOW_MULT' 'E'. "#EC NOTEXT
+    CLEAR DC_INST_PRES.
+    CLEAR DC_MANAGE.
+  ELSE.
+    PERFORM PRES_FILL_DC TABLES VALUES     COLUMN_TEXTS
+                                ROW_LABELS COLUMN_LABELS
+                         USING ORIENTATION CHANGING LOCAL_RETVAL.
+    IF LOCAL_RETVAL <> CL_GFW=>OK.
+      CALL METHOD CL_GFW=>SHOW_MSG EXPORTING MSGNO = LOCAL_RETVAL.
+    ELSE.
+      DC_MANAGE-MY_ID_AT_DC = MY_ID_AT_DC.
+      APPEND DC_MANAGE TO DC_MANAGE_TAB.
+      clear GRAPHIC_PROXY.
+*     if content is requested there's no container available/needed
+      if not content is requested.
+*   ***** check container object to place graphic
+        if not parent is initial.
+          parent_container = parent.
+*       else create container to place graphic
+        elseif not container is initial.
+*           (place it into the custom control named CONTAINER
+*            defined via screenpainter in dynpro 100)
+          CREATE OBJECT CUSTOM_CONTAINER
+              EXPORTING
+                CONTAINER_NAME = container.
+  "       there will be a RABAX here if any error occured while creating
+  "       the container -> check if container name is uppercase !
+          parent_container = custom_container.
+          GRAPHIC_PROXY-AUTO_CONTAINER = CUSTOM_CONTAINER.
+        else.
+          LOCAL_RETVAL = cl_gfw=>e_gp_init_place.
+          clear parent_container.
+        endif.
+      endif.
+* ***** create and initialize GRAPHIC PROXY
+      if not parent_container is initial or content is requested.
+        CREATE OBJECT GP_INST_PRES.
+        GRAPHIC_PROXY-REF = GP_INST_PRES.
+        APPEND GRAPHIC_PROXY TO GP_TAB.
+        if content is requested.
+          CALL METHOD GRAPHIC_PROXY-REF->INIT
+                 EXPORTINg PARENT     = PARENT_CONTAINER
+                           DC         = DC_INST_PRES
+                           PROD_ID    = cl_gui_gp_pres=>co_prod_export
+                           force_prod = gfw_true
+               IMPORTING RETVAL  = LOCAL_RETVAL.
+        else.
+          CALL METHOD GRAPHIC_PROXY-REF->INIT
+                 EXPORTINg PARENT  = PARENT_CONTAINER
+                           TOP     = TOP
+                           LEFT    = LEFT
+                           HEIGHT  = HEIGHT
+                           WIDTH   = WIDTH
+                           DC      = DC_INST_PRES
+               IMPORTING RETVAL  = LOCAL_RETVAL.
+        endif.
+      ENDIF.
+      IF LOCAL_RETVAL <> CL_GFW=>OK.
+        GFW_WRITE LOCAL_RETVAL 'GFW_PRES_SHOW_MULT' 'E'. "#EC NOTEXT
+      ELSE.
+*       set dc attributes (use special method of gp implementation)
+        IF PRESENTATION_TYPE = GFW_PRESTYPE_PIE_CHART.
+          IF not ROW_LABELS is initial and
+             not COLUMN_LABELS is initial.
+*           show labels for groups and dim1 (x values)
+            CALL METHOD GP_INST_PRES->SET_DC_NAMES
+                    EXPORTING
+                       OBJ_ID    = 'OBJID'
+                       DIM1      = 'X_VAL'
+                       DIM2      = 'Y_VAL'
+                       GRP_ID    = 'GRPID'
+                       T_DIM1    = 'T_X_VAL'
+                       T_GRP_ID  = 'T_GRPID'
+                       OBJREF_ID = 'X_VAL' "different colored sections
+                    IMPORTING RETVAL = LOCAL_RETVAL.
+          ELSEIF ( not ROW_LABELS is initial and
+                       orientation = GFW_ORIENT_ROWS    ) OR
+                 ( not COLUMN_LABELS is initial and
+                       orientation = GFW_ORIENT_COLUMNS ).
+*           show labels for group, only
+            CALL METHOD GP_INST_PRES->SET_DC_NAMES
+                    EXPORTING
+                       OBJ_ID    = 'OBJID'
+                       DIM1      = 'X_VAL'
+                       DIM2      = 'Y_VAL'
+                       GRP_ID    = 'GRPID'
+                       T_GRP_ID  = 'T_GRPID'
+                       OBJREF_ID = 'X_VAL' "different colored sections
+                    IMPORTING RETVAL = LOCAL_RETVAL.
+          ELSEIF ( not ROW_LABELS is initial and
+                       orientation = GFW_ORIENT_COLUMNS ) OR
+                 ( not COLUMN_LABELS is initial and
+                       orientation = GFW_ORIENT_ROWS    ).
+*           show labels for dim1 (x values), only
+             CALL METHOD GP_INST_PRES->SET_DC_NAMES
+                    EXPORTING
+                       OBJ_ID    = 'OBJID'
+                       DIM1      = 'X_VAL'
+                       DIM2      = 'Y_VAL'
+                       GRP_ID    = 'GRPID'
+                       T_DIM1    = 'T_X_VAL'
+                       OBJREF_ID = 'X_VAL' "different colored sections
+                    IMPORTING RETVAL = LOCAL_RETVAL.
+          ELSE.
+*           show no labels
+            CALL METHOD GP_INST_PRES->SET_DC_NAMES
+                    EXPORTING
+                       OBJ_ID    = 'OBJID'
+                       DIM1      = 'X_VAL'
+                       DIM2      = 'Y_VAL'
+                       GRP_ID    = 'GRPID'
+                       OBJREF_ID = 'X_VAL' "different colored sections
+                    IMPORTING RETVAL = LOCAL_RETVAL.
+          ENDIF.
+        ELSEIF not ROW_LABELS is initial and
+               not COLUMN_LABELS is initial.
+*           show labels for groups and dim1 (x values)
+            CALL METHOD GP_INST_PRES->SET_DC_NAMES
+                    EXPORTING
+                       OBJ_ID    = 'OBJID'
+                       DIM1      = 'X_VAL'
+                       DIM2      = 'Y_VAL'
+                       GRP_ID    = 'GRPID'
+                       T_DIM1    = 'T_X_VAL'
+                       T_GRP_ID  = 'T_GRPID'
+                    IMPORTING RETVAL = LOCAL_RETVAL.
+        ELSEIF ( not ROW_LABELS is initial and
+                     orientation = GFW_ORIENT_ROWS    ) OR
+               ( not COLUMN_LABELS is initial and
+                     orientation = GFW_ORIENT_COLUMNS ).
+*         show labels for group, only
+          CALL METHOD GP_INST_PRES->SET_DC_NAMES
+                    EXPORTING
+                       OBJ_ID    = 'OBJID'
+                       DIM1      = 'X_VAL'
+                       DIM2      = 'Y_VAL'
+                       GRP_ID    = 'GRPID'
+                       T_GRP_ID  = 'T_GRPID'
+                    IMPORTING RETVAL = LOCAL_RETVAL.
+        ELSEIF ( not ROW_LABELS is initial and
+                     orientation = GFW_ORIENT_COLUMNS ) OR
+               ( not COLUMN_LABELS is initial and
+                     orientation = GFW_ORIENT_ROWS    ).
+*         show labels for dim1 (x values), only
+           CALL METHOD GP_INST_PRES->SET_DC_NAMES
+                    EXPORTING
+                       OBJ_ID    = 'OBJID'
+                       DIM1      = 'X_VAL'
+                       DIM2      = 'Y_VAL'
+                       GRP_ID    = 'GRPID'
+                       T_DIM1    = 'T_X_VAL'
+                    IMPORTING RETVAL = LOCAL_RETVAL.
+        ELSE.
+*         show no labels
+          CALL METHOD GP_INST_PRES->SET_DC_NAMES
+                    EXPORTING
+                       OBJ_ID    = 'OBJID'
+                       DIM1      = 'X_VAL'
+                       DIM2      = 'Y_VAL'
+                       GRP_ID    = 'GRPID'
+                    IMPORTING RETVAL = LOCAL_RETVAL.
+        ENDIF.
+
+*       take presentation_type and header to assemble customizing
+        IF LOCAL_RETVAL = CL_GFW=>OK.
+*         create display_context with visibility = gfw_false
+          CREATE OBJECT BUNDLE_DISPLAY
+                        EXPORTING INSTANCE_ID = 'GFWFC'.
+          CALL METHOD BUNDLE_DISPLAY->IF_CUSTOMIZING~SET
+             EXPORTING ATTR_ID = CL_CU_DISPLAY_CONTEXT=>CO_VISIBILITY
+                                VALUE = GFW_FALSE.
+*         ** do not show data sheet
+          create object bundle_data_sheet
+                        EXPORTING INSTANCE_ID = 'GFWFC'.
+*         use defaults so do not load cu from database
+          CALL METHOD bundle_data_sheet->IF_CUSTOMIZING~SET
+              EXPORTING ATTR_ID = cl_cu_data_sheet=>CO_DISPLAY_CONTEXT
+                                VALUE = BUNDLE_DISPLAY.
+          CALL METHOD GRAPHIC_PROXY-REF->ADD_CU_BUNDLE
+                      EXPORTING PORT = IF_GRAPHIC_PROXY=>CO_PORT_CHART
+                                BUNDLE = BUNDLE_DATA_SHEET
+                      IMPORTING RETVAL = LOCAL_RETVAL.
+*         ** do not show minor grid lines at Y axis
+          create object bundle_grid
+                        EXPORTING INSTANCE_ID = 'GFWFCY'.
+          CALL METHOD bundle_grid->IF_CUSTOMIZING~SET
+              EXPORTING ATTR_ID = cl_cu_grid=>CO_MINOR_CONTEXT
+                                VALUE = BUNDLE_DISPLAY.
+          CALL METHOD GRAPHIC_PROXY-REF->ADD_CU_BUNDLE
+                      EXPORTING PORT =
+                             IF_GRAPHIC_PROXY=>CO_PORT_CHART_Y_PRIM_AXIS
+                                BUNDLE = BUNDLE_grid
+                      IMPORTING RETVAL = LOCAL_RETVAL.
+*         ** do not show any grid lines at X axis
+          create object bundle_grid
+                        EXPORTING INSTANCE_ID = 'GFWFCX'.
+          CALL METHOD bundle_grid->IF_CUSTOMIZING~SET
+              EXPORTING ATTR_ID = cl_cu_grid=>CO_MINOR_CONTEXT
+                                VALUE = BUNDLE_DISPLAY.
+          CALL METHOD bundle_grid->IF_CUSTOMIZING~SET
+              EXPORTING ATTR_ID = cl_cu_grid=>CO_MAJOR_CONTEXT
+                                VALUE = BUNDLE_DISPLAY.
+          CALL METHOD GRAPHIC_PROXY-REF->ADD_CU_BUNDLE
+                      EXPORTING PORT =
+                             IF_GRAPHIC_PROXY=>CO_PORT_CHART_X_PRIM_AXIS
+                                BUNDLE = BUNDLE_grid
+                      IMPORTING RETVAL = LOCAL_RETVAL.
+*         *** X AXIS ***
+*         ** set axis titles (if needed else do not show any title)
+          create object bundle_x_axis
+                        EXPORTING INSTANCE_ID = 'GFWFC_X'.
+          IF X_AXIS_TITLE IS INITIAL.
+            CALL METHOD bundle_x_axis->IF_CUSTOMIZING~SET
+              EXPORTING ATTR_ID = cl_cu_axis=>CO_TITLE_CONTEXT
+                                VALUE = BUNDLE_DISPLAY.
+          ELSE.
+            CALL METHOD bundle_x_axis->IF_CUSTOMIZING~SET
+              EXPORTING ATTR_ID = cl_cu_axis=>CO_TITLE
+                                VALUE = X_AXIS_TITLE.
+*         create title context (no border around text)
+            CREATE OBJECT BUNDLE_TITLE
+                        EXPORTING INSTANCE_ID = 'GFWFC_TITLE'.
+            CALL METHOD BUNDLE_TITLE->IF_CUSTOMIZING~SET
+              EXPORTING ATTR_ID = CL_CU_DISPLAY_CONTEXT=>CO_BL_STYLE
+                                VALUE = 1. "no frame around title text
+            CALL METHOD bundle_x_axis->IF_CUSTOMIZING~SET
+              EXPORTING ATTR_ID = cl_cu_axis=>CO_TITLE_CONTEXT
+                                VALUE = BUNDLE_TITLE.
+          ENDIF.
+          CALL METHOD GRAPHIC_PROXY-REF->ADD_CU_BUNDLE
+                      EXPORTING PORT =
+                             IF_GRAPHIC_PROXY=>CO_PORT_CHART_X_PRIM_AXIS
+                                BUNDLE = BUNDLE_X_AXIS
+                      IMPORTING RETVAL = LOCAL_RETVAL.
+*         *** Y AXIS ***
+          create object bundle_axis
+                        EXPORTING INSTANCE_ID = 'GFWFC'.
+*          IF Y_AXIS_MIN_VALUE_AUTO = gfw_false.
+*            CALL METHOD bundle_axis->IF_CUSTOMIZING~SET
+*              EXPORTING ATTR_ID = cl_cu_axis=>CO_MIN_VALUE_AUTO
+*                                VALUE = gfw_false.
+*            CALL METHOD bundle_axis->IF_CUSTOMIZING~SET
+*              EXPORTING ATTR_ID = cl_cu_axis=>CO_MIN_VALUE
+*                                VALUE = Y_AXIS_MIN_VALUE.
+*          ENDIF.
+*          IF Y_AXIS_MAX_VALUE_AUTO = gfw_false.
+*            CALL METHOD bundle_axis->IF_CUSTOMIZING~SET
+*              EXPORTING ATTR_ID = cl_cu_axis=>CO_MAX_VALUE_AUTO
+*                                VALUE = gfw_false.
+*            CALL METHOD bundle_axis->IF_CUSTOMIZING~SET
+*              EXPORTING ATTR_ID = cl_cu_axis=>CO_MAX_VALUE
+*                                VALUE = Y_AXIS_MAX_VALUE.
+*          ENDIF..
+          IF Y_AXIS_TITLE IS INITIAL.
+          CALL METHOD bundle_axis->IF_CUSTOMIZING~SET
+              EXPORTING ATTR_ID = cl_cu_axis=>CO_TITLE_CONTEXT
+                                VALUE = BUNDLE_DISPLAY.
+          ELSE.
+            CALL METHOD bundle_axis->IF_CUSTOMIZING~SET
+              EXPORTING ATTR_ID = cl_cu_axis=>CO_TITLE
+                                VALUE = Y_AXIS_TITLE.
+*           create title context
+*           (no border around text, orientation upwards)
+            CREATE OBJECT BUNDLE_TITLE
+                        EXPORTING INSTANCE_ID = 'GFWFC_TITLE'.
+            CALL METHOD BUNDLE_TITLE->IF_CUSTOMIZING~SET
+              EXPORTING ATTR_ID = CL_CU_DISPLAY_CONTEXT=>CO_BL_STYLE
+                                VALUE = 1. "no frame around title text
+            CALL METHOD BUNDLE_TITLE->IF_CUSTOMIZING~SET
+              EXPORTING ATTR_ID =
+                                CL_CU_DISPLAY_CONTEXT=>CO_TF_ORIENTATION
+                                VALUE = 3. "upward
+            CALL METHOD bundle_axis->IF_CUSTOMIZING~SET
+              EXPORTING ATTR_ID = cl_cu_axis=>CO_TITLE_CONTEXT
+                                VALUE = BUNDLE_TITLE.
+          ENDIF.
+          CALL METHOD GRAPHIC_PROXY-REF->ADD_CU_BUNDLE
+                      EXPORTING PORT =
+                             IF_GRAPHIC_PROXY=>CO_PORT_CHART_Y_PRIM_AXIS
+                                BUNDLE = BUNDLE_AXIS
+                      IMPORTING RETVAL = LOCAL_RETVAL.
+*         ** set title
+          CREATE OBJECT BUNDLE_DRAWING EXPORTING INSTANCE_ID = 'GFWFC'.
+*         use defaults so do not load cu from database
+*         set title text
+          IF HEADER IS INITIAL.
+*           loffc 8th Oct 1999/set title invisible
+            CALL METHOD BUNDLE_DRAWING->IF_CUSTOMIZING~SET
+              EXPORTING ATTR_ID = CL_CU_DRAWING_AREA=>CO_TITLE_CONTEXT
+                                VALUE = BUNDLE_DISPLAY.
+          ELSE.
+            CALL METHOD BUNDLE_DRAWING->IF_CUSTOMIZING~SET
+                      EXPORTING ATTR_ID = CL_CU_DRAWING_AREA=>CO_TITLE
+                                VALUE = HEADER.
+          ENDIF.
+          "do not allow (interactive) changes
+          CALL METHOD BUNDLE_DRAWING->IF_CUSTOMIZING~SET_MASTER.
+          CALL METHOD GRAPHIC_PROXY-REF->ADD_CU_BUNDLE
+                      EXPORTING PORT = IF_GRAPHIC_PROXY=>CO_PORT_CHART
+                                BUNDLE = BUNDLE_DRAWING
+                      IMPORTING RETVAL = LOCAL_RETVAL.
+*         set default layout for all objects in graphic (no borders)
+          CREATE OBJECT BUNDLE_DIAGRAM_CONTEXT
+                        EXPORTING INSTANCE_ID = 'GFWFC_DIAGRAM'.
+          CALL METHOD BUNDLE_DIAGRAM_CONTEXT->IF_CUSTOMIZING~SET
+              EXPORTING ATTR_ID = CL_CU_DISPLAY_CONTEXT=>CO_BL_STYLE
+                                VALUE = 1. "no frame around title text
+          "do not allow (interactive) changes
+          CALL METHOD BUNDLE_DIAGRAM_CONTEXT->IF_CUSTOMIZING~SET_MASTER.
+          CALL METHOD GRAPHIC_PROXY-REF->ADD_CU_BUNDLE
+                      EXPORTING PORT = IF_GRAPHIC_PROXY=>CO_PORT_DIAGRAM
+                                BUNDLE = BUNDLE_DIAGRAM_CONTEXT
+                      IMPORTING RETVAL = LOCAL_RETVAL.
+        ENDIF. "//set title
+        IF LOCAL_RETVAL = CL_GFW=>OK.
+          if PRESENTATION_TYPE = GFW_PRESTYPE_TIME_AXIS and
+             not BUNDLE_X_AXIS is initial.
+*           set time axis flag
+            VALUES_STYLE = 34. "xyscatter
+            CALL METHOD BUNDLE_X_AXIS->IF_CUSTOMIZING~SET
+                      EXPORTING ATTR_ID = CL_CU_AXIS=>CO_SCALE_STYLE
+                                VALUE = 3.
+          else.
+            VALUES_STYLE = PRESENTATION_TYPE.
+          endif.
+        endif.
+        IF LOCAL_RETVAL = CL_GFW=>OK.
+*         ** set presentation type
+          CREATE OBJECT BUNDLE_VALUES EXPORTING INSTANCE_ID = 'GFWFC'.
+*         use defaults so do not load cu from database
+          CALL METHOD BUNDLE_VALUES->IF_CUSTOMIZING~SET
+                      EXPORTING ATTR_ID = CL_CU_VALUES=>CO_STYLE
+                                VALUE = VALUES_STYLE.
+          CALL METHOD GRAPHIC_PROXY-REF->ADD_CU_BUNDLE
+                      EXPORTING PORT = IF_GRAPHIC_PROXY=>CO_PORT_CHART
+                                BUNDLE = BUNDLE_VALUES
+                      IMPORTING RETVAL = LOCAL_RETVAL.
+*         do not allow (interactive) changes
+          CALL METHOD BUNDLE_VALUES->IF_CUSTOMIZING~SET_MASTER.
+
+          IF LOCAL_RETVAL = CL_GFW=>OK.
+*           set values with different color for each grpid;
+*           if pie set color for each xval, too
+            DO.
+              index = SY-INDEX.
+              set_grpid_cu = gfw_false.
+              set_XVAL_cu  = gfw_false.
+              read table GRPID_LIST index index.
+              if sy-subrc = 0 or sy-subrc = 2.
+                set_grpid_cu = gfw_true.
+              endif.
+              IF PRESENTATION_TYPE = GFW_PRESTYPE_PIE_CHART.
+                read table XVAL_LIST index index.
+                if sy-subrc = 0 or sy-subrc = 2.
+                  set_XVAL_cu = gfw_true.
+                endif.
+              endif.
+              if set_grpid_cu = gfw_false AND
+                 set_XVAL_cu  = gfw_false.
+                exit. "//ready, leave loop
+              endif.
+*             get next color
+              COLOR = index + 2.
+              IF COLOR = 65. COLOR = 1.
+              ELSEIF COLOR > 65. COLOR = 2.
+              ENDIF.
+*             fill display context
+              CREATE OBJECT BUNDLE_DISPLAY
+                                        EXPORTING INSTANCE_ID = 'GFWFC'.
+*             use defaults so do not load cu from database
+              CALL METHOD BUNDLE_DISPLAY->IF_CUSTOMIZING~SET
+                      EXPORTING ATTR_ID =
+                                CL_CU_DISPLAY_CONTEXT=>CO_BG_CLR_PLT_ID
+                                VALUE = COLOR.
+              CALL METHOD BUNDLE_DISPLAY->IF_CUSTOMIZING~SET
+                      EXPORTING ATTR_ID =
+                                CL_CU_DISPLAY_CONTEXT=>CO_BL_CLR_PLT_ID
+                                VALUE = COLOR.
+              CALL METHOD BUNDLE_DISPLAY->IF_CUSTOMIZING~SET
+                    EXPORTING ATTR_ID =
+                              CL_CU_DISPLAY_CONTEXT=>CO_MR_BG_CLR_PLT_ID
+                              VALUE = COLOR.
+              CALL METHOD BUNDLE_DISPLAY->IF_CUSTOMIZING~SET
+                    EXPORTING ATTR_ID =
+                              CL_CU_DISPLAY_CONTEXT=>CO_MR_FG_CLR_PLT_ID
+                              VALUE = COLOR.
+              if set_grpid_cu = gfw_true.
+                CREATE OBJECT BUNDLE_VALUES
+                           EXPORTING INSTANCE_ID = GRPID_LIST.
+*               use defaults so do not load cu from database
+                CALL METHOD BUNDLE_VALUES->IF_CUSTOMIZING~SET
+                      EXPORTING ATTR_ID = CL_CU_VALUES=>CO_STYLE
+                                VALUE = VALUES_STYLE.
+*               set color
+                CALL METHOD BUNDLE_VALUES->IF_CUSTOMIZING~SET
+                     EXPORTING ATTR_ID = CL_CU_VALUES=>CO_CURVE_CONTEXT
+                                VALUE = BUNDLE_DISPLAY.
+                CALL METHOD GRAPHIC_PROXY-REF->ADD_CU_BUNDLE
+                      EXPORTING PORT   = IF_GRAPHIC_PROXY=>CO_PORT_CHART
+                                KEY    = GRPID_LIST
+                                BUNDLE = BUNDLE_VALUES
+                      IMPORTING RETVAL = LOCAL_RETVAL.
+*               do not allow (interactive) changes
+                CALL METHOD BUNDLE_VALUES->IF_CUSTOMIZING~SET_MASTER.
+              endif.
+              IF LOCAL_RETVAL <> CL_GFW=>OK. EXIT. ENDIF.
+              if set_XVAL_cu = gfw_true.
+                CREATE OBJECT BUNDLE_POINT
+                           EXPORTING INSTANCE_ID = XVAL_LIST.
+*               use defaults so do not load cu from database
+*               set color
+                CALL METHOD BUNDLE_POINT->IF_CUSTOMIZING~SET
+                     EXPORTING ATTR_ID = CL_CU_POINT=>CO_DISPLAY_CONTEXT
+                               VALUE = BUNDLE_DISPLAY.
+                CALL METHOD GRAPHIC_PROXY-REF->ADD_CU_BUNDLE
+                      EXPORTING PORT   = IF_GRAPHIC_PROXY=>CO_PORT_CHART
+                                KEY    = XVAL_LIST
+                                BUNDLE = BUNDLE_POINT
+                      IMPORTING RETVAL = LOCAL_RETVAL.
+*               do not allow (interactive) changes
+                CALL METHOD BUNDLE_POINT->IF_CUSTOMIZING~SET_MASTER.
+              ENDIF.
+              IF LOCAL_RETVAL <> CL_GFW=>OK. EXIT. ENDIF.
+            ENDDO.
+          ENDIF.
+        ENDIF. "//set presentation type
+        IF LOCAL_RETVAL <> CL_GFW=>OK.
+          GFW_WRITE LOCAL_RETVAL 'GFW_PRES_SHOW_MULT' 'E'. "#EC NOTEXT
+        ELSE.
+          CALL METHOD GRAPHIC_PROXY-REF->ACTIVATE
+                               IMPORTING RETVAL = LOCAL_RETVAL.
+          IF LOCAL_RETVAL <> CL_GFW=>OK.
+            GFW_WRITE LOCAL_RETVAL 'GFW_PRES_SHOW_MULT' 'E'. "#EC NOTEXT
+          ELSEIF CONTENT IS REQUESTED.
+            CALL METHOD GRAPHIC_PROXY-REF->Export
+               EXPORTING format  = if_graphic_proxy=>co_format_gif
+                         width   = width
+                         height  = height
+               importing CONTENT_TYPE   = tmp_content_type
+                         CONTENT_LENGTH = tmp_content_length
+                         CONTENT        = tmp_content
+                         RETVAL         = LOCAL_RETVAL.
+            IF LOCAL_RETVAL <> CL_GFW=>OK.
+              GFW_WRITE LOCAL_RETVAL
+                'GFW_PRES_SHOW_MULT' 'E'. "#EC NOTEXT
+            ENDIF.
+            if CONTENT_TYPE is requested.
+              content_type = tmp_content_type.
+            endif.
+            if content_length is requested.
+              content_length = tmp_content_length.
+            endif.
+            content[] = tmp_content[].
+          ENDIF.
+        ENDIF.
+      ENDIF. "//init ok
+    ENDIF. "//fill_dc ok
+  ENDIF. "//create and init dc ok
+
+* ***** SHOW GRAPHICS
+  IF SHOW = GFW_TRUE AND LOCAL_RETVAL = CL_GFW=>OK and
+     NOT CONTENT IS REQUESTED.
+*   **** distribute changes (to all subscribed graphic proxies)
+    LOOP AT DC_MANAGE_TAB INTO DC_MANAGE.
+      IF NOT DC_MANAGE IS INITIAL.
+        CALL METHOD DC_MANAGE-REF->DISTRIBUTE_CHANGES
+                           IMPORTING RETVAL = LOCAL_RETVAL.
+        IF LOCAL_RETVAL <> CL_GFW=>OK.
+          GFW_WRITE LOCAL_RETVAL 'GFW_PRES_SHOW_MULT' 'E'. "#EC NOTEXT
+        ENDIF.
+      ENDIF.
+    ENDLOOP.
+*   **** activate mux (handling of external graphics and interactions)
+    CALL METHOD CL_GFW_MUX=>ACTIVATE IMPORTING RETVAL = LOCAL_RETVAL.
+    IF LOCAL_RETVAL <> CL_GFW=>OK.
+      GFW_WRITE LOCAL_RETVAL 'GFW_PRES_SHOW_MULT' 'E'. "#EC NOTEXT
+    ENDIF.
+    GRAPHICS_SHOWN = GFW_TRUE.
+  ELSEIF LOCAL_RETVAL = CL_GFW=>OK AND
+         CONTENT IS REQUESTED.
+*   delete old graphics in next call
+    GRAPHICS_SHOWN = GFW_TRUE.
+  ELSEIF LOCAL_RETVAL = CL_GFW=>OK.
+    GRAPHICS_SHOWN = GFW_FALSE.
+  ENDIF. "//SHOW = gfw_true
+
+  IF RETVAL IS REQUESTED.
+    RETVAL = LOCAL_RETVAL.
+  ENDIF.
+  IF LOCAL_RETVAL <> CL_GFW=>OK.
+    RAISE ERROR_OCCURRED.
+  ENDIF.
+ENDFUNCTION.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

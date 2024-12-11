@@ -1,0 +1,268 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=EUC-KR" />
+<title>Dictionary object- USRINFO</title>
+<style type="text/css">
+  th{text-align:left}
+  .cell{
+     font-family:"Courier New", Courier, monospace;
+     color:#000;
+     font-size:12px;
+     background-color:#F2F4F7;
+  }
+  .cell td { border: thin solid #ccc; }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Table: USRINFO</h2>
+  <h3>Description: Extended User Info for SM04</h3></td>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Row</th>
+  <th>Field name</th>
+  <th>Position</th>
+  <th>Key</th>
+  <th>Data element</th>
+  <th>Domain</th>
+  <th>Datatype</th>
+  <th>Length</th>
+  <th>Lowercase</th>
+  <th>Domain text</th>
+</tr>
+<tr class="cell">
+  <td> 1</td>
+  <td>TID</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>UTID</td>
+  <td>UTID</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Terminal ID</td>
+</tr>
+<tr class="cell">
+  <td> 2</td>
+  <td>MANDT</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>MANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Client</td>
+</tr>
+<tr class="cell">
+  <td> 3</td>
+  <td>BNAME</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>UBNAME</td>
+  <td>UBNAME</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>User Name</td>
+</tr>
+<tr class="cell">
+  <td> 4</td>
+  <td>TCODE</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>UTCODE</td>
+  <td>TCODE</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>TCODE</td>
+</tr>
+<tr class="cell">
+  <td> 5</td>
+  <td>TERM</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>UTERM</td>
+  <td>CHAR20</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Terminal ID</td>
+</tr>
+<tr class="cell">
+  <td> 6</td>
+  <td>ZEIT</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>UDTIME</td>
+  <td>UDTIME</td>
+  <td>CHAR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Dialog time in SM04</td>
+</tr>
+<tr class="cell">
+  <td> 7</td>
+  <td>MASTER</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>UMASTER</td>
+  <td>UMASTER</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Master</td>
+</tr>
+<tr class="cell">
+  <td> 8</td>
+  <td>TRACE</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>USER_TRACE</td>
+  <td>USER_TRACE</td>
+  <td>INT1</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>User trace</td>
+</tr>
+<tr class="cell">
+  <td> 9</td>
+  <td>EXTMODI</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>UMODE</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Task Handler: Number of External or Internal Modes</td>
+</tr>
+<tr class="cell">
+  <td>10</td>
+  <td>INTMODI</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>UMODE</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Task Handler: Number of External or Internal Modes</td>
+</tr>
+<tr class="cell">
+  <td>11</td>
+  <td>TYPE</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>UEXT_TYPE</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Type of Logon</td>
+</tr>
+<tr class="cell">
+  <td>12</td>
+  <td>STAT</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>USTATE</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>State of System Logon</td>
+</tr>
+<tr class="cell">
+  <td>13</td>
+  <td>PROTOCOL</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>UPROTOCOL</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Logon Protocol of Plugin</td>
+</tr>
+<tr class="cell">
+  <td>14</td>
+  <td>GUIVERSION</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>UGUIVERSION</td>
+  <td>CHAR10</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Version of SAP GUI</td>
+</tr>
+<tr class="cell">
+  <td>15</td>
+  <td>RFC_TYPE</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>URFC_TYPE</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Type of RFC Logon</td>
+</tr>
+<tr class="cell">
+  <td>16</td>
+  <td>HOSTADDR</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>NI_NODEADDR</td>
+  <td>NI_NODEADDR</td>
+  <td>CHAR</td>
+  <td>45</td>
+  <td>X</td>
+  <td>IP Address</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754</td>
+   </tr>
+</table>
+</body>
+</html>

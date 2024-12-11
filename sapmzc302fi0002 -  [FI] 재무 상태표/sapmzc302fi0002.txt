@@ -25,5 +25,12 @@ INCLUDE sapmzc302fi0002f01                      .  " FORM-Routines
 * T02   취소
 * T03 적절한 폴더가 선택되지 못했습니다.
 
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: K5
+*001   & & & &
+
 ----------------------------------------------------------------------------------
 Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

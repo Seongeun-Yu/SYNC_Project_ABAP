@@ -37,5 +37,12 @@ INCLUDE sapmzc302mm0004f01                      .  " FORM-Routines
 * I09   검수진행
 * I10   검수확인
 
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: K5
+*001   & & & &
+
 ----------------------------------------------------------------------------------
 Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

@@ -1,0 +1,127 @@
+*----------------------------------------------------------------------*
+*   INCLUDE RVGTISCO                                                   *
+*----------------------------------------------------------------------*
+
+
+* Internal types of nodes for identification and graphics
+DATA: BEGIN OF NODETYPES,
+      LADESTELLE LIKE RV56A-SELKZ    VALUE 'V', "point of shipment
+      UMSCHLAG_VSW LIKE RV56A-SELKZ  VALUE 'Y', "terminal w. chg.of.carr
+      UMSCHLAGPUNKT LIKE RV56A-SELKZ VALUE 'U', "cargo terminal
+      EMPFAENGER LIKE RV56A-SELKZ    VALUE 'E', "customer, receiver
+      LIEFERANT LIKE RV56A-SELKZ     VALUE 'S', "supplier
+      ABLADESTELLE LIKE RV56A-SELKZ  VALUE 'R', "receiver in own company
+      ANDERE LIKE RV56A-SELKZ        VALUE 'Z', "others
+      UNDEF LIKE RV56A-SELKZ         VALUE 'X', "undefined
+      GRENZE LIKE RV56A-SELKZ        VALUE '0', "Border
+      ZOLLSTELLE LIKE RV56A-SELKZ    VALUE '1', "customs
+      ZOLLGRENZE LIKE RV56A-SELKZ    VALUE '2', "border with customs
+      LEGENDE LIKE RV56A-SELKZ       VALUE 'L', "legend
+* groupings
+      UMSCHLAG(5)                    VALUE 'YU012', "terminal
+      FREMDFIRMA(2)                  VALUE 'ES',  "other company
+      EIGENFIRMA(2)                  VALUE 'VR',  "own company
+    END OF NODETYPES.
+
+* Types of segments
+DATA: BEGIN OF SEGMTYPES,
+      EINZEL LIKE RV56A-SELKZ       VALUE '1',  "single transport
+      MEHRF  LIKE RV56A-SELKZ       VALUE '2',  "bundles transport
+      SEINZEL LIKE RV56A-SELKZ      VALUE '3',  "single sel. transport
+      SMEHRF LIKE RV56A-SELKZ       VALUE '4',  "bundled sel. transport
+    END OF SEGMTYPES.
+DATA: STATUS TYPE C.
+
+* Basic segment ID definition and segment limit for bundled segments
+DATA: BUNDL_BASE_ID(10) TYPE N VALUE '1000000000'.
+DATA: BUNDL_LIMIT_ALL TYPE I VALUE 2.   "threshold for bundling all
+* 3 CANDIDATES FOR CUSTOMIZING
+DATA: BUNDL_LIMIT_STD TYPE I VALUE 2.   "Threshold standard
+DATA: BUNDL_LIMIT_STP TYPE I VALUE 2.   "threshold for startup position
+DATA: BUNDL_LIMIT_MAX TYPE I VALUE 100. "threshold maximum
+
+* Modes for 'INITIALIZE_BUNDLING'-form
+DATA: BEGIN OF BUNDL_MODES,
+      NO_GENERATION VALUE '1',      "Just reset bundling to initial
+      GENERATE VALUE '2',           "Generate entries in ALL_xxxxx_TAB
+    END OF BUNDL_MODES.
+
+* Node selectors
+DATA: BEGIN OF NODESEL,
+      START LIKE RV56A-SELKZ        VALUE 'S',  "Start node
+      END   LIKE RV56A-SELKZ        VALUE 'E',  "End node
+    END OF NODESEL.
+
+* GTIS graphics profile definition
+DATA: BEGIN OF GTIS,
+      PROFGROUP LIKE TCNGT-PRF_GRUPPE VALUE 'VTRC',
+      PROFNAME  LIKE TCNGT-PRF_NAME   VALUE 'GTIS',
+      PROFIDX   LIKE TCNGT-PRF_INDEX  VALUE '1',
+    END OF GTIS.
+
+* GTIS barchart profile definition
+DATA: BEGIN OF GTISBC1,
+      PROFGROUP LIKE TBCGT-PRF_GRUPPE VALUE 'VTRC',
+      PROFNAME  LIKE TBCGT-PRF_NAME   VALUE 'GTIS_BC',
+      PROFIDX   LIKE TBCGT-PRF_INDEX  VALUE '1',
+    END OF GTISBC1.
+
+* Menu definitions for GTIS Transport Network
+DATA: BEGIN OF GTIS_TN_MENU,
+      HIGHLIGHT_DELIV(4) VALUE 'AHVL',    "Highlighting of deliveries
+      HIGHLIGHT_SHIPM(4) VALUE 'AHVS',    "Highlighting of shipments
+      SWITCH_NET_DISP(4) VALUE 'ANET',    "Network mode setting
+      SWITCH_NETWORK(4) VALUE 'TPNT',     "Network mode
+      SEGMENT_ATTRIBUTES(4) VALUE 'ASTA', "Segment attribute type
+      DELIV_DETAIL(4) VALUE 'DLIF',       "Delivery details
+      DATE_DETAIL(4) VALUE 'DTDG',        "Date details
+      NODE_DETAIL(4) VALUE 'DKNO',        "Node details
+      BUNDLE_ALL(4) VALUE 'AZAZ',         "Bundle all segments
+      BUNDLE_MARKED(4) VALUE 'AZMZ',      "Bundle marked segments
+      UNBUNDLE_ALL(4) VALUE 'AZAA',       "Unbundle all segments
+      UNBUNDLE_MARKED(4) VALUE 'AZMA',    "Unbundle marked segments
+      INIT_BUNDLING(4) VALUE 'AZIN',      "Initialize bundling
+      SET_BUNDL_THR(4) VALUE 'AZST',      "Set bundling threshold
+      MARK_SELECTED(4) VALUE 'DMRK',      "Mark selected transp/deliv
+      DELETE_MARKS(4) VALUE 'DMDL',       "Delete marks on segments
+      HIGHLIGHT_MODE(4) VALUE 'DMAA',     "Highlighting mode for segment
+      EXIT_WITH_SELECT(4) VALUE 'EXSE',   "Exit with selection of Transp
+    END OF GTIS_TN_MENU.
+
+* Menu definitions for GTIS Transport Network
+DATA: BEGIN OF GTIS_GD_MENU,
+      ENLARGE_VIEW(4)    VALUE 'ENLV',    "Enlagre the view by factor 2
+      REDUCE_VIEW(4)     VALUE 'REDV',    "Reduce the view by factor 2
+      SHOW_LEGEND(4)     VALUE 'LEGD',    "Show a legend
+    END OF GTIS_GD_MENU.
+
+* Selection modes
+DATA  CHG_SEL_MODE-SELECT VALUE 'S'.
+DATA  CHG_SEL_MODE-UNSELECT VALUE 'U'.
+
+* Selection signs
+DATA: BEGIN OF SELECTION_SIGN,
+        SELECTED VALUE 'X',
+        INDIRECT VALUE 'I',
+        UNSELECTED VALUE SPACE,
+      END OF SELECTION_SIGN.
+
+* Object selection modes
+DATA: BEGIN OF OBJECT_MODES,
+        DELIVERY VALUE '0',       "Modify only deliveries selection
+        SHIPMENT VALUE '1',       "Modify only shipments selection
+        DELIV_SHIPM VALUE '2',    "Modify deliveries and shipments
+      END OF OBJECT_MODES.
+
+* Displaymodes and drawmodes
+DATA: BEGIN OF DISPMODE,
+        NET VALUE 'N',            "Show network
+        ROUTE VALUE 'R',          "Show route
+      END OF DISPMODE.
+DATA: BEGIN OF DRWMODE,
+        ORIGINAL VALUE 'O',       "Draw original topology
+        REORGANIZE VALUE 'R',     "Draw simplified topology
+      END OF DRWMODE.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

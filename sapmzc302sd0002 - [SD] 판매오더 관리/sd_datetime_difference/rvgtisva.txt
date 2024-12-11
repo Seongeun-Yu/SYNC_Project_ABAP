@@ -1,0 +1,210 @@
+*----------------------------------------------------------------------*
+*   INCLUDE RVGTISVA                                                   *
+*----------------------------------------------------------------------*
+
+DATA: SEGMENT_INFO_TYPE LIKE RV56A-SELKZ.  "Info type for segments
+                                           "VSArt, Weight etc.
+DATA: WINNAME LIKE NET_GRAPH-WINID.
+
+* State flag, success flag, placement flag
+DATA: GRAPH_STATE TYPE I VALUE 2.
+DATA: SUCCESS_FLAG LIKE RV56A-SELKZ.
+
+* 1 CANDIDATE FOR CUSTOMIZING
+DATA: AUTOPLACEMENTMODE LIKE RV56A-SELKZ VALUE SPACE.
+
+* Limit for bundling of segments
+DATA: BUNDL_LIMIT TYPE I.
+DATA: BUNDL_LIMIT_SAVE TYPE I.
+* Flags for repainting graphics screen and other modifications
+DATA: REPAINT_SCREEN.
+DATA: CHANGE_OF_SELECTION.
+DATA: CHANGE_OF_VISIBILITY.
+DATA: CHANGE_OF_SEGM_ATTRIB.
+DATA: RESTORE_POSITIONS.
+* Memory for ok-codes in network menu
+DATA: NET_OK(4).
+* Multi purpose tablesize variables
+DATA: TABLESIZE_1 TYPE I.
+DATA: TABLESIZE_2 TYPE I.
+* Mode for call of net module: A, L, T, none
+DATA: CALL_MODE LIKE RV56A-SELKZ VALUE SPACE.
+* Displaymode: copy of SD_GTIS_TRANSNET-Mode Parameter
+DATA: DISPLAYMODE LIKE RV56A-SELKZ.
+DATA: DISPLAYMODE_SAV LIKE RV56A-SELKZ.
+* Mode for clustering of nodes into coutry units.
+DATA: CLUSTERMODE LIKE RV56A-SELKZ  VALUE 'X'.
+DATA: CLUSTERMODE_SAV LIKE RV56A-SELKZ.
+
+* Drawmode: how to draw subnets ([O]riginal or [R]eorganized)
+* 1 CANDIDATE FOR CUSTOMIZING
+DATA: DRAWMODE LIKE RV56A-SELKZ VALUE 'O'.
+DATA: DRAWMODE_SAV LIKE RV56A-SELKZ.       "Temporary copy
+
+* Object modification mode: which objects are modified by selected mark
+* 1 CANDIDATE FOR CUSTOMIZING
+DATA: OBJ_MODIFY_MODE LIKE RV56A-SELKZ VALUE '2'.
+
+* GANTT DEADLINE DIAGRAM VARIABLES *************************************
+* Startup section size and unit
+DATA: STD_SECTSIZE LIKE BCSECTION-SIZE VALUE 200,
+      STD_SECTUNIT LIKE BCSECTION-UNIT VALUE BC_CONST-HOUR_UNIT.
+* Current sectionsize and unit
+DATA: SECTSIZE LIKE BCSECTION-SIZE VALUE 200,
+      SECTUNIT LIKE BCSECTION-UNIT VALUE BC_CONST-HOUR_UNIT.
+
+* Dynpro variables ****************************************************
+DATA: OK-CODE(4) TYPE C.        "Ok-code and memory for ok-code
+DATA: SAVE_OK-CODE(4) TYPE C.
+DATA: CURSORFIELD(30).
+FIELD-SYMBOLS: <CF> type c.
+* Dynpro loop structure
+DATA: BEGIN OF LOOPCOUNT,
+      IDX LIKE SY-INDEX VALUE 1,         "Current loop index
+      SIZE LIKE SY-LOOPC,                "Size of a loop
+      MAX LIKE SY-INDEX,                 "Size of complete table
+      TMP LIKE SY-INDEX,                 "Temporary index
+    END OF LOOPCOUNT.
+
+* Dynpro 110: highlighting of deliveries
+CONTROLS CONTROL_110 TYPE TABLEVIEW USING SCREEN '0110'.
+DATA: LC_110 LIKE LOOPCOUNT.           "Loop counter structure
+DATA: NAME_110 LIKE KNA1-NAME1.        "Name of customer
+DATA: LAND_110 LIKE KNA1-LAND1.        "Country
+DATA: ORT_110 LIKE KNA1-ORT01.         "City
+DATA: PSTLZ_110 LIKE KNA1-PSTLZ.       "Zipcode
+DATA: LFART_110 LIKE LIKP-LFART.       "Delivery type
+
+* Dynpro 111: highlighting of transports
+CONTROLS CONTROL_111 TYPE TABLEVIEW USING SCREEN '0111'.
+DATA: LC_111 LIKE LOOPCOUNT.           "Loop counter structure
+DATA: VSART_111 LIKE VTTK-VSART.       "Shipping type
+DATA: ABDATUM_111 LIKE VTTK-DPTBG.     "Start date
+DATA: ABZEIT_111 LIKE VTTK-UPTBG.      "Start time
+DATA: KNOTA_111 LIKE VTTS-KNOTA.       "Start node
+DATA: KNOTZ_111 LIKE VTTS-KNOTZ.       "End node
+DATA: ROUTE_111(35).                   "End node
+DATA: RFO0_111 LIKE VTTS-TSRFO.        "First segment
+DATA: RFO1_111 LIKE VTTS-TSRFO.        "Last segment
+
+* Dynpro 120: network display setup
+DATA: BEGIN OF SEL120,                 "network display mode
+        TPN LIKE RV56A-SELKZ,          "Transport network
+        TPW LIKE RV56A-SELKZ,          "Transport route
+        TPWV LIKE RV56A-SELKZ,         "Transport routy simplified
+      END OF SEL120.
+
+* Dynpro 130: Segment attribute selection
+* Segment info mode: which inforamtion is displayed on segments
+*                    in addition to transport ID (number of transports),
+*                    delivery ID (number of deliveries) and route
+
+DATA: BEGIN OF SEGMINFO,
+      VERSANDART    LIKE RV56A-SELKZ  VALUE 'X', "Shipping type (default
+      DIENSTLEISTER LIKE RV56A-SELKZ  VALUE ' ', "Carrier
+      VERK_TRAEGER  LIKE RV56A-SELKZ  VALUE ' ', "
+      INCO_TERM     LIKE RV56A-SELKZ  VALUE ' ', "Inco term
+      VS_ELEMENT    LIKE RV56A-SELKZ  VALUE ' ', "shipping element
+      PLANDATEN     LIKE RV56A-SELKZ  VALUE ' ', "planned schedule
+      ISTDATEN      LIKE RV56A-SELKZ  VALUE ' ', "real schedule
+      DATEN         LIKE RV56A-SELKZ  VALUE ' ', "complete schedule
+      GEWICHT       LIKE RV56A-SELKZ  VALUE ' ', "Sum of gros weights
+      VOLUMEN       LIKE RV56A-SELKZ  VALUE ' ', "Volume
+      PK_ANZAHL     LIKE RV56A-SELKZ  VALUE ' ', "Number of pieces
+      SEGMTYP       LIKE RV56A-SELKZ  VALUE ' ', "segment type VL,HL,NL
+    END OF SEGMINFO.
+DATA: SEGMINFO_SAVE LIKE SEGMINFO.
+
+
+* Dynpro 150: Selection of object highlighting mode
+* Object highl. mode: which information is used to higlight segments
+*                     highlight only segments with same deliveries
+*                     same shipments like selected segm or both
+
+DATA: BEGIN OF OBJ_HIGHLIGHTING_MODE,
+      DELIVERY  LIKE RV56A-SELKZ  VALUE ' ', "deliveries
+      SHIPMENT  LIKE RV56A-SELKZ  VALUE ' ', "shipments
+      BOTH      LIKE RV56A-SELKZ  VALUE 'X', "both
+    END OF OBJ_HIGHLIGHTING_MODE.
+DATA: OBJ_HIGH_SAVE LIKE OBJ_HIGHLIGHTING_MODE.
+
+
+* Dynpro 200: deliveries details for one transport segment
+CONTROLS CONTROL_200 TYPE TABLEVIEW USING SCREEN '0200'.
+DATA: LC_200 LIKE LOOPCOUNT.           "Loop counter structure
+DATA: CUR_LINE_200 LIKE SY-LILLI.
+* ..and a copy DELIV_SEGM for Dynpro output is located in RVGTISNT
+
+
+* Dynpro 210: deliveries details fro bundled transport segments
+CONTROLS CONTROL_210 TYPE TABLEVIEW USING SCREEN '0210'.
+DATA: LC_210 LIKE LOOPCOUNT.           "Loop counter structure
+DATA: CUR_LINE_210 LIKE SY-LILLI.
+* ..and a copy DELIV_SEGM for Dynpro output is again located in RVGTISNT
+
+
+* Dynpro 220: details on nodes and incoming and outgoing transports
+CONTROLS CONTROL_220 TYPE TABLEVIEW USING SCREEN '0220'.
+DATA: LC_220 LIKE LOOPCOUNT.           "Loop counter structure
+DATA: CUR_LINE_220 LIKE SY-LILLI.
+DATA: D220-TEXT1 LIKE NET_NVALS-VAL.        "Text 1 of node
+DATA: D220-TEXT2 LIKE NET_NVALS-VAL.        "Text 2 of node
+DATA: D220-VST_TYP(80).
+DATA: DELAY_D220 TYPE D.                    "Delay in days
+DATA: DELAY_H220 TYPE T.                    "Delay in hours
+DATA: DELAY_D220TMP TYPE D.                 "Delay in days (temporary)
+DATA: DELAY_H220TMP TYPE T.                 "Delay in hours (temporary)
+DATA: DELAY_DAYS TYPE P DECIMALS 0 VALUE 0.
+DATA: DELAY_HOURS TYPE P DECIMALS 0 VALUE 0.
+DATA: DELAY_MINUTES TYPE P DECIMALS 0 VALUE 0.
+DATA: DD_SAV TYPE P, DH_SAV TYPE P, DM_SAV TYPE P.
+DATA: DAYDIFF TYPE P, TIMEDIFF TYPE P DECIMALS 2.
+* Incoming and outgoing deliveries and transports
+DATA: BEGIN OF SHIPM_NODE OCCURS 0,
+      VBELN LIKE LIKP-VBELN,           "Delivery,
+      SELKZ LIKE RV56A-SELKZ,          "Selection sign
+      TKNIN LIKE VTSP-TKNUM,           "Incoming transport number
+      TSNIN LIKE VTSP-TSNUM,           "Incoming transport segment
+      TPNIN LIKE VTSP-TPNUM,           "Incoming transport position
+      TSRFI LIKE VTTS-TSRFO,           "Incoming transport sequence
+      DPTEN LIKE VTTS-DPTEN,           "Incoming planned date
+      UPTEN LIKE VTTS-UPTEN,           "Incoming planned time
+      DATEN LIKE VTTS-DATEN,           "Incoming actual date
+      UATEN LIKE VTTS-UATEN,           "Incoming actual time
+      DELDI TYPE P DECIMALS 0,         "Incom. Delay days
+      DELHI TYPE P DECIMALS 2,         "Incom. Delay days
+      DELI0,                           "Incom. Delay status no toleance
+      DELI1,                           "Incom. Delay status w. tolerance
+      TDLNI LIKE VTTS-TDLNR,           "Incoming carrier ID
+      TDNAI LIKE LFA1-NAME1,           "Incoming carrier name
+      TKNOU LIKE VTSP-TKNUM,           "Outgoing transport number
+      TSNOU LIKE VTSP-TSNUM,           "Outgoing transport segment
+      TPNOU LIKE VTSP-TPNUM,           "Outgoing transport position
+      TSRFO LIKE VTTS-TSRFO,           "Outgoing transport sequence
+      DPTBG LIKE VTTS-DPTBG,           "Outgoing planned date
+      UPTBG LIKE VTTS-UPTBG,           "Outgoing planned time
+      DATBG LIKE VTTS-DATBG,           "Outgoing actual date
+      UATBG LIKE VTTS-UATBG,           "Outgoing actual time
+      DELDO TYPE P DECIMALS 0,         "Outgo. Delay days
+      DELHO TYPE P DECIMALS 2,         "Outgo. Delay hours
+      DELO0,                           "Outgo. Delay status no toleance
+      DELO1,                           "Outgo. Delay status w. tolerance
+      TDLNO LIKE VTTS-TDLNR,           "Outgoing carrier ID
+      TDNAO LIKE LFA1-NAME1,           "Outgoing carrier name
+*-----Following timing declarations are for Gantt diagram
+      BEGP_ABS LIKE GGAEL-BEG,         "Begin in sec from 31-12-1899
+      ENDP_ABS LIKE GGAEL-BEG,         "End in sec from 31-12-1899
+      BEGA_ABS LIKE GGAEL-BEG,         "Begin in sec from 31-12-1899
+      ENDA_ABS LIKE GGAEL-BEG,         "End in sec from 31-12-1899
+      DURP_ABS LIKE GGAEL-DUR,         "Planned duration in sec
+      DURA_ABS LIKE GGAEL-DUR,         "Real duration in sec
+      END OF SHIPM_NODE.
+
+* Dynpro 225: details incoming and outgoing transport for one delivery
+DATA: STAT_225_IN(20).                 "Status incoming
+DATA: STAT_225_OUT(20).                "Status outgoing
+DATA: STAT_225_IN2(20).                 "Status incoming
+DATA: STAT_225_OUT2(20).                "Status outgoing
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

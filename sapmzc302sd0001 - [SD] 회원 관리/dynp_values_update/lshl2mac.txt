@@ -1,0 +1,46 @@
+*----------------------------------------------------------------------*
+*   INCLUDE LSHL2MAC                                                   *
+*----------------------------------------------------------------------*
+
+define define_table.
+  data: &1 like &2 occurs &3 with header line.
+end-of-definition.
+
+define move_table.
+  loop at &1.
+    move &1 to &2.
+    append &2.
+  endloop.
+end-of-definition.
+
+define cls.
+  refresh &1.
+  clear &1.
+end-of-definition.
+
+define def_struc.
+  data: &1 like &2.
+end-of-definition.
+
+define tm_ind.
+  read table &1 index &2.
+  move &3 to &1.
+  modify &1 index &2.
+end-of-definition.
+
+define mt_field.
+  loop at &1.
+    move &3 to &1-&2.
+    modify &1 index sy-tabix.
+  endloop.
+end-of-definition.
+
+define mt_all.
+  loop at &1.
+    move &2 to &1.
+    modify &1 index sy-tabix.
+  endloop.
+end-of-definition.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

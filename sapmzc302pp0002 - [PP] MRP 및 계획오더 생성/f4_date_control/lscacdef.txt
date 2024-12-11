@@ -1,0 +1,55 @@
+*----------------------------------------------------------------------*
+*   INCLUDE LSCACDEF                                                   *
+*----------------------------------------------------------------------*
+
+class lcl_event_handler definition.
+  public section.
+    methods: on_date_selected
+               for event date_selected of cl_gui_calendar
+                 importing
+                   date_begin
+                   date_end,
+
+             on_f2
+               for event f2 of cl_gui_calendar
+                 importing
+                   date,
+
+             on_f12
+               for event f12 of cl_gui_calendar
+                 importing
+                   date,
+
+             on_info_request
+               for event info_request of cl_gui_calendar
+                 importing
+                   date_begin
+                   date_end.
+endclass.
+
+data: g_container            type ref to cl_gui_custom_container,
+      g_evt_receiver         type ref to lcl_event_handler,
+      g_my_navigator         type ref to cl_gui_calendar,
+      g_my_display_months    type i,
+      g_my_navigator_style   type i,
+      g_my_stand_alone       type c,
+      g_my_year_begin        type i,
+      g_my_year_end          type i,
+      g_my_selection_style   type i,
+      g_my_week_day          type i,
+      g_my_focus_date        type cnca_utc_date,
+      g_b_init               type c,
+      g_ok_code              like sy-ucomm,
+*      g_wa_event             type cnca_event,
+      g_rb_date_selected     type c,
+      g_rb_busy_info_request type c,
+      g_ed_date_begin        type cnca_utc_date,
+      g_ed_date_end          type cnca_utc_date,
+      g_myevent_tab          type cntl_simple_events,
+      g_myevent              type cntl_simple_event,
+      g_badi                 type ref to calendar_definition,
+      g_month_first_week     type kmonat,
+      g_day_first_week       type ktag.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

@@ -1,0 +1,84 @@
+FUNCTION-POOL SFES.                    "MESSAGE-ID ..
+
+INCLUDE OLE2INCL.
+
+class CL_ABAP_CHAR_UTILITIES definition load.
+
+TYPE-POOLS:
+  SFES.
+
+CONSTANTS: ORB_COM_DEF VALUE 1,
+           ORB_SOM_DEF VALUE 2.
+
+* Definitionen fuer Up/Download ueber Data-Provider
+
+CONSTANTS:
+C_DPTABLESIZE      TYPE I VALUE 1024. "Länge Übergabetabelle DP
+
+*DATA: LINEBUFFER_BIN type XSTRING.
+*data: linebuffer type string.
+*DATA: table_line type string.
+
+*DATA: LINEBUFFERSIZE TYPE I.
+data: bytes_to_transfer type i.
+
+*data: codepage_converter type ref to CL_ABAP_CONV_OUT_CE.
+*data: codepage_converter2 type ref to CL_ABAP_CONV_IN_CE.
+
+*DATA : BEGIN OF DP_TABLE OCCURS 1,
+*         TEXT(C_DPTABLESIZE) type c,
+*       END OF DP_TABLE.
+*DATA : BEGIN OF DP_TABLE_BIN OCCURS 1,
+*         data(C_DPTABLESIZE) type x,
+*       END OF DP_TABLE_BIN.
+
+*DATA: NOGRAPH(4) VALUE 'JAVA'.
+
+* data: frontcodepage type ABAP_ENCOD.
+
+DATA: ORBTYP TYPE I.
+
+* COM related data
+DATA: H_COM1 TYPE OLE2_OBJECT.         "// pointer to SAPINFO-Object
+DATA: COM_INIT.                        "// init only once
+
+* Common data
+DATA: GLOBAL_RUN_CD LIKE RLGRAP-FILENAME.
+DATA: INFO_IS_VALID.
+DATA: COMNAM(255).                     " Computername...........1..
+DATA: WINDIR(255).                     " Windows Directory......2..
+DATA: SYSDIR(255).                     " System Directory.......3..
+DATA: TMPDIR(255).                     " Temp Directory.........4..
+DATA: USRNAM(255).                     " User Name (Desktop)....5..
+DATA: PLAFRM(255).                     " Platform...............6..
+DATA: BLDNUM(255).                     " Build Number...........7..
+DATA: SYSVER(255).                     " OS Version.............8..
+DATA: PRONAM(255).                     " Program Name...........9..
+DATA: PROPAT(255).                     " Program Path...........10.
+DATA: CURDIR(255).                     " Current Directory......11.
+DATA: DESKTOPDIR(255).                 " Desktop Directory......12.
+DATA: SAPDIR(255).
+DATA: SAPSYSDIR(255).
+
+DATA OK-CODE(8).
+DATA FILE_NAME TYPE STRING.
+DATA ICON(4).
+
+data dy_window_title type string.
+data dy_default_extension type string.
+data dy_default_file_name type string.
+data dy_with_encoding.
+data dy_file_filter type string.
+data dy_initial_directory type string.
+data dy_path type string.
+
+data dy_fullpath type string.
+data dy_user_action type i.
+data dy_file_encoding type CPCODEPAGE.
+data dy_filename type string.
+data current_dir type string.
+data slash.
+data init.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

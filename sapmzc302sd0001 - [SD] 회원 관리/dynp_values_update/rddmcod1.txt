@@ -1,0 +1,64 @@
+
+***********************************************************
+* Aktualisierungsarten einer Matchcode-Id                 *
+***********************************************************
+
+DATA: MC_MAINT_SY LIKE DD23V-MAINT VALUE 'S',   "synchrone MC-Id
+      MC_MAINT_AS LIKE DD23V-MAINT VALUE 'A',   "asynchrone MC-Id
+      MC_MAINT_PR LIKE DD23V-MAINT VALUE 'P',   "programmgest. MC-Id
+      MC_MAINT_IX LIKE DD23V-MAINT VALUE 'I',   "Index als MC-Id
+      MC_MAINT_CL LIKE DD23V-MAINT VALUE 'K'.   "MC-Ids im Klassifika-
+                                                "tionssystem
+
+***********************************************************
+* Attribute der zu einer MC-Id generierten Pooltabelle    *
+***********************************************************
+
+DATA: MC_USER        LIKE DD02V-AS4USER   VALUE '    ',
+      MC_APPLCLASS   LIKE DD02V-APPLCLASS VALUE 'SDGM',
+      MC_AUTHCLASS   LIKE DD02V-AUTHCLASS VALUE 0,
+      MC_GEN_DEVCLASS  LIKE TDEVC-DEVCLASS VALUE '$MC',
+      MC_POOLTEXT    LIKE DD02V-DDTEXT,
+      MC_MCIDTABTEXT LIKE DD02V-DDTEXT,
+      MC_MCIDVIEWTEXT LIKE DD02V-DDTEXT,
+      MC_MCIDINDEXTEXT LIKE DD02V-DDTEXT,
+      MC_GENDOMTEXT  LIKE DD01V-DDTEXT,
+      MC_GENROLLTEXT LIKE DD04V-DDTEXT.
+
+* Name und Datenelement des Loeschkennzeichenfeldes
+DATA: MC_DELFIELD    LIKE DD03V-FIELDNAME VALUE 'MCDELFLAG',
+      MC_DELDATEL    LIKE DD03V-ROLLNAME VALUE 'MCDELFLAG'.
+
+
+***********************************************************
+* Attribute des zu einem MC-Objekt generierten Pools      *
+***********************************************************
+
+** Schluessellaenge
+*DATA: MC_KEYMAX      type DD06V_STRUC-KEYMAX    VALUE 110,
+** Default-Einstellung fuer Datenteil des generierten Pools
+*      MC_DATAMAX     type DD06V_STRUC-DATAMAX   VALUE 500.
+** Tabellenklasse
+*      MC_SQLCLASS    type DD06V_STRUC-SQLCLASS  VALUE 'POOL',
+** Musterpool
+*      MC_SAMPLEPOOL  type DD06V_STRUC-SQLTAB    VALUE 'YMUS',
+** Name des Datenteils im Musterpool
+*      MC_SP_VARDATA  type DD16V_STRUC-FIELDNAME VALUE 'VARDATA'.
+
+***********************************************************
+* Bitpositionen fuer diverse Flagbytes in den MC-Tabellen *
+***********************************************************
+
+* Bitpositionen im Flagbyte DD24V-FLAGS
+DATA: MC_COND_FIELD_BIT  TYPE X VALUE '01'.
+* MC_NO_SELECTF_BIT  TYPE X VALUE '02'. nicht mehr benoetigt
+
+***********************************************************
+* Sonstiges                                               *
+***********************************************************
+
+* Id des "Primary Key" im MC-Objekt
+DATA: MC_PRIMKEYID(3) VALUE 'KEY'.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

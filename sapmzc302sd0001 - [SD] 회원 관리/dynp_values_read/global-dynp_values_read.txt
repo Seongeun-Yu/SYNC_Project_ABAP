@@ -1,0 +1,684 @@
+function-pool shl2       message-id sh no standard page heading.
+
+
+
+* -------------------------------------------------------------------- *
+*  Änderungen/History                                                  *
+* (weitere Änderungen sind im Funktionsbaustein VALUES_DISPLAY         *
+*  beschrieben)                                                        *
+*                                                                      *
+*   1/95     - Neue globale Felder zu Matchcodeselektionsoptionen      *
+*                                                                      *
+*  12/94     - Neue globale Felder für persönliche Werte- und          *
+*              Spaltenauswahl,                                         *
+*            - für VALUES in Ablauflogik und Auswahl mehrerer Felder   *
+*                                                                      *
+*  30.09.94  - Neue globale Felder für selbstprogrammierte Hilfe       *
+*                                                                      *
+*  09.08.94  - Strukturierung verbessert, Systemfelder an geeigneten   *
+*              Stellen eingesetzt         (Thomas Kraft, TK)           *
+* -------------------------------------------------------------------- *
+
+* Makros
+include lshl2mac.
+
+tables: t100,
+        phelp,
+        thlpg,                         " winhelpfile zur devclass
+        thelp,            "Tabelle mit Voreinstellugen für den HELP
+        thlpf,                         "Datenelementzusätze
+        thlpv,
+        ihelp,                         "Bildschirmstruktur
+        t002t,                         "Texte zu den Sprachen
+        thelpi,           "Index für Sekundärzugriff in der Doku
+        dokil,                         "Index der Dokumentation
+        t002,                          "Sprachenschlüssel
+        dfies,                         "Sicht auf Tabellenfelder
+        rsmdy,                         "Matchcode-Infos
+        dval,             "Tabelle mit Werten aus den Dynpros
+        dselc,            "Tabelle mit Selebdg. der Werte aus Dynpros
+        help_info,                     "Alle vom Help benötigten Infos
+        dd07v,                         "View auf Domaenenwerte
+        dd08l,                         "Beziehungen
+        dd02v,                         "Tabellen.
+        trdir,                         "Programmdirectory
+        dd23l,                         "Matchcode-Id's
+        dd23t,                         "Matchcode-Id-Texte
+        rsmva,                         "Matchcode-Fbausteine-Uebergabe
+        help_tinf,                     "technische Info
+        tadir,                         "technische Info 2
+        tstc,                          "system transaction code
+        tmeds,                         "Hypertextsabsprünge
+        thlpc,                         "Customizing EntwicklungsklasseDS
+        ttcds,                         "Customizing Transaktionsabsprung
+        shkontext,                     "Transportwesen
+        helpval,                       "Werte für die Einschränkungen
+        thexc,                         "geneal exception handle cust
+        thexs,                         "general exception handle sap
+        dd03l,                         " Tabellenfelder,
+        dd05s,                         " Konst. Fremdschlüssel
+        dd02l,                         " Tabellentypen
+        t100o,                         " Nachrichten
+        objs,                          " Objektstückliste
+        objsub,                        " Subobjekte
+        objsubt,                       " Subbjekttexte
+        dd01l,                         " Domänen
+        tddat,                         " Berechtigungen
+        pat03.                         " Patch-Level
+
+  CONSTANTS: c_no_exc_class(18) TYPE c VALUE 'NO_EXCEPTION_CLASS'.
+
+*.......................................statisticflag for F1
+data   : f1_use_statistic.             "value 'X'..
+tables : hlpstat_f1.
+
+*...........delete with rsdelhlp.
+*....................................... to use = 'X'.
+
+
+data: ok_code like sy-xcode,           "Funktionscode
+      actfield(30),                    "Aktuelle Cursorposition
+      xcount(2) type n,                "Kontrollzaehler für 'X'
+      position(1) type n, "Position der Sprache im Sprachenvektor
+      number_string(10),               "Für Rangfolge der Sprachen
+      docuexist like thelpi-existline.
+" Flag zum Erkennen ob Doku in Sprache vorh.
+
+data: begin of i002t occurs 0,
+        sprsl like t002t-sprsl,
+        sptxt like t002t-sptxt,
+        position(1) type n ,
+      end of i002t.
+
+data: wbereich.
+
+* stack for help_infos, used by F1
+define_table stack_help_infos help_info 0.    "listproz max 9 levels
+
+data index_stack_help_info like sy-tabix.    "index for akt_stackline
+
+* winh_object_show (linkübergabe)
+define_table links tline 0.
+
+* Puffertabelle fuer Dynp_Values_REad
+*data: dynpdfies_tab type sorted table of dfies with unique key
+*                         tabname fieldname,
+data: dynpdfies_tab type sorted table of strucinfo with unique key
+                         tabname fldpath,
+      no_ddic_tables type hashed table of dfies-tabname
+                          with unique default key.
+
+* Strukturdefinitionen für die Spaltenüberschriften:
+
+define_table tstruc shstruc 0.
+
+define_table intstructure shstruc 0.
+
+data: begin of intdynpfields occurs 0,
+        tabname like help_info-tabname,
+        fieldname like help_info-fieldname,
+        fldvalue(132),
+      end of intdynpfields.
+
+define_table intvalues shvalue 0.
+
+define_table intvaluescheck shvalue 0.
+
+define_table popupfields helpval 0.
+
+define_table menu ddyn 0.
+
+data: menu_dynpname like help_info-dynpprog,
+      menu_dynpnumb(04),
+      menu_req(01).
+
+data: dokclass like dsysh-dokclass,    "DSYS-Klasse
+      dokname like dokil-object,
+*     DOKNAME LIKE DSYSH-DOKNAME,  "zu kurz für link auf z.B. TX
+      outline like tdsgl-outline,
+      hometext like dsygh-doktitle,
+      pf15(1) type c value ' '.
+
+* Interne Tabelle in der die Werte inkl. Beschreibung abgelegt werden
+* Für jede Zeile existieren meherere Positionen, die alle den gleichen
+* Wert für den Zeilenzähler haben.
+define_table tvalue shvalue 1.
+
+* Werte des ausgewählten Feldes
+data: mcode(100).
+data: subrc,
+      lv_subrc like sy-subrc.
+
+* interne Tabelle für die Matchcode-Feldwerte
+data: begin of tmcode occurs 0,
+        tabname          like dd24h-tabname,
+        dict_field_name  like dfies-fieldname,    "Dictionary-Feldname
+        mc_field_len     like dfies-outputlen,    "Länge des MC-Feldes
+        mc_field_offset(2) type n,     "Offset für Matchcode
+        field_value(79)  type c,
+        scrlen_s  like dd24h-scrlen_s, "Schlüsselwortlänge kurz
+        scrlen_m  like dd24h-scrlen_m, " mittel
+        scrlen_l  like dd24h-scrlen_l, " lang
+        scrtext_s like dd24h-scrtext_s,"Schlüsselwort kurz
+        scrtext_m like dd24h-scrtext_m," mittel
+        scrtext_l like dd24h-scrtext_l," lang
+        gpa like dd24h-gpa,
+        memid like dd24h-memid,        " SPA/GPA-Par.-Id
+        datatype like dd24h-datatype,  " DDIC-Datentyp
+end of tmcode.
+
+
+* Fensterbreite
+data win_width(2) type n value 79.
+
+define_table dvaltab dval 0.
+
+define_table dseltab dselc 0.          " Dynproselect
+
+* Im Hilfe-Menü der Hilfebilder benötigte Daten der aktuellen Anwendung
+data: begin of menue_dat,
+        programm like help_info-program,
+        dynpro(8) type c,              " Dynpronummer
+        tcode       like sy-tcode,
+        langu       like sy-langu,
+        kz_sydyn(1)   type c,
+        report like help_info-program,
+      end of menue_dat.
+
+define_table dynpselect dselc 0.
+
+define_table dynpvaluetab dval 0.
+
+define_table ivalues shvalue 0.
+
+define_table ivaluestructure shstruc 0.
+
+define_table dd23h_tab dd23h 0.
+
+define_table idd23l dd23l 0.
+
+define_table idd23t dd23t 0.
+
+define_table irsmva rsmva 0.
+
+define_table ihelp_valuestr help_value 0.
+
+data: begin of ihelp_values occurs 0,
+        string(60).
+data: end of ihelp_values.
+
+define_table dd24h_tab dd24h 0.
+
+data: top_flag(1) type c.              "Zum Setzen verschiedener Titel
+data: aus_zeile_flag(1) type c.
+data: textstring(80) type c.
+data: intmaxentries type i value 100.  " Maximale Anz. Werte 1-tes Mal
+data: h_maxentries type i value 19999. " Maximale Anzahl von Werten,
+                                       " die aus der DB gelesen werden.
+data: retcode(1) type c.               " Returncode
+data: windowlength(5) type n.
+data: hcucol like sy-cucol.
+data: hcurow like sy-curow.
+data: startx(3) type n.
+data: starty(3) type n.
+data: endx(3) type n.
+data: endy(3) type n.
+data: intdisplay(1) type c.            " Displayflag
+*
+data: no_values_found(1) type c.
+*
+data: begin of excludetab occurs 0,
+        func(4),
+      end of excludetab.
+data: begin of checktable occurs 0,
+        op(2),
+        low_value like help_info-fldvalue,
+        high_value like help_info-fldvalue,
+        position like shstruc-pos,
+      end of checktable.
+
+data: checkflag(1) type c.       " Flag zum Pruefen der Einschränkungen
+data: highvalue like help_info-fldvalue.
+
+data: gline TYPE STANDARD TABLE OF tline,
+      gs_gl_header TYPE THEAD,
+      gs_itcpo     TYPE itcpo.
+
+define_table lines_tmp tline 0.
+
+define_table lines_temp tline 0.
+
+define_table lines_temp2 tline 0.
+
+define_table lines_temp3 tline 0.
+
+define_table tlines tline 0.
+
+define_table tlines2 tline 0.
+
+def_struc header thead.
+
+define_table glossarylist term3 0.
+
+data: adirobject(4) type c.
+data: adirobjname(30) type c.
+
+data: begin of exclude occurs 0,
+        func(4) type c,
+      end of exclude.
+
+data: dtel like dd04t-rollname,        "(10) TYPE c,
+      de_auswahl(1) type c,
+      dz_auswahl(1) type c,
+      dz_automatisch_zuordnen(1) type c,
+      dtelzusatz(4) type c,
+      hprogramm like help_info-program,
+      hstatus like help_info-pfkey,
+      himg.
+
+data: tabline like sy-tabix,
+      old_line like sy-tabix.
+
+* MATCHCODE
+***********************************************************************
+*                         Includes                                    *
+***********************************************************************
+
+include rddmcod1.                      " globale MC-Konstanten
+
+tables: dderr.            " Returncode fuer DD-Schnittstellenfunktionen
+tables: tfdir.                         " Funktionsbausteine
+
+data: progname like help_info-program.
+
+* Name der zur aktuellen Id gehoerenden Selektionsroutine in
+* diesem Programm
+data: formname(30) type c.
+data: glosslink(1) type c.
+data: hline like sy-tabix.
+data: maxlength(3) type n.
+
+* Beenden
+data: tcd(4) type c.
+data: mcid like dd23l-mcid.
+data: hselect_index like sy-tabix.
+
+define_table dpovtab dpov 0.
+
+data: dpovtab610 type table of dpov610.
+
+***********************************************************************
+* Flag to store the documentationtype witch was displayed (if possible)
+***********************************************************************
+data type_of_displayed_docu(4) type c.
+*DOCU R/3 documentation
+*DSYS Hypertextbook
+*WINH WinhelpFile
+
+***********************************************************************
+* Flag to SUPPRESS NO DOCU MESSAGE IF STANDARD IS OVERRIDE BY hypertext
+* or winhelp.
+***********************************************************************
+data suppress_nodocu(1) type c.
+***********************************************************************
+*                          Konstanten                                 *
+***********************************************************************
+* Masken fuer die Programm- und Routinennamen, die abhaengig
+* vom aktuellen MC-Objekt und der aktuellen Id dynamisch
+* gerufen werden
+data: select_form_mask(30)   type c value 'SELECT_%'.
+data: writehd_form_mask(30)  type c value 'WRITEHD_%'.
+data: lisel_form_mask(30)    type c value 'LISEL_%'.
+
+data: int_fldvalue like help_info-fldvalue.
+data flag_thexc(1) type c.
+
+* IMG-Pflege
+data: imgobject like objsub-objectname,
+      imgobjecttype like objsub-objecttype,
+      imgsubobjectname like objsub-subobjname.
+
+data: imgobjdummy like objsub-objectname,
+      imgtypedummy like objsub-objecttype,
+      imgsubdummy like objsub-subobjname.
+
+data: projectnumber like tcusp-pronr.
+
+* Memory-Parameter und persönliche Hilfe
+data: old_checkvalue like help_info-fldvalue.
+tables: f4tmp, f4uhlp, myhlp, gctab.
+
+define_table if4tmp f4tmp 0.
+
+define_table if4uhlp f4uhlp 0.
+
+define_table iperstab shvalue 0.
+
+data: f4user_done(1) type c.
+data: longest_value_length type i value 4, val_length type i.
+data: userintvalues like shvalue.
+data: search_string like help_info-fldvalue,
+      search_offset like sy-tabix,
+      search_success(1) type c.
+data: myhlp_done(1) type c, myhlp_saved(1) type c.
+
+define_table imyhlp myhlp 0.
+
+define_table check_myhlp myhlp 0.
+
+data: begin of merktab occurs 0,
+        pos like shstruc-pos,
+        selflag like shstruc-selectflag,
+        length(3) type n,
+        offset type i,
+      end of merktab.
+
+data: merk_keyword like help_info-keyword.
+
+define_table user_intvalues shvalue 0.
+
+define_table igctab gctab 0.
+
+define_table igctab_old gctab 0.
+
+data: screen_number(3) type c.
+data: call_600(1) type c.
+data: note_pershelp(1) type c value ' '.
+
+data: end_650(1) type c,
+      called_650(1) type c,
+      changed_columns(1) type c,
+      already_cols_del(1) type c value ' ',
+      set_correct_output(1) type c,
+      tried_delete_key(1) type c value ' '.
+
+define_table internal_structure shstruc 0.
+
+define_table internal_temp shstruc 0.
+
+tables: f4cols.
+
+define_table if4cols f4cols 0.
+
+define_table check_f4cols f4cols 0.
+
+data: begin of delete_positions occurs 0,
+        deleted_pos type i,
+      end of delete_positions.
+
+data: begin of delfix occurs 0,
+        pos type i,
+      end of delfix.
+
+data: begin of positions_no_change occurs 0,
+        pos type i,
+      end of positions_no_change.
+
+data: begin of exist_positions occurs 0,
+        exist_pos type i,
+      end of exist_positions.
+
+data: header_lines type i.
+
+data: global_help_date like help_info-fldvalue.
+
+* Für BETWEEN in Ablauflogik
+data: canc_120(1) type c,
+      lco like sy-linno,
+      range(1) type c.
+
+define_table dynproranges dval 0.
+
+define_table selranges dval 0.
+
+* Für Auswahl mehrerer Felder
+data: write_in_colours(1) type c,
+      vals_selected(1) type c value ' '.
+
+data: begin of already_sel_vals occurs 0,
+        wert like help_info-fldvalue,
+      end of already_sel_vals.
+
+data: titel(40) type c.
+
+define_table all_selected_values shvalue 0.
+
+data: no_scrolling(1) type c.
+
+* Für Matchcodeselektionsoptionen
+data: mc_fieldname(20) type c,
+      mc_lowval(30) type c,
+      mc_highval(30) type c,
+      single_23(1) type c,
+      ne_23(1) type c,
+      ge_23(1) type c,
+      lt_23(1) type c,
+      le_23(1) type c,
+      gt_23(1) type c,
+      sel_23(1) type c,
+      no_sel_23(1) type c.
+
+data: generic_23(1) type c.
+
+data: do_mc_select(1) type c.
+
+define_table mc_options mcselopt 0.
+
+data: mc_zeile like sy-linno.
+
+data: mc_list_called(1) type c.
+
+data: only_one_mc_id(1) type c value space.
+
+tables: rsmdy2.
+
+* Selektion vor Lesen
+data: max_entries_before_read type i value 100.
+
+data: selection_fields like helpval occurs 0 with header line.
+
+data: data_already_shrinked(1) type c,
+      more_arrow(8) type c,
+      end_selection(1) type c value space.
+* Modifizierte Ikone
+data: more_button(4) type c.
+
+data: initial_3000(1) type c.
+
+data: begin of shrinked_fields occurs 0,
+        feld like help_info-fieldname,
+      end of shrinked_fields.
+
+data: sel_stopped(1) type c value ' ',
+      dynpselect_exists(1) type c.
+
+* Für den Absprung F1 --> F4
+data: f1_docu_has_been_called(1) type c.
+
+* Globale Struktur mit PHELP-Informationen
+data: global_help_info like help_info.
+
+* Fenster- und Scrollbreite
+data: fensterbreite type i.
+
+* High-Werte-Kennzeichen
+data: high_exists(1) type c.
+
+data: begin of excl_funcs_at_domvals occurs 1,
+        func(4) type c,
+      end of excl_funcs_at_domvals.
+
+* Domänenwerte aus DDIC-Funktion wg. Konvertierungsvermeidung
+data: domvalues_from_dd_routine(1) type c.
+
+* Neue Helpviewselektionen
+define_table helpview_options hvselopt 1.
+
+data: f4_is_called_first_time(1) type c,
+      f4_is_called_second_time(1) type c.
+
+data: old_helpview_program(1) type c.
+
+define_table old_hv_structab shstruc 0.
+
+define_table stack_sel_opt mcselopt 0.
+define_table stack_keyval_tab shkeyval 0.
+define_table stack_keyrange_tab hvselopt 0.
+
+data: cancel_first_selection(1) type c.
+data: sel_is_cancelled(1) type c.
+
+data: global_helpview like help_info-tabname.
+
+* Neues Selektionsverfahren bei Prüftabellen
+data: f4keyfield like help_info-fieldname,
+      f4keyfieldvalue like help_info-fldvalue value space.
+
+data: pers_help_is_done(1) type c,
+      langu_1500           TYPE sylangu,
+      gv_no_edit           TYPE char1,
+      gv_no_translate      TYPE char1,
+      gv_no_SE80           TYPE char1,
+      gv_no_S_DEVELOP      TYPE char1,
+      gv_no_S_PROJECT      TYPE char1,
+      gv_no_workflow       TYPE char1,
+      gv_no_snote_display  TYPE char1.
+
+data: stack_valuekeyvalue like help_info-fldvalue.
+
+data: global_client_removed(1) type c.
+
+* Neues Suchverfahren für Matchcodehilfe
+data: show_new_standard_button(1) type c.
+data: global_selected_id like dd23h-mcid,
+      global_default_id like dd23h-mcid,
+      global_matchcode_object like dd23h-mconame.
+data: mc_list_2nd_time(1) type c,
+      do_not_change_def_id(1) type c,
+      new_id_list_is_called(1) type c,
+      only_one_id_exists(1) type c.
+data: info_in_list(70) type c.
+
+data: no_range_button(1) type c.
+
+* Customizinganschluß
+data: foundint.
+data: g_t100o like t100o occurs 0 with header line.
+data: global_tabname like help_info-tabname.
+
+* Rtf-Viewer.
+data: h_fcode like help_i_pra-fcode.
+
+* Stacking der F4-Werte für seriellen F4-Aufruf
+define_table stack_intvalues shvalue 0.
+define_table stack_intstructure shstruc 0.
+data: stack_intvalues_index like sy-tabix.
+define_table first_intvalues shvalue 0.
+define_table first_intstructure shstruc 0.
+
+* Nachrichtennavigation aus technischer Info.
+data: message_program like help_info-program.
+data: message_subprogram like help_info-program.
+DATA: BEGIN OF gs_old_na_tech_info,
+        messageid TYPE MSGID,
+        messagenr TYPE MSGNR,
+        program   TYPE PROGRAMM,
+        report    TYPE PROGRAMM,
+        cprog     TYPE PROGRAMM,
+      END OF gs_old_na_tech_info,
+      status_feld(30) type c value ' '.
+
+* Mainscreen bei Vorhandensein eines Subscreens für Batch-Input.
+data: mainscreen like help_info-program,
+      maindynp like help_info-dynpro.
+
+* Konstante Spalten
+data: begin of const_cols occurs 0,
+        pos like shstruc-pos,
+      end of const_cols.
+
+* Alle Werte anzeigen
+data: show_all_values_now(1) type c.
+data: user_wants_all_values(1) type c.
+
+* cua-fuction
+tables: rseul_tree, rseul_keys.
+data: tree like rseul_tree occurs 0 with header line.
+data: keys like rseul_keys occurs 0 with header line.
+
+* Dynproselektion merken:
+data: global_dynpsel like dselc occurs 0 with header line.
+data: global_options like mcselopt occurs 0 with header line.
+
+* Objektpflege aus F1 heraus aktiv.
+data: object_maint_from_f1(1) type c.
+
+* Typen für neue Prüftabellenlogik.
+types: v_table(132) type c,
+       where_tab(132) type c,
+       prog_tab(79) type c.
+data: values_char_table type v_table occurs 0 with header line.
+data: values_text_table type v_table occurs 0 with header line.
+data: wheretab type where_tab occurs 0 with header line.
+data: where_text_tab type where_tab occurs 0 with header line.
+
+* tmp +                                                      "mk
+data: g_test_mode type c   value 'X'.                       "mk
+* tmp -                                                      "mk
+
+* Anbindung Workflow
+tables: t100w.
+data: found_wf(1) type c.
+data: wf_task type SWD_STEP_T.
+data: glob_msgv1 like help_info-msgv1,
+      glob_msgv2 like help_info-msgv1,
+      glob_msgv3 like help_info-msgv1,
+      glob_msgv4 like help_info-msgv1,
+      glob_msgty like sy-msgty.
+
+data: c_always_shorttext(1) type c value '1'.        "mk 25.10.96
+*                                   Schalter, der festlegt, ob der
+*                                   Kurztext zu einem Feld immer
+*                                   angezeigt wird oder nur dann, wenn
+*                                   es keinen Langtext gibt
+*
+* 'X': Ueberschrift: Feld: langes Schluesselwort
+*      Kurztext wird nur dann angezeigt, wenn kein Langtext existiert
+*      Ueberschrift 'Defintion' entfaellt
+*
+* '1': Ueberschrift: Kurztext
+*      Ueberschrift 'Defintion' entfaellt
+*      kein Schluesselwort
+*
+* ' ': Ueberschrift: Feld: langes Schluesselwort
+*      Kurztext
+*      Langtext (falls vorhanden),
+*      beginnend mit der Ueberschrift 'Definition'
+
+* Für die Währungskonvertierung:
+tables: tcurx.
+
+* Wegen Verlängerung von dfies-fieldname (Grrrr)
+data: dfies_field_length type i value 30.
+
+data help_info_f7_sich like help_info.
+data shkontext_sich    like shkontext.
+
+data: ddxx like dd02v.
+data: tabname_text(32) type c.  "Tabellentyp
+
+data  gheader  like thead.
+data  glines  like tline occurs 0 with header line.
+
+data  g_links_enable.
+
+* for showing the docu in modal Viewer,
+* when 'print in spool' or 'Execute & Print' for reports is requested
+DATA: gv_1st_call TYPE char1,                         "#EC NEEDED
+      bit_0 LIKE syst-subty VALUE '00', "-> 00000000  "#EC NEEDED
+      bit_2 LIKE syst-subty VALUE '02', "-> 00000010  "#EC NEEDED
+      bit_2_complement LIKE syst-subty VALUE 'FD', "-> 11111101 "#EC NEEDED
+      syst_subty_backup LIKE syst-subty.              "#EC NEEDED
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

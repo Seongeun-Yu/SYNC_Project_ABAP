@@ -24,5 +24,12 @@ INCLUDE sapmzc302mm0002f01                      .  " FORM-Routines
 * E04 하나의 행을 선택해주세요
 * I01   구매오더생성
 
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: K5
+*001   & & & &
+
 ----------------------------------------------------------------------------------
 Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

@@ -1,0 +1,1560 @@
+FUNCTION bp_job_modify.
+*"----------------------------------------------------------------------
+*"*"Lokale Schnittstelle:
+*"  IMPORTING
+*"     VALUE(DIALOG) LIKE  BTCH0000-CHAR1
+*"     VALUE(JOBCOUNT) LIKE  TBTCJOB-JOBCOUNT DEFAULT SPACE
+*"     VALUE(JOBNAME) LIKE  TBTCJOB-JOBNAME DEFAULT SPACE
+*"     VALUE(NEW_JOBHEAD) LIKE  TBTCJOB STRUCTURE  TBTCJOB
+*"         DEFAULT SPACE
+*"     VALUE(OPCODE) LIKE  BTCH0000-INT4 DEFAULT 0
+*"     VALUE(RELEASE_STDT) LIKE  TBTCSTRT STRUCTURE  TBTCSTRT
+*"         DEFAULT INITIAL_STDT
+*"     VALUE(RELEASE_TARGETSYSTEM) DEFAULT SPACE
+*"     VALUE(SUPPRESS_RELEASE_CHECK) LIKE  BTCH0000-CHAR1
+*"         DEFAULT SPACE
+*"     VALUE(ADK_MODE) LIKE  BTCH0000-CHAR1 DEFAULT FALSE
+*"     VALUE(RECIPIENT_OBJ) LIKE  SWOTOBJID STRUCTURE  SWOTOBJID
+*"         OPTIONAL
+*"     VALUE(RELEASE_TARGETSERVER) LIKE  BTCTGTSRVR-SRVNAME
+*"         DEFAULT SPACE
+*"     VALUE(DONT_RELEASE) LIKE  BTCH0000-CHAR1 DEFAULT SPACE
+*"     VALUE(TARGETGROUP) TYPE  BPSRVGRP DEFAULT SPACE
+*"     VALUE(DIRECT_START) LIKE  BTCH0000-CHAR1 OPTIONAL
+*"     VALUE(JOBCLASS) TYPE  BTCJOBCLAS OPTIONAL
+*"     VALUE(EMAIL_NOTIFICATION) TYPE  BTC_S_EMAIL OPTIONAL
+*"  EXPORTING
+*"     VALUE(MODIFIED_JOBHEAD) LIKE  TBTCJOB STRUCTURE  TBTCJOB
+*"  TABLES
+*"      NEW_STEPLIST STRUCTURE  TBTCSTEP
+*"  CHANGING
+*"     REFERENCE(RET) TYPE  I OPTIONAL
+*"     REFERENCE(EMSG) TYPE  SYMSG OPTIONAL
+*"  EXCEPTIONS
+*"      CANT_DERELEASE_JOB
+*"      CANT_ENQ_JOB
+*"      CANT_READ_JOBDATA
+*"      CANT_RELEASE_JOB
+*"      CANT_SET_JOBSTATUS_IN_DB
+*"      CANT_START_JOB_IMMEDIATELY
+*"      CANT_UPDATE_JOBDATA
+*"      EVENTCNT_GENERATION_ERROR
+*"      INVALID_DIALOG_TYPE
+*"      INVALID_NEW_JOBDATA
+*"      INVALID_NEW_JOBSTATUS
+*"      INVALID_OPCODE
+*"      INVALID_STARTDATE
+*"      JOB_EDIT_FAILED
+*"      JOB_MODIFY_CANCELED
+*"      JOB_NOT_MODIFIABLE_ANYMORE
+*"      NOTHING_TO_DO
+*"      NO_BATCH_ON_TARGET_HOST
+*"      NO_BATCH_SERVER_FOUND
+*"      NO_BATCH_WP_FOR_JOBCLASS
+*"      NO_MODIFY_PRIVILEGE_GIVEN
+*"      NO_RELEASE_PRIVILEGE_GIVEN
+*"      NO_STARTDATE_NO_RELEASE
+*"      TARGET_HOST_NOT_DEFINED
+*"      TGT_HOST_CHK_HAS_FAILED
+*"      INVALID_TARGETGROUP
+*"      CONFLICTING_TARGETS
+*"----------------------------------------------------------------------
+  DATA: rc              LIKE btch0000-int4,
+        old_status      LIKE tbtcjob-status,
+        new_status      LIKE tbtcjob-status,
+        target_machine  LIKE tbtcjob-btcsystem,
+        read_mode       LIKE btch0000-int4 VALUE 0,
+        job_mod_type    LIKE btch0000-int4 VALUE 0,
+        stdt_mod_type   LIKE btch0000-int4 VALUE 0,
+        startdate_given LIKE true,
+        tmp_grp         TYPE REF TO cl_bp_server_group,   "GRP: stuff
+        tgtsrvgrp_id    TYPE csmsysguid VALUE space,
+        grp_server_list TYPE TABLE OF bpsrvline,
+        one_resource    TYPE msname2, "one possible resource for the job
+        p_sy_subrc      LIKE sy-subrc.
+
+  DATA BEGIN OF old_jobhead.
+  INCLUDE STRUCTURE tbtcjob.
+  DATA END OF old_jobhead.
+
+  DATA BEGIN OF old_steplist OCCURS 10.
+  INCLUDE STRUCTURE tbtcstep.
+  DATA END OF old_steplist.
+
+  DATA BEGIN OF old_stdt.
+  INCLUDE STRUCTURE tbtcstrt.  " alte Startterminwerte
+  DATA END OF old_stdt.
+
+  DATA BEGIN OF new_stdt.
+  INCLUDE STRUCTURE tbtcstrt.  " neue Startterminwerte
+  DATA END OF new_stdt.
+
+  DATA release_targethost LIKE tbtco-btcsystem.
+  DATA: clear_server_group TYPE btcchar1.  " note 1658978
+
+*** for tracing *****************************************
+
+  DATA: tracelevel_btc TYPE i.
+
+  PERFORM check_and_set_trace_level_btc
+                            USING tracelevel_btc
+                                  jobname.
+
+  PERFORM write_string_to_wptrace_btc USING tracelevel_btc
+                                          'BP_JOB_MODIFY:'  "#EC NOTEXT
+                                          'Jobname / Jobcount = ' "#EC NOTEXT
+                                          jobname
+                                          jobcount.
+
+***********************************************************
+
+*  CLASS cl_bp_const DEFINITION LOAD.
+
+  cl_btc_error_controller=>clear_error_info( ).  " note 2272827
+
+***** c5034979 XBP20, change *****
+  CLEAR: ret, emsg.
+
+*
+*  Inputparameter DIALOG und OPCODE prüfen
+*
+  PERFORM check_mode_parameters USING dialog opcode.
+
+
+  PERFORM check_authority USING jobname
+                                jobcount
+                                release_stdt
+                                dont_release
+                          CHANGING ret
+                                   emsg.
+*
+* make sure the btch1140aux is free for something new:
+*
+  IF NOT btch1140aux-recipient IS INITIAL.
+    swc_free_object btch1140aux-recipient.
+    CLEAR btch1140aux-recipient.
+  ENDIF.
+
+* Email Notification
+  IF email_notification IS NOT INITIAL.
+    email_notify_wa = email_notification.
+  ENDIF.
+
+  PERFORM handle_incoming_target USING jobname
+                                       jobcount
+                                       release_targetsystem
+                                 CHANGING release_targetserver
+                                          targetgroup
+                                          tgtsrvgrp_id
+                                          release_targethost
+                                          clear_server_group
+                                          tmp_grp
+                                          emsg
+                                          p_sy_subrc.
+*
+* Job sperren
+*
+  PERFORM enq_job USING jobname jobcount dialog rc.
+
+  IF rc NE 0.
+    PERFORM deq_job USING jobname jobcount dialog rc.
+    emsg-msgid = 'BT'.
+    emsg-msgno = '126'.
+    emsg-msgty = 'E'.
+    emsg-msgv1 = jobname.
+    RAISE cant_enq_job.
+  ENDIF.
+*
+* alte Jobdaten von der Datenbank lesen und merken
+*
+  PERFORM read_old_jobdata TABLES old_steplist
+                           USING  jobname
+                                  jobcount
+                                  read_mode
+                                  old_jobhead
+                                  dialog
+                                  rc.
+  IF rc NE 0.
+    MOVE-CORRESPONDING syst TO emsg.
+    PERFORM deq_job USING jobname jobcount dialog rc.
+    RAISE cant_read_jobdata.
+  ENDIF.
+
+  old_status = old_jobhead-status.
+  PERFORM extract_stdt_from_jobhead USING old_jobhead old_stdt.
+*
+* prüfen, ob überhaupt was zu tun ist
+*
+  IF ( ( opcode EQ btc_release_job AND
+         old_status EQ btc_released    )          OR
+       ( opcode EQ btc_derelease_job AND
+         old_status EQ btc_scheduled            )    ).
+    PERFORM deq_job USING jobname jobcount dialog rc.
+    emsg-msgid = 'XM'.
+    emsg-msgno = '208'.
+    emsg-msgty = 'S'.
+    RAISE nothing_to_do.
+  ENDIF.
+*
+* Änderungsberechtigung prüfen
+*
+  PERFORM check_job_modify_privilege USING old_jobhead
+                                           new_jobhead
+                                           opcode
+                                           dialog
+                                           rc.
+  IF rc <> 0.
+    MOVE-CORRESPONDING syst TO emsg.
+  ENDIF.
+  CASE rc.
+    WHEN 0.
+      " Änderungsberechtigung liegt vor
+    WHEN modification_not_possible.
+      PERFORM deq_job USING jobname jobcount dialog rc.
+      RAISE job_not_modifiable_anymore.
+    WHEN no_modif_privilege_given.
+      PERFORM deq_job USING jobname jobcount dialog rc.
+      RAISE no_modify_privilege_given.
+    WHEN invalid_new_jobstatus.
+      PERFORM deq_job USING jobname jobcount dialog rc.
+      RAISE invalid_new_jobstatus.
+    WHEN cant_release_job.
+
+* store precise error information ********************************
+      xbp_msgpar2 = jobcount.
+      xbp_msgpar3 = jobname.
+
+      CALL METHOD cl_btc_error_controller=>fill_error_info
+        EXPORTING
+          i_msgid = 'XM'
+          i_msgno = msg_cant_release_job_2
+          i_msg2  = xbp_msgpar2
+          i_msg3  = xbp_msgpar3.
+      CLEAR xbp_msgpar2.
+      CLEAR xbp_msgpar3.
+******************************************************************
+
+      PERFORM deq_job USING jobname jobcount dialog rc.
+      RAISE cant_release_job.
+  ENDCASE.
+*
+* Prüfen, ob Freigabeberechtigung vorliegt (setzen der globalen
+* Variablen RELEASE_PRIVILEGE_GIVEN). Wird ein Systemjob modifiziert,
+* so soll immer Freigabeberechtigung vorliegen.
+*
+  IF suppress_release_check EQ 'X'.
+    release_privilege_given = btc_yes.
+  ELSE.
+    PERFORM check_release_privilege.
+  ENDIF.
+
+**********************************************************************
+*
+*
+*
+* Work around for workflow -- define job with starting condition
+*                             but status 'planned' for later release
+* by removing user releasing privilege
+* JY 07/28/1999
+*
+**********************************************************************
+*
+*
+  IF dont_release EQ 'X'.
+    release_privilege_given = btc_no.
+  ENDIF.
+
+*
+* gewünschten Dialogmode und zugehörigen Opcode verarbeiten:
+*
+*  - OPCODE = BTC_DERELEASE_JOB (Dialog- und Nichtdialogfall):
+*    - alte Jobkopf- und Starttermindaten kopieren
+*  - DIALOG = Ja
+*    - Freigabeberechtigung prüfen
+*    - falls Job vorher freigegeben war, diesen temporär ausplanen
+*    - falls ganzer Job modifiziert werden soll Jobeditor aufrufen
+*    - falls Job freigeben werden soll, Starttermineditor aufrufen
+*    - falls Job vorher freigegeben war, diesen wieder mit den alten
+*      Jobkopfdaten freigeben. Grund: falls wir anschliessend die
+*      Verarbeitung abbrechen müssen, dann stehen nach wie vor die
+*      alten Jobdaten in der Datenbank.
+*
+*          .
+  IF opcode EQ btc_derelease_job.
+    new_jobhead  = old_jobhead.
+    new_stdt     = old_stdt.           " neuer = alter Starttermin
+    new_status   = btc_scheduled.      " neuer Status = 'eingeplant'
+    job_mod_type = btc_job_modified.   " Kopf- und Freigabedaten
+  ELSE.                                " müssen upgedatet werden
+    IF dialog EQ btc_yes.
+      IF opcode EQ btc_modify_whole_job.  " Jobdaten ändern
+        CALL FUNCTION 'BP_JOB_EDITOR'
+          EXPORTING
+            job_editor_dialog      = btc_yes
+            job_editor_opcode      = btc_edit_job
+            job_head_input         = old_jobhead
+            email_notification     = email_notification
+          IMPORTING
+            job_editor_modify_type = job_mod_type
+            job_head_output        = new_jobhead
+            job_stdt_output        = new_stdt
+          TABLES
+            job_steplist           = old_steplist
+          EXCEPTIONS
+            OTHERS                 = 99.
+
+        IF sy-subrc EQ 0.
+          new_status = new_jobhead-status.
+        ELSE.
+          PERFORM deq_job USING jobname jobcount dialog rc.
+          RAISE job_edit_failed.
+        ENDIF.
+      ELSE. " Job soll freigegeben werden -> Starttermineditor rufen
+        IF release_privilege_given EQ btc_no.
+          MESSAGE s108.
+          PERFORM deq_job USING jobname jobcount dialog rc.
+          RAISE no_release_privilege_given.
+        ENDIF.
+
+* 29.9.2017    d023157
+
+        IF cl_batch_authorizations=>can_create_periodic_jobs( ) NE abap_true.
+          CLEAR old_stdt-periodic.
+          CLEAR old_stdt-prdmins.
+          CLEAR old_stdt-prdhours.
+          CLEAR old_stdt-prddays.
+          CLEAR old_stdt-prdweeks.
+          CLEAR old_stdt-prdmonths.
+        ENDIF.
+
+        CALL FUNCTION 'BP_START_DATE_EDITOR'
+          EXPORTING
+            stdt_dialog      = btc_yes
+            stdt_opcode      = btc_edit_startdate
+            stdt_input       = old_stdt
+          IMPORTING
+            stdt_output      = new_stdt
+            stdt_modify_type = stdt_mod_type
+          EXCEPTIONS
+            OTHERS           = 99.
+        IF sy-subrc EQ 0.
+          new_status   = btc_released.
+          new_jobhead  = old_jobhead.
+          job_mod_type = btc_job_modified.
+        ELSE.
+          PERFORM deq_job USING jobname jobcount dialog rc.
+          RAISE job_edit_failed.
+        ENDIF.
+      ENDIF.
+
+      IF job_mod_type  EQ btc_job_not_modified OR  " Benutzer will
+         stdt_mod_type EQ btc_stdt_not_modified.   " abbrechen
+        PERFORM deq_job USING jobname jobcount dialog rc.
+        RAISE job_modify_canceled.
+      ENDIF.
+
+* c5034979, note 578967
+* Dequeue BTCEVTJOB entry.
+* If function modules in previous sections created an
+* eventcounter, then dequeue it, because a new one
+* will be created in the following store_stdt_in_jobhead
+      IF NOT new_jobhead-eventcount IS INITIAL.
+        CALL FUNCTION 'DEQUEUE_BTCEVTJOB'
+          EXPORTING
+            eventid    = new_jobhead-eventid
+            eventcount = new_jobhead-eventcount
+          EXCEPTIONS
+            OTHERS     = 99 ##FM_SUBRC_OK.
+      ENDIF.
+* c5034979, note 578967
+
+      PERFORM store_stdt_in_jobhead USING new_jobhead
+                                          new_stdt
+                                          dialog
+                                          rc.
+      IF rc NE 0.                  " Syslog wurde schon geschrieben
+        PERFORM deq_job USING jobname jobcount dialog rc.
+        RAISE eventcnt_generation_error.
+      ENDIF.
+    ENDIF.
+*
+*    im Nichtdialogfall:
+*    - falls der ganze Job modifiziert werden soll -> neue Jobdaten
+*      prüfen
+*    - falls der Job 'geclosed' werden soll -> NEWFLAG auf 'C' setzen
+*      und evtl. übergebene Starttermindaten (Vorschlagswerte) im
+*      Jobkopf ablegen
+*    - falls der Job freigegeben werden soll: neuer = alter Jobkopf
+*      und anschliessend die neuen Starttermindaten und d. Zielrechner
+*      im Jobkopf speichern
+*    - es muß geprüft werden, ob Starttermindaten vorliegen, falls
+*      gewünscht wird, den Job freizugeben. Anschliessend wird der
+*      Status des neuen Jobs bestimmt
+*
+    IF dialog EQ btc_no.
+      IF opcode EQ btc_modify_whole_job.
+        IF new_jobhead-jobname  NE jobname OR
+           new_jobhead-jobcount NE jobcount.
+          PERFORM write_job_modify_syslog USING
+                                          new_jobdata_id_mismatch
+                                          space
+                                          jobname.
+          PERFORM deq_job USING jobname jobcount dialog rc.
+          RAISE invalid_new_jobdata.
+        ENDIF.
+
+        CALL FUNCTION 'BP_JOB_EDITOR'
+          EXPORTING
+            job_editor_dialog  = btc_no
+            job_editor_opcode  = btc_check_only
+            job_head_input     = new_jobhead
+            email_notification = email_notification
+          IMPORTING
+            job_stdt_output    = new_stdt
+            job_head_output    = new_jobhead
+          TABLES
+            job_steplist       = new_steplist
+          EXCEPTIONS
+            invalid_startdate  = 1
+            OTHERS             = 99.
+        p_sy_subrc = sy-subrc.
+        IF p_sy_subrc <> 0.
+          CALL METHOD cl_btc_error_controller=>read_error_info
+            IMPORTING
+              einfo = emsg.
+        ENDIF.
+        CASE p_sy_subrc.
+          WHEN 0.
+            " neue Jobdaten sind ok
+          WHEN 1.
+            PERFORM deq_job USING jobname jobcount dialog rc.
+            RAISE invalid_startdate.
+          WHEN OTHERS.
+            PERFORM deq_job USING jobname jobcount dialog rc.
+            RAISE invalid_new_jobdata.
+        ENDCASE.
+      ELSEIF opcode EQ btc_close_job.
+        new_jobhead           = old_jobhead.
+        new_jobhead-newflag   = 'C'.
+        new_jobhead-btcsystem = release_targethost.
+        new_jobhead-execserver = release_targetserver.
+        IF tgtsrvgrp_id <> space."GRP:target mutually excl.anyway!
+          new_jobhead-tgtsrvgrp = tgtsrvgrp_id.
+        ELSE.
+          IF clear_server_group = 'X'.   " note 1658978
+            CLEAR new_jobhead-tgtsrvgrp.
+          ENDIF.
+        ENDIF.
+
+        IF release_stdt NE initial_stdt.
+          new_stdt = release_stdt.
+        ELSE.
+          new_stdt = old_stdt.
+        ENDIF.
+      ELSE.                            " Job soll freigegeben werden
+        new_jobhead           = old_jobhead.
+        new_stdt              = release_stdt.
+        IF old_jobhead-btcsystem IS INITIAL.
+          " in case of a job copy leave the old target in place
+          new_jobhead-btcsystem = release_targethost.
+        ENDIF.
+        IF old_jobhead-tgtsrvgrp IS INITIAL. "GRP: no old, then new
+          " in case of a job copy - not sure if that is really nec.
+          new_jobhead-tgtsrvgrp = tgtsrvgrp_id.
+        ENDIF.
+      ENDIF.
+      IF clear_server_group = abap_true OR release_targetserver IS NOT INITIAL.   " note 2552084
+        CLEAR new_jobhead-tgtsrvgrp.
+      ENDIF.
+
+      IF dont_release <> abap_true.
+*       jetzt Starttermindaten und Freigabeberechtigung prüfen
+*
+        CALL FUNCTION 'BP_START_DATE_EDITOR'          " Starttermindaten
+          EXPORTING
+            stdt_dialog        = btc_no   " prüfen bzw. er-
+            stdt_input         = new_stdt " mitteln ob
+          IMPORTING
+            stdt_output        = new_stdt " welche vorliegen
+          EXCEPTIONS
+            no_startdate_given = 1
+            OTHERS             = 99.
+        CASE sy-subrc.
+          WHEN 0.
+            startdate_given = btc_yes.
+          WHEN 1.
+            startdate_given = btc_no.
+          WHEN OTHERS.
+            MOVE-CORRESPONDING syst TO emsg.
+            PERFORM deq_job USING jobname jobcount dialog rc.
+            RAISE invalid_startdate.
+        ENDCASE.
+      ENDIF.
+
+* c5034979, note 578967
+* Dequeue BTCEVTJOB entry.
+* If function modules in previous sections created an
+* eventcounter, then dequeue it, because a new one
+* will be created in the following store_stdt_in_jobhead
+      IF NOT new_jobhead-eventcount IS INITIAL.
+        CALL FUNCTION 'DEQUEUE_BTCEVTJOB'
+          EXPORTING
+            eventid    = new_jobhead-eventid
+            eventcount = new_jobhead-eventcount
+          EXCEPTIONS
+            OTHERS     = 99 ##FM_SUBRC_OK.
+      ENDIF.
+* c5034979, note 578967
+
+      PERFORM store_stdt_in_jobhead USING new_jobhead
+                                          new_stdt
+                                          btc_no
+                                          rc.
+      IF rc NE 0.                   " Syslog wurde schon geschrieben
+        PERFORM deq_job USING jobname jobcount dialog rc.
+        RAISE eventcnt_generation_error.
+      ENDIF.
+
+      IF opcode EQ btc_release_job AND
+         startdate_given EQ btc_no.
+        PERFORM deq_job USING jobname jobcount dialog rc.
+        PERFORM write_job_modify_syslog USING
+                                        no_startdate_no_release
+*                                        new_jobhead-jobname.
+                                        space
+                                        job_info.
+        emsg-msgid = 'BT'.
+        emsg-msgno = '001'.
+        emsg-msgty = 'E'.
+        RAISE no_startdate_no_release.
+      ENDIF.
+
+      IF release_privilege_given EQ btc_yes.
+        IF startdate_given EQ btc_yes.
+          new_status = btc_released.
+        ELSE.
+          new_status = btc_scheduled.
+        ENDIF.
+      ELSE.
+        IF startdate_given EQ btc_yes AND
+           opcode EQ btc_release_job.
+          PERFORM deq_job USING jobname jobcount dialog rc.
+          PERFORM write_job_modify_syslog USING
+                                    no_release_privilege_given
+                                    job_info
+                                    space.
+          emsg-msgid = 'BT'.
+          emsg-msgno = '656'.
+          emsg-msgty = 'E'.
+          RAISE no_release_privilege_given.
+        ELSE.
+          new_status = btc_scheduled.
+        ENDIF.
+      ENDIF.
+
+      IF opcode EQ btc_release_job OR
+         opcode EQ btc_close_job.
+        job_mod_type = btc_job_modified.
+      ELSE.
+        job_mod_type = btc_job_new_step_count.
+      ENDIF.
+    ENDIF.
+  ENDIF.
+
+* start of note 1447880
+  IF new_jobhead-jobclass NE jobclass AND
+       ( jobclass = btc_jobclass_a OR
+       jobclass = btc_jobclass_b OR
+       jobclass = btc_jobclass_c ).
+    new_jobhead-jobclass = jobclass.
+  ENDIF.
+  IF new_jobhead-jobclass <> btc_jobclass_a AND
+     new_jobhead-jobclass <> btc_jobclass_b AND
+     new_jobhead-jobclass <> btc_jobclass_c.
+    new_jobhead-jobclass = btc_jobclass_c.
+  ENDIF.
+* end of note 1447880
+
+*
+* falls Job freigegeben werden soll, dann Zielrechnerprüfung durch-
+* führen und den Servernamen des Zielrechners ermitteln.
+*
+  IF opcode     EQ btc_release_job AND
+     new_status EQ btc_released.
+
+* GRP: 'old case' as it was, the targethost is separated
+    IF targetgroup = space.
+      new_jobhead-btcsysreax = space.
+      IF old_jobhead-execserver IS INITIAL.
+        "case job copy: only if the original job did not specify one...
+        new_jobhead-execserver = release_targetserver.
+      ENDIF.
+
+      target_machine = new_jobhead-btcsystem.
+
+      IF new_stdt-startdttyp = btc_stdt_immediate.
+        IF release_targetserver   <> space OR
+           new_jobhead-execserver <> space.
+*   Sofortstart mit Zielserver
+          DATA: dummy_host TYPE tbtcjob-btcsystem.
+          IF release_targetserver <> space.
+            PERFORM verify_batch_server USING dummy_host
+                                              release_targetserver
+                                              rc.
+            new_stdt-instname = release_targetserver.
+          ELSE.
+            PERFORM verify_batch_server USING dummy_host
+                                              new_jobhead-execserver
+                                              rc.
+            new_stdt-instname = new_jobhead-execserver.
+          ENDIF.
+
+          CASE rc.
+            WHEN 0.
+            WHEN no_batch_on_target_host.
+              PERFORM deq_job USING jobname jobcount dialog rc.
+              IF dialog EQ btc_yes.
+                MESSAGE s515 WITH new_jobhead-execserver.
+              ELSE.
+                emsg-msgid = 'BT'.
+                emsg-msgno = '515'.
+                emsg-msgty = 'E'.
+                emsg-msgv1 = new_jobhead-execserver.
+                PERFORM write_job_modify_syslog USING
+                                              no_batch_on_target_host_id
+                                              job_info
+                                              new_jobhead-execserver.
+              ENDIF.
+              RAISE no_batch_on_target_host.
+            WHEN OTHERS.   " auch fuer tgt_host_chk_has_failed.
+              PERFORM deq_job USING jobname jobcount dialog rc.
+              IF dialog EQ btc_yes.
+                MESSAGE s503.
+              ELSE.
+                emsg-msgid = 'BT'.
+                emsg-msgno = '503'.
+                emsg-msgty = 'E'.
+                PERFORM write_job_modify_syslog USING
+                                              tgt_host_chk_has_failed_id
+                                              job_info
+                                              space.
+              ENDIF.
+              RAISE tgt_host_chk_has_failed.
+          ENDCASE.
+
+          PERFORM check_for_free_btc_wp USING new_stdt-instname
+                                              new_jobhead-jobclass
+                                              rc.
+          CASE rc.
+            WHEN no_batch_wp_for_jobclass.
+              " kann nur vorkommen bei Jobklasse B oder C, wenn auf Ziel-
+              " rechner nur Jobklasse A verarbeitet werden kann
+              PERFORM deq_job USING jobname jobcount dialog rc.
+              IF dialog EQ btc_yes.
+                MESSAGE e256 WITH new_jobhead-execserver.
+              ELSE.
+                emsg-msgid = 'BT'.
+                emsg-msgno = '256'.
+                emsg-msgty = 'E'.
+                emsg-msgv1 = new_jobhead-execserver.
+                PERFORM write_job_modify_syslog USING
+                                            no_batch_wp_for_jobclass_id
+                                            job_info
+                                            new_jobhead-execserver.
+              ENDIF.
+              RAISE no_batch_wp_for_jobclass.
+            WHEN OTHERS.     " auch fuer 0
+              IF new_jobhead-btcsystem NE space.
+                new_jobhead-btcsysreax = target_machine.
+                new_jobhead-execserver = new_stdt-instname.
+              ENDIF.
+              IF new_stdt-startdttyp EQ btc_stdt_immediate.
+                new_jobhead-btcsysreax = target_machine.
+              ENDIF.
+          ENDCASE.
+        ELSE.
+* Sofortstart ohne Zielserver
+        ENDIF.
+        new_stdt-imstrtpos = true.
+      ELSE.
+        new_stdt-instname      = release_targetserver.
+        PERFORM check_server_for_job_exec USING
+                                               new_stdt-instname
+                                               target_machine
+                                               new_stdt
+                                               new_jobhead-jobclass
+                                               rc.
+        CASE rc.
+          WHEN 0.
+            IF new_jobhead-btcsystem NE space.
+              new_jobhead-btcsysreax = target_machine.
+              new_jobhead-execserver = new_stdt-instname.
+            ENDIF.
+            IF new_stdt-startdttyp EQ btc_stdt_immediate.
+              new_jobhead-btcsysreax = target_machine.
+            ENDIF.
+          WHEN tgt_host_chk_has_failed.
+            PERFORM deq_job USING jobname jobcount dialog rc.
+            IF dialog EQ btc_yes.
+              MESSAGE s503.
+            ELSE.
+              emsg-msgid = 'BT'.
+              emsg-msgno = '503'.
+              emsg-msgty = 'E'.
+              PERFORM write_job_modify_syslog USING
+                                              tgt_host_chk_has_failed_id
+                                              job_info
+                                              space.
+            ENDIF.
+            RAISE tgt_host_chk_has_failed.
+          WHEN no_batch_on_target_host.
+            PERFORM deq_job USING jobname jobcount dialog rc.
+            IF dialog EQ btc_yes.
+              MESSAGE s515 WITH new_jobhead-execserver.
+            ELSE.
+              emsg-msgid = 'BT'.
+              emsg-msgno = '515'.
+              emsg-msgty = 'E'.
+              emsg-msgv1 = new_jobhead-execserver.
+              PERFORM write_job_modify_syslog USING
+                                            no_batch_on_target_host_id
+                                            job_info
+                                            new_jobhead-execserver.
+            ENDIF.
+            RAISE no_batch_on_target_host.
+          WHEN no_free_batch_wp_now.
+            " kann nur vorkommen bei Starttermin 'Sofort' mit Zielrechner-
+            " angabe. Macht aber nix, denn Job wird später über Datum /
+            " Uhrzeit eingeplant
+            IF target_machine NE space.
+              new_jobhead-btcsysreax = target_machine.
+              new_jobhead-execserver = new_stdt-instname.
+            ENDIF.
+          WHEN no_batch_wp_for_jobclass.
+            " kann nur vorkommen bei Jobklasse B oder C, wenn auf Ziel-
+            " rechner nur Jobklasse A verarbeitet werden kann
+            PERFORM deq_job USING jobname jobcount dialog rc.
+            IF dialog EQ btc_yes.
+              MESSAGE e256 WITH new_jobhead-execserver.
+            ELSE.
+              emsg-msgid = 'BT'.
+              emsg-msgno = '256'.
+              emsg-msgty = 'E'.
+              emsg-msgv1 = new_jobhead-execserver.
+              PERFORM write_job_modify_syslog USING
+                                            no_batch_wp_for_jobclass_id
+                                            job_info
+                                            new_jobhead-execserver.
+            ENDIF.
+            RAISE no_batch_wp_for_jobclass.
+          WHEN target_host_not_defined.
+            PERFORM deq_job USING jobname jobcount dialog rc.
+            IF dialog EQ btc_yes.
+              MESSAGE s123 WITH new_jobhead-execserver.
+            ELSE.
+              emsg-msgid = 'BT'.
+              emsg-msgno = '123'.
+              emsg-msgty = 'E'.
+              emsg-msgv1 = new_jobhead-execserver.
+              PERFORM write_job_modify_syslog USING
+                                            target_host_not_defined_id
+                                            job_info
+                                            new_jobhead-execserver.
+            ENDIF.
+            RAISE target_host_not_defined.
+          WHEN no_batch_server_found.
+            " kommt vor, wenn kein Zielrechner angegeben wurde und kein
+            " freier Batchserver vorhanden ist. Bei 'Sofortstart' kein
+            " Fehler -> Job wird über Datum/Uhrzeit eingeplant
+            IF new_stdt-startdttyp NE btc_stdt_immediate.
+              PERFORM deq_job USING jobname jobcount dialog rc.
+              IF dialog EQ btc_yes.
+                MESSAGE e257 WITH new_jobhead-jobname.
+              ELSE.
+                emsg-msgid = 'BT'.
+                emsg-msgno = '257'.
+                emsg-msgty = 'E'.
+                emsg-msgv1 = new_jobhead-jobname.
+                PERFORM write_job_modify_syslog USING
+                                              no_batch_server_found_id
+                                              space
+*                                              new_jobhead-jobname.
+                                              job_info.
+              ENDIF.
+              RAISE no_batch_server_found.
+            ENDIF.
+        ENDCASE.
+      ENDIF.
+    ELSE.
+      IF new_stdt-startdttyp <> btc_stdt_immediate.
+        CALL METHOD tmp_grp->get_list
+          RECEIVING
+            o_list = grp_server_list.
+        PERFORM find_resource_in_srv_group USING
+                                           grp_server_list
+                                           new_jobhead-jobclass
+                                           new_stdt
+                                           one_resource.
+        IF one_resource IS INITIAL.
+          MESSAGE w664 WITH targetgroup RAISING no_batch_server_found.
+        ENDIF.
+      ELSE.
+        new_stdt-imstrtpos = true.
+      ENDIF.
+      CLEAR: new_stdt-instname, new_jobhead-execserver, new_jobhead-btcsystem.  " note 2552084
+      new_jobhead-tgtsrvgrp = tgtsrvgrp_id.
+    ENDIF.
+  ENDIF.
+
+**Zeitzone konvertieren
+  IF new_stdt-tmzone IS NOT INITIAL.
+
+    CALL METHOD cl_bp_utilities=>convert_timezone
+      EXPORTING
+        iv_time_zone_local  = new_stdt-tmzone
+        iv_convert_to_local = abap_false
+      CHANGING
+        cv_date             = new_jobhead-sdlstrtdt
+        cv_time             = new_jobhead-sdlstrttm.
+    CALL METHOD cl_bp_utilities=>convert_timezone
+      EXPORTING
+        iv_time_zone_local  = new_stdt-tmzone
+        iv_convert_to_local = abap_false
+      CHANGING
+        cv_date             = new_jobhead-laststrtdt
+        cv_time             = new_jobhead-laststrttm.
+
+  ENDIF.
+*
+
+*
+* vor der Manipulation von Starttermindaten, diese sperren
+*
+* c5034979, 4.12.2002
+  IF new_stdt-startdttyp = btc_stdt_afterjob OR
+     new_stdt-startdttyp = btc_stdt_event.
+    rc = 0.
+  ELSE.
+    PERFORM enq_release_info_in_db USING new_stdt dialog rc.
+  ENDIF.
+* c5034979, 4.12.2002
+
+  IF rc NE 0.
+    ROLLBACK WORK.
+    emsg-msgid = 'BT'.
+    emsg-msgno = '126'.
+    emsg-msgty = 'E'.
+    emsg-msgv1 = jobname.
+    PERFORM deq_job USING jobname jobcount dialog rc.
+    RAISE cant_enq_job.
+  ENDIF.
+*
+* falls neuer Status = 'freigegeben' -> Job freigeben
+*
+  IF new_status EQ btc_released.
+    PERFORM release_modified_job USING new_jobhead
+                                       new_stdt
+                                       old_jobhead
+                                       old_stdt
+                                       old_status
+                                       dialog
+                                       rc.
+    IF rc NE 0.
+      ROLLBACK WORK.
+      emsg-msgid = 'BT'.
+      emsg-msgno = '381'.
+      emsg-msgty = 'E'.
+      emsg-msgv1 = jobname.
+      emsg-msgv2 = jobcount.
+      PERFORM deq_job USING jobname jobcount dialog rc.
+      PERFORM deq_release_info_in_db USING new_stdt dialog rc.
+      RAISE cant_release_job.
+    ENDIF.
+  ENDIF.
+*
+* falls neuer Status = 'eingeplant'
+*
+  IF new_status EQ btc_scheduled.
+    IF old_status EQ btc_released OR old_status EQ btc_put_active.  "note 1994709
+      PERFORM reset_release_info_in_db USING old_jobhead
+                                             old_stdt
+                                             dialog
+                                             rc.
+      IF rc NE 0.
+        ROLLBACK WORK.
+        emsg-msgid = 'BT'.
+        emsg-msgno = '382'.
+        emsg-msgty = 'E'.
+        emsg-msgv1 = jobname.
+        emsg-msgv2 = jobcount.
+        PERFORM deq_job USING jobname jobcount dialog rc.
+        PERFORM deq_release_info_in_db USING new_stdt dialog rc.
+        RAISE cant_derelease_job.
+      ENDIF.
+    ENDIF.
+  ENDIF.
+*
+* Jobdaten in der Datenbank updaten
+*
+
+  PERFORM handle_recipient USING dialog
+                                 opcode
+                                 old_jobhead
+                           CHANGING recipient_obj
+                                 new_jobhead.
+
+
+  IF dialog EQ btc_yes.
+
+    PERFORM update_modified_jobdata TABLES old_steplist
+                                    USING  new_jobhead
+                                           new_stdt
+                                           new_status
+                                           old_stdt
+                                           job_mod_type
+                                           dialog
+                                           rc.
+  ELSE.
+
+* c5034979, Note 581692
+    IF opcode = btc_modify_whole_job.
+*   use new_steplist
+      FREE old_steplist.
+      REFRESH old_steplist.
+      APPEND LINES OF new_steplist TO old_steplist.         " (1)
+    ELSE.
+*   use old_steplist
+    ENDIF.
+
+    PERFORM update_modified_jobdata TABLES old_steplist
+* c5034979, Note 581692
+                                    USING  new_jobhead
+                                           new_stdt
+                                           new_status
+                                           old_stdt
+                                           job_mod_type
+                                           dialog
+                                           rc.
+
+    IF ( release_stdt-startdttyp = btc_stdt_afterjob OR
+      ( release_stdt-startdttyp = btc_stdt_event AND
+        release_stdt-eventid = btc_eventid_eoj ) )
+      AND new_stdt-startdttyp = btc_stdt_immediate .
+      PERFORM update_orig_predjinfo USING jobname jobcount.
+    ENDIF.
+
+  ENDIF.
+
+  IF rc EQ 0.
+
+* d023157     13.2.2008
+* It can happen that a job is released via a
+* direct call of BP_JOB_MODIFY (without calling JOB_CLOSE).
+* If this is the case, AND if parent-child-functionality
+* has beeb switched on, we have to call BP_CHILD_REGISTER
+* here. (customer message 893202 2008)
+
+    PERFORM child_register USING old_status
+                                 new_status
+                                 new_jobhead.
+
+*
+* fix date: 08/02/2000
+* reason: 'commit work' destroy the transaction and wouldn't work
+* with batch input. The functionality of commit could be done by
+* using DB commit work directly.
+*    IF adk_mode EQ true.               " Job ist ein Archivierungsjob
+* Do not commit, if job starts immediately
+* DB_COMMIT will be called from start_job_immediately
+    IF new_stdt-imstrtpos <> true OR
+       new_stdt-startdttyp <> btc_stdt_immediate.
+
+      CALL FUNCTION 'DB_COMMIT'
+        EXPORTING
+          iv_default = abap_true.
+
+    ENDIF.
+* c5034979, 4.12.2002
+    IF new_stdt-startdttyp = btc_stdt_afterjob OR
+       new_stdt-startdttyp = btc_stdt_event.
+      CALL FUNCTION 'DEQUEUE_BTCEVTJOB'
+        EXPORTING
+          eventid    = new_jobhead-eventid
+          eventcount = new_jobhead-eventcount
+        EXCEPTIONS
+          OTHERS     = 99 ##FM_SUBRC_OK.
+    ELSE.
+      PERFORM deq_release_info_in_db USING new_stdt dialog rc.
+    ENDIF.
+* c5034979, 4.12.2002
+    IF dialog EQ btc_yes.
+      CASE opcode.
+        WHEN btc_modify_whole_job.
+          MESSAGE s276 WITH jobname.
+        WHEN btc_release_job.
+          MESSAGE s277 WITH jobname.
+        WHEN btc_derelease_job.
+          MESSAGE s278 WITH jobname.
+        WHEN OTHERS.
+          IF new_status EQ 'P'.
+            MESSAGE s112 WITH jobname TEXT-079.
+          ELSE.
+            MESSAGE s112 WITH jobname TEXT-080.
+          ENDIF.
+      ENDCASE.
+    ENDIF.
+  ELSE.
+    ROLLBACK WORK.
+    emsg-msgid = 'BT'.
+    emsg-msgno = '383'.
+    emsg-msgty = 'E'.
+    emsg-msgv1 = jobname.
+    emsg-msgv2 = jobcount.
+    PERFORM deq_job USING jobname jobcount dialog rc.
+    PERFORM deq_release_info_in_db USING new_stdt dialog rc.
+    RAISE cant_update_jobdata.
+  ENDIF.
+*
+*  falls Starttermintyp = 'Sofort' und ein Server gefunden wurde, dann
+*  den Job auf dem gefunden Server zur Ausführung bringen
+*
+  IF new_stdt-startdttyp EQ btc_stdt_immediate AND
+     new_stdt-imstrtpos EQ true AND
+     new_status EQ btc_released.
+
+* 23.3.2005  d023157   note 830916
+    IF  dialog EQ btc_yes AND
+       ( ( NOT new_jobhead-execserver IS INITIAL ) OR
+                        ( NOT new_jobhead-execserver CO ' ' ) ) AND
+       ( new_stdt-instname IS INITIAL OR new_stdt-instname CO ' ' ).
+
+      new_stdt-instname = new_jobhead-execserver.
+    ENDIF.
+
+
+    PERFORM start_job_immediately USING new_jobhead
+                                        new_stdt-instname
+                                        dialog
+                                        direct_start
+                                        old_jobhead-status
+                                        rc.
+    DATA: rc_2 LIKE rc.
+    PERFORM deq_job USING jobname jobcount dialog rc_2.
+    IF rc NE 0 AND NOT direct_start IS INITIAL.
+      emsg-msgid = 'BT'.
+      emsg-msgno = '122'.
+      emsg-msgty = 'E'.
+      emsg-msgv1 = jobname.
+      RAISE cant_start_job_immediately.
+    ENDIF.
+  ELSE.
+    PERFORM deq_job USING jobname jobcount dialog rc.
+  ENDIF.
+*
+* neuen, modifizierten Jobkopf an den Aufrufen zurückgeben
+*
+  modified_jobhead = new_jobhead.
+
+ENDFUNCTION.
+
+**********************************************************************
+
+FORM shift_servergroup USING
+                       server LIKE  btctgtsrvr-srvname
+                       group  TYPE  bpsrvgrp
+                       p_rc   TYPE  i.
+
+  TABLES:  tsrvgrp.
+
+  DATA: server_list  LIKE  msxxlist OCCURS 0 WITH HEADER LINE.
+  DATA: batch        LIKE  msxxlist-msgtypes VALUE 8.
+  DATA l_len TYPE i.
+
+  p_rc = 0.
+
+  CALL FUNCTION 'TH_SERVER_LIST'
+*         EXPORTING
+*              services =
+    TABLES
+      list   = server_list
+    EXCEPTIONS
+      OTHERS = 99 ##FM_SUBRC_OK.
+
+* prüfen, ob der Inhalt des Parameters TARGET_SERVER ein
+* Batch Server ist.
+  READ TABLE server_list WITH KEY name = server.
+  IF sy-subrc = 0.
+    EXIT.
+  ENDIF.
+
+* Es handelt sich nicht um einen Batch Server =>
+* prüfen, ob es sich um einen Gruppennamen handelt.
+
+  IF server(1) = '<'.   " allow server group names with < >
+    SHIFT server.
+    l_len = strlen( server ) - 1.
+    IF server+l_len = '>'.
+      server+l_len(1) = space.
+    ENDIF.
+  ENDIF.
+
+  SELECT * FROM tsrvgrp WHERE grpname = server.
+    EXIT.
+  ENDSELECT.
+
+* wenn es sich nicht um einen Gruppennamen handelt => exit
+  IF sy-subrc NE 0.
+    EXIT.
+  ENDIF.
+
+  group = server.
+  CLEAR server.
+  p_rc = 1.
+
+ENDFORM.                    "shift_servergroup
+
+***************************************************************************
+*& This routine is used if check_pred_1010 has detected that the
+*& given predecessor is already finished or canceled.
+*& The successor has been saved with immediate start, but the information
+*& information about the the predecessor (has been saved with
+*& cl_btc_predecessor_utilities=>get_predjob_info earlier) needs to be
+*& stored in the successor.
+***************************************************************************
+FORM update_orig_predjinfo USING p_jobname TYPE btcjob
+                                 p_jobcount TYPE btcjobcnt.
+
+  DATA lv_eventparm TYPE btcevtparm.
+
+
+  cl_btc_predecessor_utilities=>get_predjob_info(
+    IMPORTING
+      ev_pred_jobname      = DATA(lv_pjn)
+      ev_pred_jobcount     = DATA(lv_pjc)
+      ev_predjob_checkstat = DATA(lv_checkstat)
+      ev_predjob_status    = DATA(lv_predstatus)
+         ).
+
+  cl_btc_predecessor_utilities=>clear_predjob_info( ).
+
+  CHECK lv_pjn IS NOT INITIAL.
+
+  lv_eventparm(32) = lv_pjn.
+  lv_eventparm+32(8) = lv_pjc.
+
+  UPDATE tbtco SET eventid = btc_eventid_eoj   " retain original start condition
+                   eventparm = lv_eventparm
+                   checkstat = lv_checkstat
+                   prednum = 1
+  WHERE jobname = p_jobname AND jobcount = p_jobcount.
+
+  IF sy-subrc = 0.
+    IF lv_predstatus = btc_aborted AND lv_checkstat = abap_true.  "job should not run after aborted predecessor
+      UPDATE tbtco SET intreport = 'RSBTCPT2' WHERE jobname = p_jobname AND jobcount = p_jobcount.
+    ENDIF.
+  ENDIF.
+
+ENDFORM.
+
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: 00
+*172   You are not authorized to use transaction &
+*
+* Message class: 01
+*825   No authorization
+*
+* Message class: 38
+*001   & & & &
+*
+* Message class: BT
+*001   Specify a start time
+*003   Specify a previous job
+*004   Job & does not exist or does not have matching status.
+*005   Specify a complete start time
+*006   Start date is in the past
+*007   Specify latest possible start time in full
+*008   Latest start time is earlier than start time
+*009   Start time and latest start time are more than one year apart
+*010   Select an option
+*011   Select one option only
+*012   Choose an operation mode for the object
+*013   Select only one operation mode for the object
+*014   Choose a trace level
+*015   Choose only one trace level
+*018   Select only one trace activation type
+*019   Position the cursor on a valid line
+*021   Specify a computer name
+*022   Specify an object ID
+*023   This entry already exists
+*024   Error saving the new entry in database table BTCCTL
+*026   Failed to schedule job & (see system log)
+*027   Failed to create job step & (see system log)
+*028   Failed to execute job & (see system log)
+*029   This entry is no longer in table BTCCTL
+*030   Invalid object ID
+*031   Period values are not permitted when specifying a previous job
+*033   Specify a repetition period
+*035   The control object editor was called with an invalid operation code (&)
+*037   No edit authorization exists
+*038   Specify an event ID
+*039   System event names must begin with the prefix 'SAP_'
+*040   The prefix 'SAP_' is only permitted for system events
+*041   Obsolete
+*042   Event & does not exist
+*043   Error saving the new event & in the database
+*044   Error reading the BTCCTL entry from an internal table
+*045   Obsolete
+*046   Obsolete
+*047   Obsolete
+*048   Obsolete
+*049   Obsolete
+*050   Obsolete
+*052   Failed to delete BTCCTL entry in internal table
+*053   Failed to delete BTCCTL entry in database
+*054   Failed to update BTCCTL entry in internal table
+*055   Failed to update BTCCTL entry in database
+*057   Error when updating event & in the database
+*058   Obsolete
+*059   Obsolete
+*060   Control objects are being edited by user & - only display is possible
+*061   The enqueue subsystem reports an internal error; see the system log
+*063   You are not authorized to use transaction &
+*064   The step list editor was called with an invalid operation code (&)
+*065   Failed to read user print parameters ('GET_PRINT_PARAMETERS')
+*066   Choose a program specification
+*067   Select only one specified program
+*069   Specify a user name
+*070   The specifications for the external program are incomplete
+*071   User & is unknown
+*072   Choose a variant first
+*073   Failed to read the selected variant from internal table
+*074   Program & is invalid or does not exist
+*075   Variant & is invalid
+*076   You must first define variants for program &
+*077   Program & cannot be scheduled (not of type 1 or J)
+*078   Program & has no variants
+*079   Specify a program name
+*080   Variant check failed. See system log
+*081   Failed to update internal step list
+*082   Error reading step list entry from internal table
+*084   Failed to delete step in internal table
+*085   Select the step to be moved
+*086   Failed to move step list line
+*087   Step list for BI-API test environment is empty
+*088   Step values are saved in stap table for BI-API test environment
+*090   & was called with invalid operation code (&)
+*091   & was called with invalid dialog mode (&)
+*092   Unknown error (&) checking ABAP and variant
+*093   Specify a job name
+*095   Specify a valid job class (A, B or C)
+*096   Invalid start date values
+*097   Define at least 1 step. A job is invalid without a step
+*098   Step & contains invalid data
+*099   Event count generation failed for previous job &
+*100   Job count generation failed for job &
+*101   Job & no longer has status 'Scheduled' and cannot be edited
+*102   You are not authorized to schedule report & for user &
+*103   User & cannot be scheduled for background processing (incorrect type)
+*104   Job values were applied to internal structure in BI-API test environment
+*105   Start date values were applied to internal structure in test environment
+*106   Internal error during user confirmation prompt (notify SAP)
+*107   User & is not authorized to schedule program & as a background job
+*108   You are not authorized to release background jobs
+*110   Job &/& is currently locked by user &
+*111   Error locking table &
+*112   Job & saved with status: &
+*115   Event table is locked; try again later
+*116   Event count generation for event & failed
+*117   Error saving job & to database
+*118   Previous job & is no longer available
+*119   Error saving event for previous job &
+*120   Failed to save step values for job &
+*121   Previous job & is locked; try again later
+*122   Failed to execute job &
+*123   Target host or target server & is not defined in an operation type
+*124   Error saving event data for job &
+*125   No delete authorization for job &
+*126   Failed to lock job &
+*127   Job & no longer exists
+*128   Job & is active. The selected function cannot be performed
+*129   Failed to delete steps for job &
+*130   Failed to delete log for job &1, count &2
+*131   Failed to delete job & from the job scheduler timetable
+*132   Failed to delete job & from the job scheduler event table
+*133   Failed to lock previous job &
+*134   Failed to lock subsequent job &
+*135   Failed to cancel release of subsequent job &
+*136   Failed to delete job & from job definition table
+*137   Failed to update number of jobs before job &
+*138   Failed to update number of jobs after job &
+*139   No steps in database found for job &
+*140   You can only change your own jobs.
+*141   Job & cannot be modified due to its status
+*142   Parameter & is empty or has invalid contents
+*143   Error deleting release data in table &
+*144   Failed to change job status for job & in database
+*145   No job matches the selection criteria
+*148   COMMIT WORK failed
+*149   Failed to generate job copy &
+*150   Job & copied with status: Scheduled
+*151   No job matches the selection criteria
+*152   The step list is empty; create at least one step
+*153   Failed to read job data from internal job list table
+*154   Failed to update job data in internal job list table
+*155   Error reading job data (job &)
+*156   Job & scheduled
+*157   Repeated scheduling of job & failed
+*158   Failed to save start date data for job &
+*161   Failed to delete job data in internal job list
+*162   Recordings for job & deleted
+*163   Select the end of the block first
+*165   Error determining the job log
+*166   No log entries exist for the selected job
+*167   Error reading job log &
+*169   The job list processor was called with an invalid operation code (&)
+*170   Sources of external programs cannot be displayed
+*171   Documentation for external programs cannot be displayed
+*172   Variants for external programs cannot be displayed
+*173   Program & has no selection screen or variants
+*174   You are not authorized to display authorizations for user &
+*175   No list exists
+*176   Job & has no previous jobs
+*177   Job & has no subsequent jobs
+*181   Definition for job & is incomplete. Job cannot be released
+*182   Definition of job & is incomplete. Operation is not possible
+*183   Job & contains an external program. Debugging is not possible
+*185   Job & is active. Debugging is not possible
+*186   Job & is not active. Capture is not possible
+*187   Job & can only be captured on host &
+*188   Failed to capture job &
+*189   The job list is empty
+*190   Choose a job
+*191   Forced mode: The preceding error will be ignored during deletion
+*192   You are not authorized to capture jobs
+*193   You can only repeat the scheduling of your own jobs
+*194   You can only copy your own jobs
+*195   You can only debug your own jobs
+*196   You can only capture your own jobs
+*197   No selection parameters are available for refreshing job lists
+*203   Operation mode & is not defined in the system
+*237   Job & not canceled
+*239   Job & is not active; cannot be canceled
+*240   No authorization to cancel job & !
+*241   Error occurred determining batch work process information!
+*242   Job & not canceled
+*244   No authorization to check job &
+*245   Status of job & is OK
+*246   Select spool list of a step!
+*247   You may only display spool lists from your own jobs!
+*248   You may only display steps from your own jobs!
+*249   Triggering of event & failed
+*250   Event & triggered
+*251   You have no authorization to display job &
+*256   Target server & only processes class A jobs
+*257   No free server found for job &
+*258   Specify only one factory calendar ID
+*259   Factory calendar ID & is not defined
+*260   Start date & is not within the factory calendar range
+*261   Unknown error during factory calendar check
+*262   & = not a workday
+*263   & = not a workday. Workday before is in the past
+*264   & = not a workday. (Start date according to restriction = &)
+*265   This is only useful with 'Execute only on workdays'
+*266   You are not authorized to schedule jobs
+*267   Period values < 1 week not allowed with restriction 'Bring forward'
+*268   Release/reset for job & failed. See the system log
+*269   You can only move your own jobs
+*270   Specify a target host
+*271   Job & was moved
+*272   Failed to move job &
+*273   Failed to determine installed system languages
+*274   The language & is not installed
+*275   Enter a language key
+*276   Job & changed
+*277   Job & released
+*278   Release of job & was undone
+*279   Enter a job count
+*286   Specify a workday
+*287   Specify a valid workday (valid range: 01 - 31)
+*288   Specify the earliest possible time of execution
+*289   Specify an execution time
+*290   Specify a program
+*292   Invalid step type found (see Syslog)
+*293   You have no authorization to change the job class
+*294   Text could not be found
+*296   'From start date' is greater than 'To start date'
+*299   System failed to create print parameter key for step & of job &
+*305   Enter the operating system type
+*326   Specifications for the external command are incomplete
+*327   External command unknown
+*328   External command parameters are too long
+*329   External command contains security risks (characters or check routines)
+*330   User-defined check routine has incorrect interface
+*331   Internal error occurred checking the external command
+*332   Too many parameters for the external command
+*333   External command expects parameters
+*334   External command was not modified by previous transaction
+*335   Internal communication error checking the external command
+*336   No authorization to immediately schedule external programs
+*338   All jobs currently locked (repeat report)
+*339   Job & currently locked (repeat report)
+*340   No spool list recipients exist for this job
+*341   Suspension of job &1 failed due to database problems
+*342   Rescheduling of job &1 failed due to database problems
+*343   Error occurred when unlocking table &1
+*344   Error accessing the central system repository
+*345   Error in transaction in other system &1 or client &2
+*346   There is already a standard job called &
+*350   Spool number &1 has been reused in the meantime
+*351   & & & & & &
+*364   Local variant &1 from client &2; cannot be displayed in client &3
+*366   Could not lock job &1 / &2
+*368   Print parameters could not be read
+*369   Job &1 / &2 is not assigned to a time period
+*370   Time frame is in the past
+*371   Time frame is before the first start date
+*372   No start date was found within the time frame
+*373   Step number &1 is invalid
+*374   Event category is invalid
+*375   Error when generating program &1
+*376   Program &1 contains syntax errors
+*378   Function was not called in the background
+*379   No GUID could be created
+*380   Error &1 occurred with insert
+*384   Status check for job &1 / &2 failed
+*385   Predecessor job is not unique
+*386   Latest possible start date is in the past
+*387   Invalid period indicator &1
+*388   Invalid counting direction found for start date type "on work day"
+*389   Job & could not be created
+*390   Invalid job data
+*391   Job overview must be refreshed
+*392   Invalid step status &1
+*405   Enter an external program
+*422   Action is not possible for application jobs.
+*423   Status of job &1 / &2 is not set to scheduled.
+*450   Job '&'/'&' does not exist
+*451   No steps found in the database for job '&'/'&'
+*460   No application logs found in the database
+*503   Unable to check the name of the target server
+*504   No target host for background processing is currently active
+*505   Unable to generate overview of currently active SAP servers
+*510   Failed to read step table
+*511   Job does not contain any steps
+*515   Target server & is not configured for background processing
+*528   Enter a variant
+*529   Enter a job class
+*530   Enter a "start date"
+*531   Enter a time
+*532   Job & is not a standard job
+*533   Component & is not installed in this system
+*534   Enter an SAP component
+*535   Standard job with program & already exists
+*536   Enter a valid value
+*537   Job & is predefined
+*538   Unable to delete job definition &
+*539   Job definition & deleted
+*540   A job of this type is still scheduled or active; first remove scheduling
+*543   All standard jobs were scheduled
+*544   Enter a valid value
+*545   Spool list recipient of job &1 can only be displayed in client &2
+*546   Cannot display spool list recipient
+*550   It is not possible to change the spool list recipient in another client
+*551   Enter the job information in English
+*552   Only possible to display object &1 in client &2
+*557   No E-mail notification defined
+*561   Select a standard variant.
+*562   Job &1 &2 was not started immediately
+*563   System is in maintenance mode
+*564   Unknown time zone
+*565   Factory calendar is only permitted without time zone specification
+*626   Internal error
+*635   Choose a valid entry for the request
+*636   Choose another rule, if you start "only on workdays"
+*638   The job is not run on Sundays and holidays
+*640   & jobs were checked and & jobs were corrected
+*641   There is a problem with the list display, ALV problem: &
+*643   Operation canceled by user
+*645   & &
+*646   You do not have authorization to release jobs, ask system admin. for it.
+*647   Only select fewer than 100 jobs at a time. You have selected & jobs.
+*648   You are copying jobs from client & into your client: &
+*649   Input ignored
+*650   Could not delete the system selection parameters
+*651   Only select one status
+*652   Only jobs with status "Scheduled" are allowed
+*653   Only jobs with start date and time are allowed
+*656   No authorization to release jobs
+*657   Program & does not need a variant
+*658   Job does not exist
+*659   No steps are defined for this job
+*660   Error in BP_JOB_MODIFY
+*661   Only specify target server or target server group - not both
+*662   Name of target server group & unknown
+*663   Cannot find info text
+*664   Target server group & is empty or does not contain a suitable server
+*666   Unknown error &
+*669   & of & jobs were corrected; & jobs remain in status "Ready"
+*680   You are not authorized to schedule user &
+*715   A job cannot be its own predecessor.
+*720   Unknown error & in & (&)
+*791   You are not authorized to perform this action
+*792   Obsolete
+*793   Obsolete
+*794   Error when deleting
+*795   Could not delete all objects
+*798   You can only change or delete this job in Solution Manager
+*799   Solution Manager scenario is active; select only one job
+*801   Unable to determine runtime information
+*840   Invalid server name: &
+*860   First choose "None of the above", then the option "Other periodicity"
+*863   Could not find print parameters for step &1
+*864   Printer not suitable for job step; automatic output not possible
+*865   Specify a name for your job selection parameters
+*866   Default selection "_DEFAULT" cannot be changed
+*879   Obsolete
+*880   Error occurred during transport
+*881   Transport request was generated
+*882   Select at least one entry
+*883   Selected jobs contain Solution Manager jobs
+*884   Solution Manager destination is missing
+*885   Browser cannot be started
+*886   Job documentation ID does not exist in context table
+*887   Job documentation not found in Solution Manager
+*889   All standard jobs are already scheduled
+*890   Event SAP_END_OF_JOB cannot be used without parameters
+*891   This job is scheduled by a job definition (see long text)
+*894   Selected jobs contain application jobs
+*895   Application jobs must not be changed in SM36 or SM37
+*897   Parameters for job &1 for program &2 could not be found.
+*
+* Message class: CSM
+*063   Matching RFC destination not found
+*
+* Message class: DB
+*682   Action was canceled
+*
+* Message class: EU
+*518   You have no display authorization
+*
+* Message class: PT
+*113   Invalid print parameters
+*
+* Message class: RZ
+*358   &1 &2 &3.
+*
+* Message class: SF
+*261   You do not have authorization for transaction &
+*
+* Message class: TA
+*063   Do you want to continue?
+*238   Only numeric clients are allowed
+*
+* Message class: XM
+*088   Inconsistency in the parent-child data of the job
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

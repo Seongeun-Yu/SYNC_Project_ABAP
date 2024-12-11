@@ -1,0 +1,14 @@
+*&---------------------------------------------------------------------*
+*&  Include           THRT_RUNTIME_INTERNAL
+*&---------------------------------------------------------------------*
+
+* Returncodes of THRT layer
+* (also defined in kernel include thrtRuntime_internal.h)
+CONSTANTS: THRT_USER_CHANGED              TYPE I VALUE 1,
+           THRT_ADMIN_ACTION_FAILED       TYPE I VALUE 2,
+           THRT_PARAMETER_ERROR           TYPE I VALUE 3,
+           THRT_TOO_MANY_DEBUG_SESSIONS   TYPE I VALUE 4,
+           THRT_DEBUGGING_ALREADY_ACTIVE  TYPE I VALUE 5.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

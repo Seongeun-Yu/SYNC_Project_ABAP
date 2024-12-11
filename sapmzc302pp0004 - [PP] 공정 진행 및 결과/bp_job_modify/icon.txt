@@ -1,0 +1,9 @@
+***INCLUDE <icon> .
+*-----------------------------------------------------------------------
+*  Instead of statement 'INCLUDE <icon>.', please use
+*  statement 'TYPE-POOLS: icon.' directly.
+*-----------------------------------------------------------------------
+TYPE-POOLS: icon.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

@@ -1,0 +1,470 @@
+function dynp_values_read.
+*"----------------------------------------------------------------------
+*"*"Lokale Schnittstelle:
+*"  IMPORTING
+*"     VALUE(DYNAME) LIKE  D020S-PROG
+*"     VALUE(DYNUMB) LIKE  D020S-DNUM
+*"     VALUE(TRANSLATE_TO_UPPER) DEFAULT SPACE
+*"     VALUE(REQUEST) LIKE  D020S-TYPE DEFAULT SPACE
+*"     VALUE(PERFORM_CONVERSION_EXITS) DEFAULT SPACE
+*"     VALUE(PERFORM_INPUT_CONVERSION) DEFAULT SPACE
+*"     VALUE(DETERMINE_LOOP_INDEX) TYPE  CHAR1 DEFAULT SPACE
+*"     VALUE(START_SEARCH_IN_CURRENT_SCREEN) TYPE  CHAR1 DEFAULT SPACE
+*"     VALUE(START_SEARCH_IN_MAIN_SCREEN) TYPE  CHAR1 DEFAULT SPACE
+*"     VALUE(START_SEARCH_IN_STACKED_SCREEN) TYPE  DYNPRO_ID DEFAULT
+*"       SPACE
+*"     VALUE(START_SEARCH_ON_SCR_STACKPOS) TYPE  SYTABIX DEFAULT SPACE
+*"     VALUE(SEARCH_OWN_SUBSCREENS_FIRST) TYPE  CHAR1 DEFAULT SPACE
+*"     REFERENCE(SEARCHPATH_OF_SUBSCREEN_AREAS) TYPE  STRING DEFAULT
+*"       SPACE
+*"  TABLES
+*"      DYNPFIELDS STRUCTURE  DYNPREAD
+*"  EXCEPTIONS
+*"      INVALID_ABAPWORKAREA
+*"      INVALID_DYNPROFIELD
+*"      INVALID_DYNPRONAME
+*"      INVALID_DYNPRONUMMER
+*"      INVALID_REQUEST
+*"      NO_FIELDDESCRIPTION
+*"      INVALID_PARAMETER
+*"      UNDEFIND_ERROR
+*"      DOUBLE_CONVERSION
+*"      STEPL_NOT_FOUND
+*"----------------------------------------------------------------------
+
+  constants: lowercaseflag type x value 4.
+  constants: start_current(7) type c value 'CURRENT',
+             start_main(4) type c value 'MAIN',
+             start_stackpos(8) type c value 'STACKPOS'.
+  data: lx030l type x030l, x031ltab type standard table of x031l
+                                         with default key.
+  data: hf type i, dp type dpov610, hstepl(3) type n.
+  data: dynptabname type help_info-tabname, hf2 type i,
+        dynpfieldname type help_info-fieldname,
+*      dynpdfies type dfies,
+        dynpdfies type strucinfo,
+*      dynpdfies_tmp type standard table of dfies,
+*      dynpdfies_tab type sorted table of dfies with unique key
+*                         tabname fieldname,
+        strucinfotab type standard table of strucinfo,
+        flduseoffs type i, flduselen type i,
+        fldnameoffs type i, fldnamelen type i,
+        fldinhoffs type i, fldinhlen type i,
+        fldinpoffs type i, fldinplen type i.
+  data: conversion_mask(7) type c value '=='.
+
+  data: conversion_function like tfdir-funcname,
+        ssf type c.
+  field-symbols: <yi> type any, <yo>.
+
+  field-symbols: <dpovline> type any, <dpovtab> type table,
+                 <dfline> type dynpread, <dfies> type strucinfo.
+*                 <wdr_appl> type any.
+*               <dfies> type dfies.
+  field-symbols: <startdynpro> type clike.
+
+
+  if perform_conversion_exits eq 'X' and
+     perform_input_conversion eq 'X'.
+    raise double_conversion.
+  endif.
+
+  if not start_search_in_current_screen is initial and
+     not start_search_in_main_screen is initial.
+    raise invalid_parameter.
+  elseif not start_search_in_stacked_screen is initial and
+         not start_search_on_scr_stackpos is initial.
+    raise invalid_parameter.
+  elseif ( not start_search_in_current_screen is initial or
+           not start_search_in_main_screen is initial ) and
+         ( not start_search_in_Stacked_screen is initial or
+           not start_search_on_scr_stackpos is initial ).
+    raise invalid_parameter.
+  endif.
+
+  if not start_search_in_current_screen is initial.
+    assign start_current to <startdynpro>.
+  elseif not start_search_in_main_screen is initial.
+    assign start_main to <startdynpro>.
+  elseif not start_search_in_stacked_screen is initial.
+    assign start_search_in_stacked_screen to <startdynpro>.
+  elseif not start_search_on_scr_stackpos is initial.
+    assign start_stackpos to <startdynpro>.
+  else.
+    assign start_current to <startdynpro>. "is default
+  endif.
+
+  if search_own_subscreens_first is supplied.
+    ssf = search_own_subscreens_first.
+  else.
+    if start_search_in_current_screen is supplied or
+       start_search_in_main_screen is supplied or
+       start_search_in_stacked_screen is supplied or
+       start_search_on_scr_stackpos is supplied or
+       searchpath_of_subscreen_areas is supplied.
+*     Neue Parameter gesetzt -> neuer Default für
+*     searchOwnSubscreensFirst ist 'X'.
+      ssf = 'X'.
+    else.
+*     es scheint ein alter Aufruf zu sein
+*      -> Abwaertskompatibilitaetsmodus einschalten
+      ssf = 'O'."ld
+    endif.
+  endif.
+
+*  assign ('WDR_TASK=>APPLICATION') to <wdr_appl>.
+
+* <<<<  Sonderlocke Web Dynpro
+*--------Web Dynpro Conversion
+*  if cl_dynp_global_control=>is_wdpmode( ) eq
+*               cl_dynp_global_control=>co_conversion_mode.
+*    if request eq 'A'.
+*      clear dynpfields[].
+*    elseif dynpfields[] is initial.
+*      raise invalid_parameter.
+*    endif.
+*    call method ('CL_DYNP')=>dynp_values_read
+*      exporting
+*        dyname                   = dyname
+*        dynumb                   = dynumb
+*        translate_to_upper       = translate_to_upper
+*        perform_conversion_exits = perform_conversion_exits
+*        perform_input_conversion = perform_input_conversion
+*        determine_loop_index     = determine_loop_index
+*      importing
+*        rc                       = hf
+*      changing
+*        dynpfields               = dynpfields[].
+*    case hf.
+*      when 0.
+**       Aus Gründen der Kompatibilität auch Seiteneffekte beibehalten
+**       hier: die Kopfzeile mit der letzten Zeile füllen
+*        describe table dynpfields.
+*        if sy-tfill gt 0.
+*          read table dynpfields index sy-tfill.
+*        else.
+*          clear dynpfields.
+*        endif.
+*      when 1. raise stepl_not_found.
+*      when 2. raise invalid_dynprofield.
+*      when 3. raise invalid_dynproname.
+*      when others. raise undefind_error.
+*    endcase.
+*    exit.
+*  elseif <wdr_appl> is not initial.
+*--------Web Dynpro Foundation
+*  if <wdr_appl> is assigned and
+*     not <wdr_appl> is initial.
+*    if request eq 'A'.
+*      clear dynpfields[].
+*    elseif dynpfields[] is initial.
+*      raise invalid_parameter.
+*    endif.
+*    call method ('CL_WDR_VALUE_HELP_HANDLER')=>('WDR_VALUES_READ')
+*      changing
+*        ctxtfields = dynpfields[].
+**       Aus Gründen der Kompatibilität auch Seiteneffekte beibehalten
+**       hier: die Kopfzeile mit der letzten Zeile füllen
+*    describe table dynpfields.
+*    if sy-tfill gt 0.
+*      read table dynpfields index sy-tfill.
+*    else.
+*      clear dynpfields.
+*    endif.
+*    exit.
+*  endif.
+* >>>>  Sonderlocke Web Dynpro ENDE
+
+  call 'DYNP_GET_STATUS' id 'FUNCTION' field 16 "kennt der Kern DPOV610?
+                         id 'VALUE' field hf.             "#EC CI_CCALL
+  if sy-subrc ne 0 or hf eq 0.                  "sieht wohl nicht so aus
+    assign: dpovtab to <dpovline>,
+            dpovtab[] to <dpovtab>.
+    flduseoffs = 0. flduselen = 1.
+    fldnameoffs = 1. fldnamelen = 132.
+    fldinhoffs = 133. fldinhlen = 132.
+    fldinpoffs = 265. fldinplen = 1.
+  else.                                         "DPOV610 ist bekannt
+    assign: dpovtab610 to <dpovtab>,
+            dp to <dpovline>.
+    flduseoffs = 0. flduselen = 1.
+    fldnameoffs = 1. fldnamelen = 140.
+    fldinpoffs = 141. fldinplen = 1.
+    fldinhoffs = 142. fldinhlen = 255.
+  endif.
+
+* dynpfields nach dpovtab schaufeln
+
+  clear: <dpovtab>, <dpovline>.
+
+  if request eq space.
+    <dpovline>+flduseoffs(flduselen) = 'I'.
+    loop at dynpfields assigning <dfline>.
+      if determine_loop_index ne space.
+* Get step loop index if user wants it.
+        call function 'DYNP_GET_STEPL'
+          importing
+            povstepl        = <dfline>-stepl
+          exceptions
+            stepl_not_found = 1
+            others          = 2.
+        if sy-subrc ne 0.
+          raise stepl_not_found.
+        endif.
+      endif.
+      if <dfline>-stepl gt 0.
+        hstepl = <dfline>-stepl.
+        concatenate <dfline>-fieldname '(' hstepl ')'
+             into <dpovline>+fldnameoffs(fldnamelen).
+      else.
+        <dpovline>+fldnameoffs(fldnamelen) = <dfline>-fieldname.
+      endif.
+      append <dpovline> to <dpovtab>.
+    endloop.
+  elseif request eq 'A'.
+    clear: dynpfields, dynpfields[].
+  endif.
+
+* Feldinhalte vom Kernel holen lassen
+
+  call  'HELP_GET_FIELDS'  id 'DYNAME'    field dyname
+                           id 'DYNUMB'    field dynumb
+                           id 'REQUEST'   field request
+                           id 'DPOVNAME'  field syst-repid
+                           id 'DPOVNUMB'  field syst-dynnr
+                           id 'SSF'       field ssf
+                           id 'PROOT'     field <startdynpro>
+                           id 'STACKPOS'  field start_search_on_scr_stackpos
+                           id 'PATH'      field searchpath_of_subscreen_areas
+                           id 'DPOV'      field <dpovtab>."#EC CI_CCALL
+  case sy-subrc.
+    when 0.
+    when 1.
+      raise  invalid_dynproname.
+    when 2.
+      raise  invalid_dynpronummer .
+    when 3.
+      raise  invalid_request.
+    when 4.
+      raise  invalid_dynprofield.
+    when 5.
+      raise  invalid_abapworkarea.
+    when 6.
+      raise  no_fielddescription .
+    when 8.
+      raise  invalid_parameter.
+    when others.
+      raise undefind_error.
+  endcase.
+
+* Dpovtab nach Dynpfields schaufeln
+
+  loop at <dpovtab> assigning <dpovline>.
+    if request eq 'A'.
+      split <dpovline>+fldnameoffs(fldnamelen) at '('
+        into dynpfields-fieldname
+             <dpovline>+fldnameoffs(fldnamelen).
+      if <dpovline>+fldnameoffs(fldnamelen) ne space.
+        split <dpovline>+fldnameoffs(fldnamelen) at ')'
+          into hstepl <dpovline>+fldnameoffs(fldnamelen).
+        dynpfields-stepl = hstepl.
+      endif.
+      append dynpfields.
+    endif.
+    read table dynpfields assigning <dfline>
+                          index sy-tabix.   "Achtung: SY-TABIX !!!
+    <dfline>-fieldinp = <dpovline>+fldinpoffs(fldinplen).
+* Initialfeldwerte
+    if <dpovline>+fldinhoffs(fldinhlen)
+              co ' _'.               "initial heißt: nur blanks or '_'
+      translate <dpovline>+fldinhoffs(fldinhlen) using '_ '.
+    endif.
+
+* Zwecks Konvertierungen etc. das DDIC befragen
+    retcode = 8.
+    if <dfline>-fieldname ca '-' and      "enthaelt Bindestrich und
+       sy-fdpos > 0 and
+       sy-fdpos <= 30 and                   "Anfang ist max 30 lang und
+       strlen( <dfline>-fieldname ) <= 61."insgesamt max. 61 lang
+      split <dfline>-fieldname at '-'    "-> vielleicht ein DDIC-Feld
+         into dynptabname dynpfieldname.
+      clear: lx030l, x031ltab.
+      if dynpfieldname <> space and
+       ( dynptabname(1) >= 'A' and
+         dynptabname(1) <= 'Z' or
+         dynptabname(1) = '/' ).
+        read table no_ddic_tables transporting no fields
+                                  with table key table_line = dynptabname.
+        if sy-subrc ne 0.
+          read table dynpdfies_tab assigning <dfies>
+             with table key tabname = dynptabname
+                            fldpath = dynpfieldname.
+          if sy-subrc = 0.
+            clear retcode.
+          else.
+*           das Feld ist (noch) unbekannt. Gibt es die Tabelle?
+            read table dynpdfies_tab with key tabname = dynptabname
+                                     transporting no fields.
+            if sy-subrc ne 0.
+*             die Tabelle ist auch (noch) unbekannt -> DDIC fragen
+*              call function 'DDIF_NAMETAB_GET'
+*                   exporting
+*                        tabname     = dynptabname
+*                   TABLES
+*                        DFIES_TAB   = dynpdfies_tmp
+*                   EXCEPTIONS
+*                        NOT_FOUND   = 1
+*                        OTHERS      = 2.
+              import nametab lx030l x031ltab id dynptabname.
+              if sy-subrc eq 0.
+*               das DDIC kennt die Tabelle
+*                sort dynpdfies_tmp by tabname fieldname.
+                perform deep_structure_field_build(saplsdnt)
+                  tables x031ltab strucinfotab
+                  using dynptabname.
+                sort strucinfotab by tabname fldpath.
+                read table strucinfotab assigning <dfies> with key
+                     tabname   = dynptabname
+                     fldpath   = dynpfieldname binary search.
+                retcode = sy-subrc. "Mag sein, daß es das Feld auch gibt
+                insert lines of strucinfotab into table dynpdfies_tab.
+              else.
+*               das DDIC kennt die tabelle nicht
+                insert dynptabname into table no_ddic_tables.
+              endif. "DDIC kennt Tabelle?
+            endif. "Tabelle (noch) unbekannt
+          endif. "Feld (noch) unbekannt
+        endif."es ist nicht als No_DDIC bekannt
+      endif. "es könnte wirklich ein Tabellenfeld sein
+    endif. "Feldname hat die Form xxx-yyy
+* Großbuchstaben gefordert?
+    if  translate_to_upper ne space or
+*       ( retcode eq 0 and <dfies>-lowercase eq space ).
+       ( retcode eq 0 and <dfies>-flag1 z lowercaseflag ).
+      translate <dpovline>+fldinhoffs(fldinhlen)
+        to upper case.                                   "#EC TRANSLANG
+    endif.
+* Conversion exits. First, output conversion. (ich weiß zwar nicht, was
+* das hier soll, aber es war drin und ich muß kompatibel bleiben)
+    if retcode eq 0 and <dfies>-convexit ne space.
+      if perform_conversion_exits ne space.
+        move <dfies>-convexit to conversion_mask+2.
+        write <dpovline>+fldinhoffs(fldinhlen)
+          to <dpovline>+fldinhoffs(fldinhlen)
+          using edit mask conversion_mask.
+* secondly, the input-conversion (das macht schon eher Sinn)
+      elseif perform_input_conversion ne space.
+        concatenate 'CONVERSION_EXIT_' <dfies>-convexit '_INPUT'
+                    into conversion_function.
+        assign <dpovline>+fldinhoffs(fldinhlen)
+          to <yi> casting type (<dfline>-fieldname).
+        assign <dpovline>+fldinhoffs(<dfies>-exlength)
+          to <yo> type 'C'.
+        call function conversion_function
+          exporting
+            input  = <yo>
+          importing
+            output = <yi>.
+        hf = fldinhoffs + <dfies>-exlength.
+        hf2 = fldinhlen - <dfies>-exlength.
+        clear <dpovline>+hf(hf2).
+      endif.
+    endif.
+
+* Wert zurückgeben
+    <dfline>-fieldvalue = <dpovline>+fldinhoffs(fldinhlen).
+  endloop. "at <dpovtab>
+
+* don't leave garbage in <dpovtab>. It's content was damaged during
+* the loop above.
+  clear: <dpovtab>.
+
+* Aus Gründen der Kompatibilität auch Seiteneffekte beibehalten
+* hier: die Kopfzeile mit der letzten Zeile füllen
+  describe table dynpfields.
+  read table dynpfields index sy-tfill.
+
+endfunction.
+
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: 00
+*172   You are not authorized to use transaction &
+*398   & & & &
+*401   Maximum number of internal sessions reached
+*
+* Message class: 14
+*027   Maximum number of GUI sessions reached
+*
+* Message class: 1R
+*004   Front-end functions cannot be executed in the background
+*
+* Message class: 42
+*328   You do not have authorization for this function
+*
+* Message class: B~
+*019   Action canceled by user
+*020   Customizing for feedback functions missing
+*021   Error in feedback
+*030   You do not have authorization to create support messages
+*
+* Message class: HL
+*108   This function is not currently available
+*
+* Message class: NR
+*401   The transaction cannot be executed
+*
+* Message class: SD
+*005   Function cannot be executed
+*008   An unanticipated error has occurred
+*059   Documentation does not exist
+*116   Document & is not available in language &
+*138   This function can only be used for data elements
+*505   Extended help display was canceled
+*601   No documentation available
+*602   This operating system & is not supported
+*776   Document does not exist in language &
+*
+* Message class: SH
+*001   Place the cursor on a valid line
+*002   Matchcode help is not possible for display fields
+*003   The selection string you entered is invalid
+*006   No language specified
+*007   The system cannot display possible entries here
+*008   No possible entries exist
+*011   Last selected value does not exist for this input field
+*013   No values have been selected for this entry field
+*014   The term searched for does not exist.
+*015   The term searched for no longer exists
+*016   The column of the field selected cannot be deleted
+*024   Lower limit greater than upper limt; enter it again
+*025   Use the date format in the user master
+*026   Either choose "Generic search" or do not enter value generically
+*027   Do not make a generic search in the value range
+*028   Specify value generically or choose another search criterion
+*029   There are no texts for the domain
+*030   Navigation is only possible for ABAP Workbench objects
+*031   Only the first 100 values are displayed
+*032   A default matchcode ID has not yet been defined
+*033   The private list of values does not fulfill the selection condition &
+*034   Search procedure & is used as the new standard
+*035   All displayed values are marked.
+*036   Only the first & values are displayed.
+*037   View &1 does not contain entry &2.
+*038   Error calling maintenance transaction
+*039   Detail screen display not possible because of reuse of table &.
+*040   Table & has no maintenance dialog
+*511   Glossary entry & was not found
+*512   No glossary list could be generated for this application area
+*513   Position the cursor on a valid line
+*710   No documentation available for field &
+*720   No documentation available
+*760   No link to term '&'
+*
+* Message class: TK
+*107   Objects could not be added to request/task &1
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

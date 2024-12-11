@@ -1,0 +1,30 @@
+*----------------------------------------------------------------------*
+*   INCLUDE RVGTISDB                                                   *
+*----------------------------------------------------------------------*
+
+
+TABLES VTTP.                           "Transport positions
+TABLES VBFA.                           "Record sequence
+TABLES VTTS.                           "Transport route segments
+TABLES VTTK.                           "Transport head data
+TABLES VTSP.                           "Transp. segm. / positions
+TABLES LIKP.                           "Deliveries head data
+TABLES T173T.                          "Text for carrier types
+TABLES T173.                           "Carrier types
+TABLES TVLAT.                          "Text for load terminals
+TABLES TVSTT.                          "Text for point of shipments
+TABLES TVST.                           "Points of shipment
+TABLES ADRC.                           "Addresses
+TABLES TVKN.                           "Node data
+TABLES TVKNT.                          "Text for node data
+TABLES KNA1.                           "Customer data
+TABLES LFA1.                           "Supplier data
+TABLES TVROT.                          "Route texts
+TABLES TVTRT.                          "Verkehrsträger
+TABLES  TCNG.                          "Graphics profiles
+TABLES  TBCG.                          "Graphics profiles barchart
+TABLES  T005T.                         "Country names
+TABLES  T001W.                         "Plant
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

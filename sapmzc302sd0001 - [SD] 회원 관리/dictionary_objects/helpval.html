@@ -1,0 +1,4240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=EUC-KR" />
+<title>Dictionary object- HELPVAL</title>
+<style type="text/css">
+  th{text-align:left}
+  .cell{
+     font-family:"Courier New", Courier, monospace;
+     color:#000;
+     font-size:12px;
+     background-color:#F2F4F7;
+  }
+  .cell td { border: thin solid #ccc; }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Table: HELPVAL</h2>
+  <h3>Description: Restrict Value Range - Transfer Table</h3></td>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Row</th>
+  <th>Field name</th>
+  <th>Position</th>
+  <th>Key</th>
+  <th>Data element</th>
+  <th>Domain</th>
+  <th>Datatype</th>
+  <th>Length</th>
+  <th>Lowercase</th>
+  <th>Domain text</th>
+</tr>
+<tr class="cell">
+  <td> 1</td>
+  <td>DOMNAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>DOMNAME</td>
+  <td>DOMNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Domain name</td>
+</tr>
+<tr class="cell">
+  <td> 2</td>
+  <td>AS4LOCAL</td>
+  <td>2</td>
+  <td>X</td>
+  <td>AS4LOCAL</td>
+  <td>AS4LOCAL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation State of Repository Object</td>
+</tr>
+<tr class="cell">
+  <td> 3</td>
+  <td>AS4VERS</td>
+  <td>3</td>
+  <td>X</td>
+  <td>AS4VERS</td>
+  <td>AS4VERS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Version of the entry (not used)</td>
+</tr>
+<tr class="cell">
+  <td> 4</td>
+  <td>DATATYPE</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>DATATYPE_D</td>
+  <td>DATATYPE</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Data Type in ABAP Dictionary</td>
+</tr>
+<tr class="cell">
+  <td> 5</td>
+  <td>LENG</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>DDLENG</td>
+  <td>DDLENG</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Length (No. of Characters)</td>
+</tr>
+<tr class="cell">
+  <td> 6</td>
+  <td>OUTPUTLEN</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>OUTPUTLEN</td>
+  <td>DDLENG</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Output Length</td>
+</tr>
+<tr class="cell">
+  <td> 7</td>
+  <td>DECIMALS</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>DECIMALS</td>
+  <td>DDLENG</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Number of Decimal Places</td>
+</tr>
+<tr class="cell">
+  <td> 8</td>
+  <td>LOWERCASE</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>LOWERCASE</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Lowercase letters allowed/not allowed</td>
+</tr>
+<tr class="cell">
+  <td> 9</td>
+  <td>SIGNFLAG</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>SIGNFLAG</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag for sign in numerical fields</td>
+</tr>
+<tr class="cell">
+  <td>10</td>
+  <td>LANGFLAG</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>LANGFLAG</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag for language-dependent values(not used)</td>
+</tr>
+<tr class="cell">
+  <td>11</td>
+  <td>VALEXI</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>VALEXI</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Existence of fixed values</td>
+</tr>
+<tr class="cell">
+  <td>12</td>
+  <td>ENTITYTAB</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>ENTITYTAB</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Value table</td>
+</tr>
+<tr class="cell">
+  <td>13</td>
+  <td>CONVEXIT</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>CONVEXIT</td>
+  <td>CONVEXIT</td>
+  <td>CHAR</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Conversion Routine</td>
+</tr>
+<tr class="cell">
+  <td>14</td>
+  <td>MASK</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>AS4MASK</td>
+  <td>AS4MASK</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Template (not used)</td>
+</tr>
+<tr class="cell">
+  <td>15</td>
+  <td>MASKLEN</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>MASKLEN</td>
+  <td>MASKLEN</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Template length (not used)</td>
+</tr>
+<tr class="cell">
+  <td>16</td>
+  <td>ACTFLAG</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>ACTFLAG</td>
+  <td>ACTFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation flag</td>
+</tr>
+<tr class="cell">
+  <td>17</td>
+  <td>APPLCLASS</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>APPLCLASS</td>
+  <td>APPLCLASS</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Application class for DD objects (not used)</td>
+</tr>
+<tr class="cell">
+  <td>18</td>
+  <td>AUTHCLASS</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>AUTHCLASS_</td>
+  <td>AUTHCLASS</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Activation type</td>
+</tr>
+<tr class="cell">
+  <td>19</td>
+  <td>AS4USER</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>AS4USER</td>
+  <td>AS4USER</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Last Changed By</td>
+</tr>
+<tr class="cell">
+  <td>20</td>
+  <td>AS4DATE</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>AS4DATE</td>
+  <td>AS4DATE</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Last Changed On</td>
+</tr>
+<tr class="cell">
+  <td>21</td>
+  <td>AS4TIME</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>AS4TIME</td>
+  <td>AS4TIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Last changed at</td>
+</tr>
+<tr class="cell">
+  <td>22</td>
+  <td>DOMMASTER</td>
+  <td>22</td>
+  <td>&nbsp;</td>
+  <td>MASTERLANG</td>
+  <td>SPRAS</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Original Language in Repository objects</td>
+</tr>
+<tr class="cell">
+  <td>23</td>
+  <td>RESERVEDOM</td>
+  <td>23</td>
+  <td>&nbsp;</td>
+  <td>RESERVEDOM</td>
+  <td>CHAR4</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Reserve for domains (not used)</td>
+</tr>
+<tr class="cell">
+  <td>24</td>
+  <td>DOMGLOBAL</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>GLOBALFLAG</td>
+  <td>GLOBALFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag for private DD objects (not used)</td>
+</tr>
+<tr class="cell">
+  <td>25</td>
+  <td>APPENDNAME</td>
+  <td>25</td>
+  <td>&nbsp;</td>
+  <td>DOMNAME</td>
+  <td>DOMNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Domain name</td>
+</tr>
+<tr class="cell">
+  <td>26</td>
+  <td>APPEXIST</td>
+  <td>26</td>
+  <td>&nbsp;</td>
+  <td>DDAPPEXI</td>
+  <td>DDAPPEXI</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Indicator that at least one domain append exists</td>
+</tr>
+<tr class="cell">
+  <td>27</td>
+  <td>PROXYTYPE</td>
+  <td>27</td>
+  <td>&nbsp;</td>
+  <td>DDPROXYTY</td>
+  <td>DDPROXYTY</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Is a generated proxy object</td>
+</tr>
+<tr class="cell">
+  <td>28</td>
+  <td>OUTPUTSTYLE</td>
+  <td>28</td>
+  <td>&nbsp;</td>
+  <td>OUTPUTSTYLE</td>
+  <td>OUTPUTSTYLE</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>DD: Output Style (Output Style) for Decfloat Types</td>
+</tr>
+<tr class="cell">
+  <td>29</td>
+  <td>AMPMFORMAT</td>
+  <td>29</td>
+  <td>&nbsp;</td>
+  <td>DDAMPMFORMAT</td>
+  <td>DDAMPMFORMAT</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Indicator whether an AM/PM time format is desired</td>
+</tr>
+<tr class="cell">
+  <td>30</td>
+  <td>ABAP_LANGUAGE_VERSION</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>ABAP_LANGUAGE_VERSION</td>
+  <td>ABAP_LANGUAGE_VERSION</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>ABAP Language Version</td>
+</tr>
+<tr class="cell">
+  <td>31</td>
+  <td>DOMNAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>DOMNAME</td>
+  <td>DOMNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Domain name</td>
+</tr>
+<tr class="cell">
+  <td>32</td>
+  <td>DDLANGUAGE</td>
+  <td>2</td>
+  <td>X</td>
+  <td>DDLANGUAGE</td>
+  <td>SPRAS</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Language Key</td>
+</tr>
+<tr class="cell">
+  <td>33</td>
+  <td>AS4LOCAL</td>
+  <td>3</td>
+  <td>X</td>
+  <td>AS4LOCAL</td>
+  <td>AS4LOCAL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation State of Repository Object</td>
+</tr>
+<tr class="cell">
+  <td>34</td>
+  <td>AS4VERS</td>
+  <td>4</td>
+  <td>X</td>
+  <td>AS4VERS</td>
+  <td>AS4VERS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Version of the entry (not used)</td>
+</tr>
+<tr class="cell">
+  <td>35</td>
+  <td>DDTEXT</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>AS4TEXT</td>
+  <td>AS4TEXT</td>
+  <td>CHAR</td>
+  <td>60</td>
+  <td>X</td>
+  <td>Short Description of Repository Objects</td>
+</tr>
+<tr class="cell">
+  <td>36</td>
+  <td>TABNAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>TABNAME</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Table Name</td>
+</tr>
+<tr class="cell">
+  <td>37</td>
+  <td>AS4LOCAL</td>
+  <td>2</td>
+  <td>X</td>
+  <td>AS4LOCAL</td>
+  <td>AS4LOCAL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation State of Repository Object</td>
+</tr>
+<tr class="cell">
+  <td>38</td>
+  <td>AS4VERS</td>
+  <td>3</td>
+  <td>X</td>
+  <td>AS4VERS</td>
+  <td>AS4VERS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Version of the entry (not used)</td>
+</tr>
+<tr class="cell">
+  <td>39</td>
+  <td>TABCLASS</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>TABCLASS</td>
+  <td>TABCLASS</td>
+  <td>CHAR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Table Category</td>
+</tr>
+<tr class="cell">
+  <td>40</td>
+  <td>SQLTAB</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>SQLAPPDTAB</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Name of an SQL table or an appended table</td>
+</tr>
+<tr class="cell">
+  <td>41</td>
+  <td>DATMIN</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>DATMIN</td>
+  <td>DATANZ</td>
+  <td>NUMC</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Minimum no. of entries</td>
+</tr>
+<tr class="cell">
+  <td>42</td>
+  <td>DATMAX</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>DATMAX</td>
+  <td>DATANZ</td>
+  <td>NUMC</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Maximum no. of entries</td>
+</tr>
+<tr class="cell">
+  <td>43</td>
+  <td>DATAVG</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>DATAVG</td>
+  <td>DATANZ</td>
+  <td>NUMC</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Average number of entries</td>
+</tr>
+<tr class="cell">
+  <td>44</td>
+  <td>CLIDEP</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>CLIDEP</td>
+  <td>CLIDEP</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Client-Specific Flag</td>
+</tr>
+<tr class="cell">
+  <td>45</td>
+  <td>BUFFERED</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>BUFFERED</td>
+  <td>BUFFERED</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Buffering flag</td>
+</tr>
+<tr class="cell">
+  <td>46</td>
+  <td>COMPRFLAG</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>COMPREX</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Field compression indicator</td>
+</tr>
+<tr class="cell">
+  <td>47</td>
+  <td>LANGDEP</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>LANGDEP</td>
+  <td>LANGDEP</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Language dependency</td>
+</tr>
+<tr class="cell">
+  <td>48</td>
+  <td>ACTFLAG</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>ACTFLAG</td>
+  <td>ACTFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation flag</td>
+</tr>
+<tr class="cell">
+  <td>49</td>
+  <td>APPLCLASS</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>APPLCLASS</td>
+  <td>APPLCLASS</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Application class for DD objects (not used)</td>
+</tr>
+<tr class="cell">
+  <td>50</td>
+  <td>AUTHCLASS</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>AUTHCLASS_</td>
+  <td>AUTHCLASS</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Activation type</td>
+</tr>
+<tr class="cell">
+  <td>51</td>
+  <td>AS4USER</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>AS4USER</td>
+  <td>AS4USER</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Last Changed By</td>
+</tr>
+<tr class="cell">
+  <td>52</td>
+  <td>AS4DATE</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>AS4DATE</td>
+  <td>AS4DATE</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Last Changed On</td>
+</tr>
+<tr class="cell">
+  <td>53</td>
+  <td>AS4TIME</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>AS4TIME</td>
+  <td>AS4TIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Last changed at</td>
+</tr>
+<tr class="cell">
+  <td>54</td>
+  <td>MASTERLANG</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>MASTERLANG</td>
+  <td>SPRAS</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Original Language in Repository objects</td>
+</tr>
+<tr class="cell">
+  <td>55</td>
+  <td>MAINFLAG</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>MAINTFLAG</td>
+  <td>MAINTFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Indicates maintenance with standard tools allowed</td>
+</tr>
+<tr class="cell">
+  <td>56</td>
+  <td>CONTFLAG</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>CONTFLAG</td>
+  <td>CONTFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Delivery class</td>
+</tr>
+<tr class="cell">
+  <td>57</td>
+  <td>RESERVETAB</td>
+  <td>22</td>
+  <td>&nbsp;</td>
+  <td>RESERVETAB</td>
+  <td>CHAR4</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>SDIC: Reserve for tables</td>
+</tr>
+<tr class="cell">
+  <td>58</td>
+  <td>GLOBALFLAG</td>
+  <td>23</td>
+  <td>&nbsp;</td>
+  <td>GLOBALFLAG</td>
+  <td>GLOBALFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag for private DD objects (not used)</td>
+</tr>
+<tr class="cell">
+  <td>59</td>
+  <td>PROZPUFF</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>PROZPUFF</td>
+  <td>PROZPUFF</td>
+  <td>NUMC</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Percentage for buffers</td>
+</tr>
+<tr class="cell">
+  <td>60</td>
+  <td>VIEWCLASS</td>
+  <td>25</td>
+  <td>&nbsp;</td>
+  <td>VIEWCLASS</td>
+  <td>VIEWCLASS</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>View Type</td>
+</tr>
+<tr class="cell">
+  <td>61</td>
+  <td>VIEWGRANT</td>
+  <td>26</td>
+  <td>&nbsp;</td>
+  <td>VIEWGRANT</td>
+  <td>VIEWGRANT</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Maintenance status (change authorization) for view data</td>
+</tr>
+<tr class="cell">
+  <td>62</td>
+  <td>MULTIPLEX</td>
+  <td>27</td>
+  <td>&nbsp;</td>
+  <td>MULTIPLEX</td>
+  <td>MULTIPLEX</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Indicates multiplexing is possible for a table</td>
+</tr>
+<tr class="cell">
+  <td>63</td>
+  <td>SHLPEXI</td>
+  <td>28</td>
+  <td>&nbsp;</td>
+  <td>SHLPEXI</td>
+  <td>DDBOOL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Search help binding to table exists</td>
+</tr>
+<tr class="cell">
+  <td>64</td>
+  <td>PROXYTYPE</td>
+  <td>29</td>
+  <td>&nbsp;</td>
+  <td>DDPROXYTY</td>
+  <td>DDPROXYTY</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Is a generated proxy object</td>
+</tr>
+<tr class="cell">
+  <td>65</td>
+  <td>EXCLASS</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>DDRANKING</td>
+  <td>DDRANKING</td>
+  <td>NUMC</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD:  Ranking for include and subtype extension</td>
+</tr>
+<tr class="cell">
+  <td>66</td>
+  <td>WRONGCL</td>
+  <td>31</td>
+  <td>&nbsp;</td>
+  <td>DDWRONGCL</td>
+  <td>DDWRONGCL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Enhancement category is incorrect</td>
+</tr>
+<tr class="cell">
+  <td>67</td>
+  <td>ALWAYSTRP</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>DDALWAYSTRP</td>
+  <td>DDALWAYSTRP</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Table is always transparent on selected databases</td>
+</tr>
+<tr class="cell">
+  <td>68</td>
+  <td>ALLDATAINCL</td>
+  <td>33</td>
+  <td>&nbsp;</td>
+  <td>DDALLDATAINCLU</td>
+  <td>DDALLDATAINCLU</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: DataAging:  Handle data as hot and cold if switched on</td>
+</tr>
+<tr class="cell">
+  <td>69</td>
+  <td>WITH_PARAMETERS</td>
+  <td>34</td>
+  <td>&nbsp;</td>
+  <td>DDWITHPAR</td>
+  <td>DDWITHPAR</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Set whenever a view or base view has parameters</td>
+</tr>
+<tr class="cell">
+  <td>70</td>
+  <td>EXVIEW_INCLUDED</td>
+  <td>35</td>
+  <td>&nbsp;</td>
+  <td>DDEXTVIEW_INCLUDED</td>
+  <td>DDEXTVIEW_INCLUDED</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Contains at least one external view in the hierarchy</td>
+</tr>
+<tr class="cell">
+  <td>71</td>
+  <td>KEYMAX_FEATURE</td>
+  <td>36</td>
+  <td>&nbsp;</td>
+  <td>DDDBKEYMAXFEATURE</td>
+  <td>DDDBFEATURE</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Maximum CL_DD_DBFEATURES=>KEYCNT_MAX1 Key Fields</td>
+</tr>
+<tr class="cell">
+  <td>72</td>
+  <td>KEYLEN_FEATURE</td>
+  <td>37</td>
+  <td>&nbsp;</td>
+  <td>DDDBKEYLENFEATURE</td>
+  <td>DDDBFEATURE</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Maximum CL_DD_DBFEATURES=>KEYLEN_MAX1 Key Length</td>
+</tr>
+<tr class="cell">
+  <td>73</td>
+  <td>TABLEN_FEATURE</td>
+  <td>38</td>
+  <td>&nbsp;</td>
+  <td>DDDBTABLENFEATURE</td>
+  <td>DDDBFEATURE</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Maximum Width CL_DD_DBFEATURES=>LEN_MAX1</td>
+</tr>
+<tr class="cell">
+  <td>74</td>
+  <td>NONTRP_INCLUDED</td>
+  <td>39</td>
+  <td>&nbsp;</td>
+  <td>DDNONTRANSP_INCLUDED</td>
+  <td>DDNONTRANSP_INCLUDED</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>At least one non-transparent table is contained here</td>
+</tr>
+<tr class="cell">
+  <td>75</td>
+  <td>VIEWREF</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>VIEWNAME</td>
+  <td>VIEWNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Name of SAP table view</td>
+</tr>
+<tr class="cell">
+  <td>76</td>
+  <td>VIEWREF_ERR</td>
+  <td>41</td>
+  <td>&nbsp;</td>
+  <td>DDVIEWREF_ERR</td>
+  <td>DDBOOL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Replacement object cannot be used</td>
+</tr>
+<tr class="cell">
+  <td>77</td>
+  <td>VIEWREF_POS_CHG</td>
+  <td>42</td>
+  <td>&nbsp;</td>
+  <td>DDVIEWREF_POSCHG</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Replacement object exists in different positions</td>
+</tr>
+<tr class="cell">
+  <td>78</td>
+  <td>TBFUNC_INCLUDED</td>
+  <td>43</td>
+  <td>&nbsp;</td>
+  <td>DDTBFUNC_INCLUDED</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Contains info whether a table function exists in hierarchy</td>
+</tr>
+<tr class="cell">
+  <td>79</td>
+  <td>IS_GTT</td>
+  <td>44</td>
+  <td>&nbsp;</td>
+  <td>DD_IS_GTT</td>
+  <td>DD_IS_GTT</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag whether table is a global temporary table</td>
+</tr>
+<tr class="cell">
+  <td>80</td>
+  <td>SESSION_VAR_EX</td>
+  <td>45</td>
+  <td>&nbsp;</td>
+  <td>DDSESSIONVAR_EX</td>
+  <td>DDSESSIONVAR_EX</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Does a session variable exist?</td>
+</tr>
+<tr class="cell">
+  <td>81</td>
+  <td>FROM_ENTITY</td>
+  <td>46</td>
+  <td>&nbsp;</td>
+  <td>DDTABGEN_FROM_DDL</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Table is generated from an entity DDL</td>
+</tr>
+<tr class="cell">
+  <td>82</td>
+  <td>PK_IS_INVHASH</td>
+  <td>47</td>
+  <td>&nbsp;</td>
+  <td>DDPK_IS_INVHASH</td>
+  <td>DDPK_IS_INVHASH</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Create primary key as inverted hash/individual</td>
+</tr>
+<tr class="cell">
+  <td>83</td>
+  <td>USED_SESSION_VARS</td>
+  <td>48</td>
+  <td>&nbsp;</td>
+  <td>DDUSEDSESSION_VARS</td>
+  <td>DDUSEDSESSION_VARS</td>
+  <td>CHAR</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>DD: Session Variables Used</td>
+</tr>
+<tr class="cell">
+  <td>84</td>
+  <td>ABAP_LANGUAGE_VERSION</td>
+  <td>49</td>
+  <td>&nbsp;</td>
+  <td>ABAP_LANGUAGE_VERSION</td>
+  <td>ABAP_LANGUAGE_VERSION</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>ABAP Language Version</td>
+</tr>
+<tr class="cell">
+  <td>85</td>
+  <td>HDB_ONLY_ENTITY_INCLUDED</td>
+  <td>50</td>
+  <td>&nbsp;</td>
+  <td>DDHDBONLY_ENTITY_INCLUDED</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Does a HDB entity occur?</td>
+</tr>
+<tr class="cell">
+  <td>86</td>
+  <td>TABNAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>TABNAME</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Table Name</td>
+</tr>
+<tr class="cell">
+  <td>87</td>
+  <td>DDLANGUAGE</td>
+  <td>2</td>
+  <td>X</td>
+  <td>DDLANGUAGE</td>
+  <td>SPRAS</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Language Key</td>
+</tr>
+<tr class="cell">
+  <td>88</td>
+  <td>TABCLASS</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>TABCLASS</td>
+  <td>TABCLASS</td>
+  <td>CHAR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Table Category</td>
+</tr>
+<tr class="cell">
+  <td>89</td>
+  <td>SQLTAB</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>SQLAPPDTAB</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Name of an SQL table or an appended table</td>
+</tr>
+<tr class="cell">
+  <td>90</td>
+  <td>DATMIN</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>DATMIN</td>
+  <td>DATANZ</td>
+  <td>NUMC</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Minimum no. of entries</td>
+</tr>
+<tr class="cell">
+  <td>91</td>
+  <td>DATMAX</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>DATMAX</td>
+  <td>DATANZ</td>
+  <td>NUMC</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Maximum no. of entries</td>
+</tr>
+<tr class="cell">
+  <td>92</td>
+  <td>DATAVG</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>DATAVG</td>
+  <td>DATANZ</td>
+  <td>NUMC</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Average number of entries</td>
+</tr>
+<tr class="cell">
+  <td>93</td>
+  <td>CLIDEP</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>CLIDEP</td>
+  <td>CLIDEP</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Client-Specific Flag</td>
+</tr>
+<tr class="cell">
+  <td>94</td>
+  <td>BUFFERED</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>BUFFERED</td>
+  <td>BUFFERED</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Buffering flag</td>
+</tr>
+<tr class="cell">
+  <td>95</td>
+  <td>COMPRFLAG</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>COMPREX</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Field compression indicator</td>
+</tr>
+<tr class="cell">
+  <td>96</td>
+  <td>LANGDEP</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>LANGDEP</td>
+  <td>LANGDEP</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Language dependency</td>
+</tr>
+<tr class="cell">
+  <td>97</td>
+  <td>DDTEXT</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>AS4TEXT</td>
+  <td>AS4TEXT</td>
+  <td>CHAR</td>
+  <td>60</td>
+  <td>X</td>
+  <td>Short Description of Repository Objects</td>
+</tr>
+<tr class="cell">
+  <td>98</td>
+  <td>ACTFLAG</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>ACTFLAG</td>
+  <td>ACTFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation flag</td>
+</tr>
+<tr class="cell">
+  <td>99</td>
+  <td>APPLCLASS</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>APPLCLASS</td>
+  <td>APPLCLASS</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Application class for DD objects (not used)</td>
+</tr>
+<tr class="cell">
+  <td>100</td>
+  <td>AUTHCLASS</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>AUTHCLASS_</td>
+  <td>AUTHCLASS</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Activation type</td>
+</tr>
+<tr class="cell">
+  <td>101</td>
+  <td>AS4USER</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>AS4USER</td>
+  <td>AS4USER</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Last Changed By</td>
+</tr>
+<tr class="cell">
+  <td>102</td>
+  <td>AS4DATE</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>AS4DATE</td>
+  <td>AS4DATE</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Last Changed On</td>
+</tr>
+<tr class="cell">
+  <td>103</td>
+  <td>AS4TIME</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>AS4TIME</td>
+  <td>AS4TIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Last changed at</td>
+</tr>
+<tr class="cell">
+  <td>104</td>
+  <td>MASTERLANG</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>MASTERLANG</td>
+  <td>SPRAS</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Original Language in Repository objects</td>
+</tr>
+<tr class="cell">
+  <td>105</td>
+  <td>MAINFLAG</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>MAINTFLAG</td>
+  <td>MAINTFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Indicates maintenance with standard tools allowed</td>
+</tr>
+<tr class="cell">
+  <td>106</td>
+  <td>CONTFLAG</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>CONTFLAG</td>
+  <td>CONTFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Delivery class</td>
+</tr>
+<tr class="cell">
+  <td>107</td>
+  <td>RESERVETAB</td>
+  <td>22</td>
+  <td>&nbsp;</td>
+  <td>RESERVETAB</td>
+  <td>CHAR4</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>SDIC: Reserve for tables</td>
+</tr>
+<tr class="cell">
+  <td>108</td>
+  <td>GLOBALFLAG</td>
+  <td>23</td>
+  <td>&nbsp;</td>
+  <td>GLOBALFLAG</td>
+  <td>GLOBALFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag for private DD objects (not used)</td>
+</tr>
+<tr class="cell">
+  <td>109</td>
+  <td>PROZPUFF</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>PROZPUFF</td>
+  <td>PROZPUFF</td>
+  <td>NUMC</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Percentage for buffers</td>
+</tr>
+<tr class="cell">
+  <td>110</td>
+  <td>VIEWCLASS</td>
+  <td>25</td>
+  <td>&nbsp;</td>
+  <td>VIEWCLASS</td>
+  <td>VIEWCLASS</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>View Type</td>
+</tr>
+<tr class="cell">
+  <td>111</td>
+  <td>VIEWGRANT</td>
+  <td>26</td>
+  <td>&nbsp;</td>
+  <td>VIEWGRANT</td>
+  <td>VIEWGRANT</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Maintenance status (change authorization) for view data</td>
+</tr>
+<tr class="cell">
+  <td>112</td>
+  <td>MULTIPLEX</td>
+  <td>27</td>
+  <td>&nbsp;</td>
+  <td>MULTIPLEX</td>
+  <td>MULTIPLEX</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Indicates multiplexing is possible for a table</td>
+</tr>
+<tr class="cell">
+  <td>113</td>
+  <td>SHLPEXI</td>
+  <td>28</td>
+  <td>&nbsp;</td>
+  <td>SHLPEXI</td>
+  <td>DDBOOL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Search help binding to table exists</td>
+</tr>
+<tr class="cell">
+  <td>114</td>
+  <td>PROXYTYPE</td>
+  <td>29</td>
+  <td>&nbsp;</td>
+  <td>DDPROXYTY</td>
+  <td>DDPROXYTY</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Is a generated proxy object</td>
+</tr>
+<tr class="cell">
+  <td>115</td>
+  <td>EXCLASS</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>DDRANKING</td>
+  <td>DDRANKING</td>
+  <td>NUMC</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD:  Ranking for include and subtype extension</td>
+</tr>
+<tr class="cell">
+  <td>116</td>
+  <td>WRONGCL</td>
+  <td>31</td>
+  <td>&nbsp;</td>
+  <td>DDWRONGCL</td>
+  <td>DDWRONGCL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Enhancement category is incorrect</td>
+</tr>
+<tr class="cell">
+  <td>117</td>
+  <td>ALWAYSTRP</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>DDALWAYSTRP</td>
+  <td>DDALWAYSTRP</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Table is always transparent on selected databases</td>
+</tr>
+<tr class="cell">
+  <td>118</td>
+  <td>ALLDATAINCL</td>
+  <td>33</td>
+  <td>&nbsp;</td>
+  <td>DDALLDATAINCLU</td>
+  <td>DDALLDATAINCLU</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: DataAging:  Handle data as hot and cold if switched on</td>
+</tr>
+<tr class="cell">
+  <td>119</td>
+  <td>WITH_PARAMETERS</td>
+  <td>34</td>
+  <td>&nbsp;</td>
+  <td>DDWITHPAR</td>
+  <td>DDWITHPAR</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Set whenever a view or base view has parameters</td>
+</tr>
+<tr class="cell">
+  <td>120</td>
+  <td>EXVIEW_INCLUDED</td>
+  <td>35</td>
+  <td>&nbsp;</td>
+  <td>DDEXTVIEW_INCLUDED</td>
+  <td>DDEXTVIEW_INCLUDED</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Contains at least one external view in the hierarchy</td>
+</tr>
+<tr class="cell">
+  <td>121</td>
+  <td>KEYMAX_FEATURE</td>
+  <td>36</td>
+  <td>&nbsp;</td>
+  <td>DDDBKEYMAXFEATURE</td>
+  <td>DDDBFEATURE</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Maximum CL_DD_DBFEATURES=>KEYCNT_MAX1 Key Fields</td>
+</tr>
+<tr class="cell">
+  <td>122</td>
+  <td>KEYLEN_FEATURE</td>
+  <td>37</td>
+  <td>&nbsp;</td>
+  <td>DDDBKEYLENFEATURE</td>
+  <td>DDDBFEATURE</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Maximum CL_DD_DBFEATURES=>KEYLEN_MAX1 Key Length</td>
+</tr>
+<tr class="cell">
+  <td>123</td>
+  <td>TABLEN_FEATURE</td>
+  <td>38</td>
+  <td>&nbsp;</td>
+  <td>DDDBTABLENFEATURE</td>
+  <td>DDDBFEATURE</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Maximum Width CL_DD_DBFEATURES=>LEN_MAX1</td>
+</tr>
+<tr class="cell">
+  <td>124</td>
+  <td>NONTRP_INCLUDED</td>
+  <td>39</td>
+  <td>&nbsp;</td>
+  <td>DDNONTRANSP_INCLUDED</td>
+  <td>DDNONTRANSP_INCLUDED</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>At least one non-transparent table is contained here</td>
+</tr>
+<tr class="cell">
+  <td>125</td>
+  <td>VIEWREF</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>VIEWNAME</td>
+  <td>VIEWNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Name of SAP table view</td>
+</tr>
+<tr class="cell">
+  <td>126</td>
+  <td>VIEWREF_ERR</td>
+  <td>41</td>
+  <td>&nbsp;</td>
+  <td>DDVIEWREF_ERR</td>
+  <td>DDBOOL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Replacement object cannot be used</td>
+</tr>
+<tr class="cell">
+  <td>127</td>
+  <td>VIEWREF_POS_CHG</td>
+  <td>42</td>
+  <td>&nbsp;</td>
+  <td>DDVIEWREF_POSCHG</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Replacement object exists in different positions</td>
+</tr>
+<tr class="cell">
+  <td>128</td>
+  <td>TBFUNC_INCLUDED</td>
+  <td>43</td>
+  <td>&nbsp;</td>
+  <td>DDTBFUNC_INCLUDED</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Contains info whether a table function exists in hierarchy</td>
+</tr>
+<tr class="cell">
+  <td>129</td>
+  <td>IS_GTT</td>
+  <td>44</td>
+  <td>&nbsp;</td>
+  <td>DD_IS_GTT</td>
+  <td>DD_IS_GTT</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag whether table is a global temporary table</td>
+</tr>
+<tr class="cell">
+  <td>130</td>
+  <td>SESSION_VAR_EX</td>
+  <td>45</td>
+  <td>&nbsp;</td>
+  <td>DDSESSIONVAR_EX</td>
+  <td>DDSESSIONVAR_EX</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Does a session variable exist?</td>
+</tr>
+<tr class="cell">
+  <td>131</td>
+  <td>FROM_ENTITY</td>
+  <td>46</td>
+  <td>&nbsp;</td>
+  <td>DDTABGEN_FROM_DDL</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Table is generated from an entity DDL</td>
+</tr>
+<tr class="cell">
+  <td>132</td>
+  <td>PK_IS_INVHASH</td>
+  <td>47</td>
+  <td>&nbsp;</td>
+  <td>DDPK_IS_INVHASH</td>
+  <td>DDPK_IS_INVHASH</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Create primary key as inverted hash/individual</td>
+</tr>
+<tr class="cell">
+  <td>133</td>
+  <td>USED_SESSION_VARS</td>
+  <td>48</td>
+  <td>&nbsp;</td>
+  <td>DDUSEDSESSION_VARS</td>
+  <td>DDUSEDSESSION_VARS</td>
+  <td>CHAR</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>DD: Session Variables Used</td>
+</tr>
+<tr class="cell">
+  <td>134</td>
+  <td>HDB_ONLY_ENTITY_INCLUDED</td>
+  <td>49</td>
+  <td>&nbsp;</td>
+  <td>DDHDBONLY_ENTITY_INCLUDED</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Does a HDB entity occur?</td>
+</tr>
+<tr class="cell">
+  <td>135</td>
+  <td>TABNAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>TABNAME</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Table Name</td>
+</tr>
+<tr class="cell">
+  <td>136</td>
+  <td>FIELDNAME</td>
+  <td>2</td>
+  <td>X</td>
+  <td>FIELDNAME</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Field Name</td>
+</tr>
+<tr class="cell">
+  <td>137</td>
+  <td>AS4LOCAL</td>
+  <td>3</td>
+  <td>X</td>
+  <td>AS4LOCAL</td>
+  <td>AS4LOCAL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation State of Repository Object</td>
+</tr>
+<tr class="cell">
+  <td>138</td>
+  <td>AS4VERS</td>
+  <td>4</td>
+  <td>X</td>
+  <td>AS4VERS</td>
+  <td>AS4VERS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Version of the entry (not used)</td>
+</tr>
+<tr class="cell">
+  <td>139</td>
+  <td>POSITION</td>
+  <td>5</td>
+  <td>X</td>
+  <td>TABFDPOS</td>
+  <td>AS4POS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Position of the field in the table</td>
+</tr>
+<tr class="cell">
+  <td>140</td>
+  <td>KEYFLAG</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>KEYFLAG</td>
+  <td>KEYFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Identifies a key field of a table</td>
+</tr>
+<tr class="cell">
+  <td>141</td>
+  <td>MANDATORY</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>MANDATORY</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag: Field is required (not blank)</td>
+</tr>
+<tr class="cell">
+  <td>142</td>
+  <td>ROLLNAME</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>ROLLNAME</td>
+  <td>ROLLNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Data element (semantic domain)</td>
+</tr>
+<tr class="cell">
+  <td>143</td>
+  <td>CHECKTABLE</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>CHECKTABLE</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Check table name of the foreign key</td>
+</tr>
+<tr class="cell">
+  <td>144</td>
+  <td>ADMINFIELD</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>ADMINFIELD</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Nesting depth for includes</td>
+</tr>
+<tr class="cell">
+  <td>145</td>
+  <td>INTTYPE</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>INTTYPE</td>
+  <td>INTTYPE</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>X</td>
+  <td>ABAP data type (C,D,N,...)</td>
+</tr>
+<tr class="cell">
+  <td>146</td>
+  <td>INTLEN</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>INTLEN</td>
+  <td>DDLENG</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Internal Length in Bytes</td>
+</tr>
+<tr class="cell">
+  <td>147</td>
+  <td>REFTABLE</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>REFTABLE</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Reference Table for Field</td>
+</tr>
+<tr class="cell">
+  <td>148</td>
+  <td>PRECFIELD</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>PRECFIELD</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Name of included table</td>
+</tr>
+<tr class="cell">
+  <td>149</td>
+  <td>REFFIELD</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>REFFIELD</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Reference Field for Currency and Quantity Fields</td>
+</tr>
+<tr class="cell">
+  <td>150</td>
+  <td>CONROUT</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>CONROUT</td>
+  <td>CHAR10</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Check or generating module for fields</td>
+</tr>
+<tr class="cell">
+  <td>151</td>
+  <td>NOTNULL</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>NOTNULL</td>
+  <td>NOTNULL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Indicator for initial values in database fields</td>
+</tr>
+<tr class="cell">
+  <td>152</td>
+  <td>DATATYPE</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>DATATYPE_D</td>
+  <td>DATATYPE</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Data Type in ABAP Dictionary</td>
+</tr>
+<tr class="cell">
+  <td>153</td>
+  <td>LENG</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>DDLENG</td>
+  <td>DDLENG</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Length (No. of Characters)</td>
+</tr>
+<tr class="cell">
+  <td>154</td>
+  <td>DECIMALS</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>DECIMALS</td>
+  <td>DDLENG</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Number of Decimal Places</td>
+</tr>
+<tr class="cell">
+  <td>155</td>
+  <td>DOMNAME</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>DOMNAME</td>
+  <td>DOMNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Domain name</td>
+</tr>
+<tr class="cell">
+  <td>156</td>
+  <td>SHLPORIGIN</td>
+  <td>22</td>
+  <td>&nbsp;</td>
+  <td>SHLPORIGIN</td>
+  <td>SHLPORIGIN</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Origin of an Input Help</td>
+</tr>
+<tr class="cell">
+  <td>157</td>
+  <td>TABLETYPE</td>
+  <td>23</td>
+  <td>&nbsp;</td>
+  <td>DDTABTYPE</td>
+  <td>DDFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Flag if it is a table</td>
+</tr>
+<tr class="cell">
+  <td>158</td>
+  <td>DEPTH</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>TYPEDEPTH</td>
+  <td>TYPEDEPTH</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>DD: Depth for structured types</td>
+</tr>
+<tr class="cell">
+  <td>159</td>
+  <td>COMPTYPE</td>
+  <td>25</td>
+  <td>&nbsp;</td>
+  <td>COMPTYPE</td>
+  <td>COMPTYPE</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Component Type</td>
+</tr>
+<tr class="cell">
+  <td>160</td>
+  <td>REFTYPE</td>
+  <td>26</td>
+  <td>&nbsp;</td>
+  <td>DDREFTYPE</td>
+  <td>DDREFTYPE</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Type of Object Referenced</td>
+</tr>
+<tr class="cell">
+  <td>161</td>
+  <td>LANGUFLAG</td>
+  <td>27</td>
+  <td>&nbsp;</td>
+  <td>DDLANGUFLG</td>
+  <td>DDLANGUFLG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Indicator for a Language Field</td>
+</tr>
+<tr class="cell">
+  <td>162</td>
+  <td>DBPOSITION</td>
+  <td>28</td>
+  <td>&nbsp;</td>
+  <td>TABFDPOS</td>
+  <td>AS4POS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Position of the field in the table</td>
+</tr>
+<tr class="cell">
+  <td>163</td>
+  <td>ANONYMOUS</td>
+  <td>29</td>
+  <td>&nbsp;</td>
+  <td>DDANONYM</td>
+  <td>DDANONYM</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Anonymization Indicator (for User Fields)</td>
+</tr>
+<tr class="cell">
+  <td>164</td>
+  <td>OUTPUTSTYLE</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>OUTPUTSTYLE</td>
+  <td>OUTPUTSTYLE</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>DD: Output Style (Output Style) for Decfloat Types</td>
+</tr>
+<tr class="cell">
+  <td>165</td>
+  <td>SRS_ID</td>
+  <td>31</td>
+  <td>&nbsp;</td>
+  <td>SRS_ID</td>
+  <td>SRS_ID</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Spatial Reference System</td>
+</tr>
+<tr class="cell">
+  <td>166</td>
+  <td>TABNAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>TABNAME</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Table Name</td>
+</tr>
+<tr class="cell">
+  <td>167</td>
+  <td>FIELDNAME</td>
+  <td>2</td>
+  <td>X</td>
+  <td>FORFIELD</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Name of the field to be checked</td>
+</tr>
+<tr class="cell">
+  <td>168</td>
+  <td>PRIMPOS</td>
+  <td>3</td>
+  <td>X</td>
+  <td>PRIMPOS</td>
+  <td>AS4POS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Position of corresp. foreign key field in primary key</td>
+</tr>
+<tr class="cell">
+  <td>169</td>
+  <td>AS4LOCAL</td>
+  <td>4</td>
+  <td>X</td>
+  <td>AS4LOCAL</td>
+  <td>AS4LOCAL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation State of Repository Object</td>
+</tr>
+<tr class="cell">
+  <td>170</td>
+  <td>AS4VERS</td>
+  <td>5</td>
+  <td>X</td>
+  <td>AS4VERS</td>
+  <td>AS4VERS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Version of the entry (not used)</td>
+</tr>
+<tr class="cell">
+  <td>171</td>
+  <td>FORTABLE</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>FORTABLE</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Table of the foreign key field</td>
+</tr>
+<tr class="cell">
+  <td>172</td>
+  <td>FORKEY</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>FORKEY</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Names of Foreign Key Fields</td>
+</tr>
+<tr class="cell">
+  <td>173</td>
+  <td>FORSTRING</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>FORSTRING</td>
+  <td>CHAR60</td>
+  <td>CHAR</td>
+  <td>60</td>
+  <td>&nbsp;</td>
+  <td>Foreign Key Part in Other Table</td>
+</tr>
+<tr class="cell">
+  <td>174</td>
+  <td>DOMNAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>DOMNAME</td>
+  <td>DOMNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Domain name</td>
+</tr>
+<tr class="cell">
+  <td>175</td>
+  <td>VALPOS</td>
+  <td>2</td>
+  <td>X</td>
+  <td>VALPOS</td>
+  <td>VALPOS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Domain value key</td>
+</tr>
+<tr class="cell">
+  <td>176</td>
+  <td>DDLANGUAGE</td>
+  <td>3</td>
+  <td>X</td>
+  <td>DDLANGUAGE</td>
+  <td>SPRAS</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Language Key</td>
+</tr>
+<tr class="cell">
+  <td>177</td>
+  <td>DOMVALUE_L</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>DOMVALUE_L</td>
+  <td>DOMVAL</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Values for Domains: Single Value / Upper Limit</td>
+</tr>
+<tr class="cell">
+  <td>178</td>
+  <td>DOMVALUE_H</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>DOMVALUE_H</td>
+  <td>DOMVAL</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Values for domains, upper limit</td>
+</tr>
+<tr class="cell">
+  <td>179</td>
+  <td>DDTEXT</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>VAL_TEXT</td>
+  <td>DDTEXT</td>
+  <td>CHAR</td>
+  <td>60</td>
+  <td>X</td>
+  <td>Short Text for Fixed Values</td>
+</tr>
+<tr class="cell">
+  <td>180</td>
+  <td>DOMVAL_LD</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>DOMVAL_LD</td>
+  <td>DOMVAL</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Language-specific values for domains, lower limit</td>
+</tr>
+<tr class="cell">
+  <td>181</td>
+  <td>DOMVAL_HD</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>DOMVAL_HD</td>
+  <td>DOMVAL</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Language-specific values for domains, upper limit</td>
+</tr>
+<tr class="cell">
+  <td>182</td>
+  <td>APPVAL</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>DDAPPVAL</td>
+  <td>DDAPPVAL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Defines whether value of appender belongs to append</td>
+</tr>
+<tr class="cell">
+  <td>183</td>
+  <td>TABNAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>TABNAME</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Table Name</td>
+</tr>
+<tr class="cell">
+  <td>184</td>
+  <td>FIELDNAME</td>
+  <td>2</td>
+  <td>X</td>
+  <td>FORFIELD</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Name of the field to be checked</td>
+</tr>
+<tr class="cell">
+  <td>185</td>
+  <td>AS4LOCAL</td>
+  <td>3</td>
+  <td>X</td>
+  <td>AS4LOCAL</td>
+  <td>AS4LOCAL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation State of Repository Object</td>
+</tr>
+<tr class="cell">
+  <td>186</td>
+  <td>AS4VERS</td>
+  <td>4</td>
+  <td>X</td>
+  <td>AS4VERS</td>
+  <td>AS4VERS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Version of the entry (not used)</td>
+</tr>
+<tr class="cell">
+  <td>187</td>
+  <td>CHECKTABLE</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>CHECKTABLE</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Check table name of the foreign key</td>
+</tr>
+<tr class="cell">
+  <td>188</td>
+  <td>FRKART</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>FRKART</td>
+  <td>FRKART</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Dependency factor for semantic foreign keys</td>
+</tr>
+<tr class="cell">
+  <td>189</td>
+  <td>CLASFIELD</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>CLASFIELD</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Internal classification of foreign keys: partial, etc.</td>
+</tr>
+<tr class="cell">
+  <td>190</td>
+  <td>CLASVALUE</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>CLASVALUE</td>
+  <td>DOMVAL</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Values for classif. field of CLAS relationship type</td>
+</tr>
+<tr class="cell">
+  <td>191</td>
+  <td>CARDLEFT</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>CARDLEFT</td>
+  <td>CARDLEFT</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Cardinality of a relationship</td>
+</tr>
+<tr class="cell">
+  <td>192</td>
+  <td>CARD</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>CARD</td>
+  <td>CARD</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Cardinality of a relationship</td>
+</tr>
+<tr class="cell">
+  <td>193</td>
+  <td>CHECKFLAG</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>CHECKFLAG</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>No check in Screen Painter</td>
+</tr>
+<tr class="cell">
+  <td>194</td>
+  <td>ARBGB</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>ARBGB</td>
+  <td>ARBGB</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Application Area</td>
+</tr>
+<tr class="cell">
+  <td>195</td>
+  <td>MSGNR</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>MSGNR</td>
+  <td>MSGNR</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Message number</td>
+</tr>
+<tr class="cell">
+  <td>196</td>
+  <td>NOINHERIT</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>INCNOINHER</td>
+  <td>INCNOINHER</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Flag whether inheritance is switched off for the FRK</td>
+</tr>
+<tr class="cell">
+  <td>197</td>
+  <td>MCONAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>MCONAME</td>
+  <td>MCONAME</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Name of a matchcode object</td>
+</tr>
+<tr class="cell">
+  <td>198</td>
+  <td>MCID</td>
+  <td>2</td>
+  <td>X</td>
+  <td>MCID</td>
+  <td>MCID</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Matchcode ID</td>
+</tr>
+<tr class="cell">
+  <td>199</td>
+  <td>AS4LOCAL</td>
+  <td>3</td>
+  <td>X</td>
+  <td>AS4LOCAL</td>
+  <td>AS4LOCAL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation State of Repository Object</td>
+</tr>
+<tr class="cell">
+  <td>200</td>
+  <td>AS4VERS</td>
+  <td>4</td>
+  <td>X</td>
+  <td>AS4VERS</td>
+  <td>AS4VERS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Version of the entry (not used)</td>
+</tr>
+<tr class="cell">
+  <td>201</td>
+  <td>APPLCLASS</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>APPLCLASS</td>
+  <td>APPLCLASS</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Application class for DD objects (not used)</td>
+</tr>
+<tr class="cell">
+  <td>202</td>
+  <td>AUTHCLASS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>AUTHCLASS_</td>
+  <td>AUTHCLASS</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Activation type</td>
+</tr>
+<tr class="cell">
+  <td>203</td>
+  <td>MAINT</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>MCMAINT</td>
+  <td>MCMAINT</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Type of matchcode analysis</td>
+</tr>
+<tr class="cell">
+  <td>204</td>
+  <td>SECINDEX</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>MCAUTHFLAG</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag indicating if authorization check active in MC display</td>
+</tr>
+<tr class="cell">
+  <td>205</td>
+  <td>ENDUSER</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>MCENDUSER</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Name of system matchcodes</td>
+</tr>
+<tr class="cell">
+  <td>206</td>
+  <td>DELFLAG</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>MCDELFLAG</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Deletion flag</td>
+</tr>
+<tr class="cell">
+  <td>207</td>
+  <td>POOLTAB</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>MCPOOLTAB</td>
+  <td>SQLTABLE</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>View or Pooled Table of Matchcode ID</td>
+</tr>
+<tr class="cell">
+  <td>208</td>
+  <td>AS4USER</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>AS4USER</td>
+  <td>AS4USER</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Last Changed By</td>
+</tr>
+<tr class="cell">
+  <td>209</td>
+  <td>AS4DATE</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>AS4DATE</td>
+  <td>AS4DATE</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Last Changed On</td>
+</tr>
+<tr class="cell">
+  <td>210</td>
+  <td>AS4TIME</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>AS4TIME</td>
+  <td>AS4TIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Last changed at</td>
+</tr>
+<tr class="cell">
+  <td>211</td>
+  <td>ACTFLAG</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>ACTFLAG</td>
+  <td>ACTFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation flag</td>
+</tr>
+<tr class="cell">
+  <td>212</td>
+  <td>MASTERLANG</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>MASTERLANG</td>
+  <td>SPRAS</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Original Language in Repository objects</td>
+</tr>
+<tr class="cell">
+  <td>213</td>
+  <td>FUNCNAME</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>MCFUNCNAME</td>
+  <td>FUNCNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Selection Function Triggered by Matchcode</td>
+</tr>
+<tr class="cell">
+  <td>214</td>
+  <td>FLAGS</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>MCFLAGBYTE</td>
+  <td>MCFLAGBYTE</td>
+  <td>RAW</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag byte</td>
+</tr>
+<tr class="cell">
+  <td>215</td>
+  <td>INDTABNAME</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>INDTABNAME</td>
+  <td>INDTAB</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Table Name for Index</td>
+</tr>
+<tr class="cell">
+  <td>216</td>
+  <td>INDNAME</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>INDEXID</td>
+  <td>INDEXID</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Unique Index ID in a Table</td>
+</tr>
+<tr class="cell">
+  <td>217</td>
+  <td>DDLANGUAGE</td>
+  <td>1</td>
+  <td>X</td>
+  <td>DDLANGUAGE</td>
+  <td>SPRAS</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Language Key</td>
+</tr>
+<tr class="cell">
+  <td>218</td>
+  <td>MCONAME</td>
+  <td>2</td>
+  <td>X</td>
+  <td>MCONAME</td>
+  <td>MCONAME</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Name of a matchcode object</td>
+</tr>
+<tr class="cell">
+  <td>219</td>
+  <td>MCID</td>
+  <td>3</td>
+  <td>X</td>
+  <td>MCID</td>
+  <td>MCID</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Matchcode ID</td>
+</tr>
+<tr class="cell">
+  <td>220</td>
+  <td>AS4LOCAL</td>
+  <td>4</td>
+  <td>X</td>
+  <td>AS4LOCAL</td>
+  <td>AS4LOCAL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation State of Repository Object</td>
+</tr>
+<tr class="cell">
+  <td>221</td>
+  <td>AS4VERS</td>
+  <td>5</td>
+  <td>X</td>
+  <td>AS4VERS</td>
+  <td>AS4VERS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Version of the entry (not used)</td>
+</tr>
+<tr class="cell">
+  <td>222</td>
+  <td>MCTEXT</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>DDTEXT</td>
+  <td>DDTEXT</td>
+  <td>CHAR</td>
+  <td>60</td>
+  <td>X</td>
+  <td>Explanatory Short Text</td>
+</tr>
+<tr class="cell">
+  <td>223</td>
+  <td>MCONAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>MCONAME</td>
+  <td>MCONAME</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Name of a matchcode object</td>
+</tr>
+<tr class="cell">
+  <td>224</td>
+  <td>MCID</td>
+  <td>2</td>
+  <td>X</td>
+  <td>MCID</td>
+  <td>MCID</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Matchcode ID</td>
+</tr>
+<tr class="cell">
+  <td>225</td>
+  <td>AS4LOCAL</td>
+  <td>3</td>
+  <td>X</td>
+  <td>AS4LOCAL</td>
+  <td>AS4LOCAL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation State of Repository Object</td>
+</tr>
+<tr class="cell">
+  <td>226</td>
+  <td>MCFIELDN</td>
+  <td>4</td>
+  <td>X</td>
+  <td>MCFIELDN</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Matchcode field name</td>
+</tr>
+<tr class="cell">
+  <td>227</td>
+  <td>AS4VERS</td>
+  <td>5</td>
+  <td>X</td>
+  <td>MCIDVERS</td>
+  <td>MCIDVERS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Version of matchcode ID</td>
+</tr>
+<tr class="cell">
+  <td>228</td>
+  <td>POSITION</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>MCPOS</td>
+  <td>AS4POS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Position in a repetition group</td>
+</tr>
+<tr class="cell">
+  <td>229</td>
+  <td>TABNAME</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>TABNAME</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Table Name</td>
+</tr>
+<tr class="cell">
+  <td>230</td>
+  <td>BASEFLDN</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>FIELDNAME</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Field Name</td>
+</tr>
+<tr class="cell">
+  <td>231</td>
+  <td>OBJPOS</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>MCPOS</td>
+  <td>AS4POS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Position in a repetition group</td>
+</tr>
+<tr class="cell">
+  <td>232</td>
+  <td>OFFSET</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>MCIDOFFS</td>
+  <td>DDLEN</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Offset within a matchcode field</td>
+</tr>
+<tr class="cell">
+  <td>233</td>
+  <td>FLENGTH</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>MCIDLEN</td>
+  <td>DDLEN</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Field length within a MC ID</td>
+</tr>
+<tr class="cell">
+  <td>234</td>
+  <td>OUTLINE</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>MCOUTLINE</td>
+  <td>MCOUTLINE</td>
+  <td>NUMC</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Output line for matchcode field</td>
+</tr>
+<tr class="cell">
+  <td>235</td>
+  <td>OUTCOL</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>MCOUTCOL</td>
+  <td>MCOUTCOL</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Output column for matchcode field</td>
+</tr>
+<tr class="cell">
+  <td>236</td>
+  <td>OUTMODFLAG</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>MCOUTMOD</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag indicating whether output item set manually</td>
+</tr>
+<tr class="cell">
+  <td>237</td>
+  <td>MEMID</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>MEMORYID</td>
+  <td>MEMORYID</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Set/Get parameter ID</td>
+</tr>
+<tr class="cell">
+  <td>238</td>
+  <td>GPA</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>MCGPA</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag indicating whether the field is filled from memory</td>
+</tr>
+<tr class="cell">
+  <td>239</td>
+  <td>SPA</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>MCSPA</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag indicating whether field is to be placed in memory</td>
+</tr>
+<tr class="cell">
+  <td>240</td>
+  <td>FLAGS</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>MCFLAGBYTE</td>
+  <td>MCFLAGBYTE</td>
+  <td>RAW</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag byte</td>
+</tr>
+<tr class="cell">
+  <td>241</td>
+  <td>NOUPPER</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>MCNOUPPER</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag: Case-Sensitive</td>
+</tr>
+<tr class="cell">
+  <td>242</td>
+  <td>ROLLNAME</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>ROLLNAME</td>
+  <td>ROLLNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Data element (semantic domain)</td>
+</tr>
+<tr class="cell">
+  <td>243</td>
+  <td>VIEWNAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>VIEWNAME</td>
+  <td>VIEWNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Name of SAP table view</td>
+</tr>
+<tr class="cell">
+  <td>244</td>
+  <td>AS4LOCAL</td>
+  <td>2</td>
+  <td>X</td>
+  <td>AS4LOCAL</td>
+  <td>AS4LOCAL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation State of Repository Object</td>
+</tr>
+<tr class="cell">
+  <td>245</td>
+  <td>TABNAME</td>
+  <td>3</td>
+  <td>X</td>
+  <td>VIBASTAB</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Base table of a view</td>
+</tr>
+<tr class="cell">
+  <td>246</td>
+  <td>AS4VERS</td>
+  <td>4</td>
+  <td>X</td>
+  <td>AS4VERS</td>
+  <td>AS4VERS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Version of the entry (not used)</td>
+</tr>
+<tr class="cell">
+  <td>247</td>
+  <td>TABPOS</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>MCPOS</td>
+  <td>AS4POS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Position in a repetition group</td>
+</tr>
+<tr class="cell">
+  <td>248</td>
+  <td>FORTABNAME</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>VIFORTAB</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Base table linked with foreign key dependency</td>
+</tr>
+<tr class="cell">
+  <td>249</td>
+  <td>FORFIELD</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>VIFORFIELD</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Foreign key field of a join relationship</td>
+</tr>
+<tr class="cell">
+  <td>250</td>
+  <td>FORDIR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>FORDIR</td>
+  <td>FORDIR</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Direction of Foreign Key Dependency</td>
+</tr>
+<tr class="cell">
+  <td>251</td>
+  <td>ROUTNAME</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>ROUTNAME</td>
+  <td>ROUTNAME</td>
+  <td>CHAR</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>Output name of routine</td>
+</tr>
+<tr class="cell">
+  <td>252</td>
+  <td>ERRNUM</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>ERRNUM</td>
+  <td>ERRNUM</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Output: Error number</td>
+</tr>
+<tr class="cell">
+  <td>253</td>
+  <td>SEVERITY</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>SEVERITY</td>
+  <td>SEVERITY</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Output: Severity of error (N/SPACE-normal, E/F/A-error)</td>
+</tr>
+<tr class="cell">
+  <td>254</td>
+  <td>MESSID</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>MESSID_D</td>
+  <td>MESSID</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>AS400-DDIC: Output message ID in T100</td>
+</tr>
+<tr class="cell">
+  <td>255</td>
+  <td>MESSNR</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>MESSNR</td>
+  <td>MESSNR</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>AS400-DDIC: Output message no. in T100</td>
+</tr>
+<tr class="cell">
+  <td>256</td>
+  <td>PROTNAME</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>PROTNAME</td>
+  <td>PROTNAME</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>ABAP Dictionary: Name of SDIC Log</td>
+</tr>
+<tr class="cell">
+  <td>257</td>
+  <td>ERRLIST</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>ERRLIST</td>
+  <td>ERRLIST</td>
+  <td>RAW</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>AS400-DDIC: Input list of self-recovering errors</td>
+</tr>
+<tr class="cell">
+  <td>258</td>
+  <td>FIELDNAME</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>FIELDNAME</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Field Name</td>
+</tr>
+<tr class="cell">
+  <td>259</td>
+  <td>TABNAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>TABNAME</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Table Name</td>
+</tr>
+<tr class="cell">
+  <td>260</td>
+  <td>FIELDNAME</td>
+  <td>2</td>
+  <td>X</td>
+  <td>FIELDNAME</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Field Name</td>
+</tr>
+<tr class="cell">
+  <td>261</td>
+  <td>LANGU</td>
+  <td>3</td>
+  <td>X</td>
+  <td>DDLANGUAGE</td>
+  <td>SPRAS</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Language Key</td>
+</tr>
+<tr class="cell">
+  <td>262</td>
+  <td>POSITION</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>TABFDPOS</td>
+  <td>AS4POS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Position of the field in the table</td>
+</tr>
+<tr class="cell">
+  <td>263</td>
+  <td>OFFSET</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>DOFFSET</td>
+  <td>DOFFSET</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Offset of a field</td>
+</tr>
+<tr class="cell">
+  <td>264</td>
+  <td>DOMNAME</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>DOMNAME</td>
+  <td>DOMNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Domain name</td>
+</tr>
+<tr class="cell">
+  <td>265</td>
+  <td>ROLLNAME</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>ROLLNAME</td>
+  <td>ROLLNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Data element (semantic domain)</td>
+</tr>
+<tr class="cell">
+  <td>266</td>
+  <td>CHECKTABLE</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>TABNAME</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Table Name</td>
+</tr>
+<tr class="cell">
+  <td>267</td>
+  <td>LENG</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>DDLENG</td>
+  <td>DDLENG</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Length (No. of Characters)</td>
+</tr>
+<tr class="cell">
+  <td>268</td>
+  <td>INTLEN</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>INTLEN</td>
+  <td>DDLENG</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Internal Length in Bytes</td>
+</tr>
+<tr class="cell">
+  <td>269</td>
+  <td>OUTPUTLEN</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>OUTPUTLEN</td>
+  <td>DDLENG</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Output Length</td>
+</tr>
+<tr class="cell">
+  <td>270</td>
+  <td>DECIMALS</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>DECIMALS</td>
+  <td>DDLENG</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Number of Decimal Places</td>
+</tr>
+<tr class="cell">
+  <td>271</td>
+  <td>DATATYPE</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>DYNPTYPE</td>
+  <td>DATATYPE</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>ABAP Dictionary: Dynpro Data Type for Screen Painter</td>
+</tr>
+<tr class="cell">
+  <td>272</td>
+  <td>INTTYPE</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>INTTYPE</td>
+  <td>INTTYPE</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>X</td>
+  <td>ABAP data type (C,D,N,...)</td>
+</tr>
+<tr class="cell">
+  <td>273</td>
+  <td>REFTABLE</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>REFTABLE</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Reference Table for Field</td>
+</tr>
+<tr class="cell">
+  <td>274</td>
+  <td>REFFIELD</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>REFFIELD</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Reference Field for Currency and Quantity Fields</td>
+</tr>
+<tr class="cell">
+  <td>275</td>
+  <td>PRECFIELD</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>PRECFIELD</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Name of included table</td>
+</tr>
+<tr class="cell">
+  <td>276</td>
+  <td>AUTHORID</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>AUTHORID</td>
+  <td>AUTHORID</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Authorization class</td>
+</tr>
+<tr class="cell">
+  <td>277</td>
+  <td>MEMORYID</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>MEMORYID</td>
+  <td>MEMORYID</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Set/Get parameter ID</td>
+</tr>
+<tr class="cell">
+  <td>278</td>
+  <td>LOGFLAG</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>LOGFLAG</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Indicator for writing change documents</td>
+</tr>
+<tr class="cell">
+  <td>279</td>
+  <td>MASK</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>AS4MASK</td>
+  <td>AS4MASK</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Template (not used)</td>
+</tr>
+<tr class="cell">
+  <td>280</td>
+  <td>MASKLEN</td>
+  <td>22</td>
+  <td>&nbsp;</td>
+  <td>MASKLEN</td>
+  <td>MASKLEN</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Template length (not used)</td>
+</tr>
+<tr class="cell">
+  <td>281</td>
+  <td>CONVEXIT</td>
+  <td>23</td>
+  <td>&nbsp;</td>
+  <td>CONVEXIT</td>
+  <td>CONVEXIT</td>
+  <td>CHAR</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Conversion Routine</td>
+</tr>
+<tr class="cell">
+  <td>282</td>
+  <td>HEADLEN</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>HEADLEN</td>
+  <td>SCRLEN</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Maximum length of heading</td>
+</tr>
+<tr class="cell">
+  <td>283</td>
+  <td>SCRLEN1</td>
+  <td>25</td>
+  <td>&nbsp;</td>
+  <td>SCRLEN_S</td>
+  <td>SCRLEN</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Max. length for short field label</td>
+</tr>
+<tr class="cell">
+  <td>284</td>
+  <td>SCRLEN2</td>
+  <td>26</td>
+  <td>&nbsp;</td>
+  <td>SCRLEN_M</td>
+  <td>SCRLEN</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Max. length for medium field label</td>
+</tr>
+<tr class="cell">
+  <td>285</td>
+  <td>SCRLEN3</td>
+  <td>27</td>
+  <td>&nbsp;</td>
+  <td>SCRLEN_L</td>
+  <td>SCRLEN</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Max. length for long field label</td>
+</tr>
+<tr class="cell">
+  <td>286</td>
+  <td>FIELDTEXT</td>
+  <td>28</td>
+  <td>&nbsp;</td>
+  <td>AS4TEXT</td>
+  <td>AS4TEXT</td>
+  <td>CHAR</td>
+  <td>60</td>
+  <td>X</td>
+  <td>Short Description of Repository Objects</td>
+</tr>
+<tr class="cell">
+  <td>287</td>
+  <td>REPTEXT</td>
+  <td>29</td>
+  <td>&nbsp;</td>
+  <td>REPTEXT</td>
+  <td>REPTEXT</td>
+  <td>CHAR</td>
+  <td>55</td>
+  <td>X</td>
+  <td>Heading</td>
+</tr>
+<tr class="cell">
+  <td>288</td>
+  <td>SCRTEXT_S</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>SCRTEXT_S</td>
+  <td>SCRTEXT_S</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>X</td>
+  <td>Short Field Label</td>
+</tr>
+<tr class="cell">
+  <td>289</td>
+  <td>SCRTEXT_M</td>
+  <td>31</td>
+  <td>&nbsp;</td>
+  <td>SCRTEXT_M</td>
+  <td>SCRTEXT_M</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>X</td>
+  <td>Medium Field Label</td>
+</tr>
+<tr class="cell">
+  <td>290</td>
+  <td>SCRTEXT_L</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>SCRTEXT_L</td>
+  <td>SCRTEXT_L</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>X</td>
+  <td>Long Field Label</td>
+</tr>
+<tr class="cell">
+  <td>291</td>
+  <td>KEYFLAG</td>
+  <td>33</td>
+  <td>&nbsp;</td>
+  <td>KEYFLAG</td>
+  <td>KEYFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Identifies a key field of a table</td>
+</tr>
+<tr class="cell">
+  <td>292</td>
+  <td>LOWERCASE</td>
+  <td>34</td>
+  <td>&nbsp;</td>
+  <td>LOWERCASE</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Lowercase letters allowed/not allowed</td>
+</tr>
+<tr class="cell">
+  <td>293</td>
+  <td>MAC</td>
+  <td>35</td>
+  <td>&nbsp;</td>
+  <td>DDSHATTACH</td>
+  <td>DDBOOL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Is a search help bound to the field?</td>
+</tr>
+<tr class="cell">
+  <td>294</td>
+  <td>GENKEY</td>
+  <td>36</td>
+  <td>&nbsp;</td>
+  <td>AS4FLAG</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag (X or Blank)</td>
+</tr>
+<tr class="cell">
+  <td>295</td>
+  <td>NOFORKEY</td>
+  <td>37</td>
+  <td>&nbsp;</td>
+  <td>AS4FLAG</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag (X or Blank)</td>
+</tr>
+<tr class="cell">
+  <td>296</td>
+  <td>VALEXI</td>
+  <td>38</td>
+  <td>&nbsp;</td>
+  <td>VALEXI</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Existence of fixed values</td>
+</tr>
+<tr class="cell">
+  <td>297</td>
+  <td>NOAUTHCH</td>
+  <td>39</td>
+  <td>&nbsp;</td>
+  <td>AS4FLAG</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag (X or Blank)</td>
+</tr>
+<tr class="cell">
+  <td>298</td>
+  <td>SIGN</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>SIGNFLAG</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag for sign in numerical fields</td>
+</tr>
+<tr class="cell">
+  <td>299</td>
+  <td>DYNPFLD</td>
+  <td>41</td>
+  <td>&nbsp;</td>
+  <td>DYNPROFLD</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag: Field is displayed on dynpro</td>
+</tr>
+<tr class="cell">
+  <td>300</td>
+  <td>F4AVAILABL</td>
+  <td>42</td>
+  <td>&nbsp;</td>
+  <td>DDF4AVAIL</td>
+  <td>DDBOOL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Does the field have an input help</td>
+</tr>
+<tr class="cell">
+  <td>301</td>
+  <td>COMPTYPE</td>
+  <td>43</td>
+  <td>&nbsp;</td>
+  <td>COMPTYPE</td>
+  <td>COMPTYPE</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Component Type</td>
+</tr>
+<tr class="cell">
+  <td>302</td>
+  <td>LFIELDNAME</td>
+  <td>44</td>
+  <td>&nbsp;</td>
+  <td>FNAM_____4</td>
+  <td>DYNFNAM</td>
+  <td>CHAR</td>
+  <td>132</td>
+  <td>&nbsp;</td>
+  <td>Field name</td>
+</tr>
+<tr class="cell">
+  <td>303</td>
+  <td>LTRFLDDIS</td>
+  <td>45</td>
+  <td>&nbsp;</td>
+  <td>DDLTRFLDDI</td>
+  <td>DDBOOL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Basic write direction is defined in LTR (left-to-right)</td>
+</tr>
+<tr class="cell">
+  <td>304</td>
+  <td>BIDICTRLC</td>
+  <td>46</td>
+  <td>&nbsp;</td>
+  <td>DDBIDICTRL</td>
+  <td>DDBOOL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: No Filtering of BIDI Formatting Characters</td>
+</tr>
+<tr class="cell">
+  <td>305</td>
+  <td>OUTPUTSTYLE</td>
+  <td>47</td>
+  <td>&nbsp;</td>
+  <td>OUTPUTSTYLE</td>
+  <td>OUTPUTSTYLE</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>DD: Output Style (Output Style) for Decfloat Types</td>
+</tr>
+<tr class="cell">
+  <td>306</td>
+  <td>NOHISTORY</td>
+  <td>48</td>
+  <td>&nbsp;</td>
+  <td>DDNOHISTORY</td>
+  <td>DDBOOL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Flag for Deactivating Input History in Dynpro Field</td>
+</tr>
+<tr class="cell">
+  <td>307</td>
+  <td>AMPMFORMAT</td>
+  <td>49</td>
+  <td>&nbsp;</td>
+  <td>DDAMPMFORMAT</td>
+  <td>DDAMPMFORMAT</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Indicator whether an AM/PM time format is desired</td>
+</tr>
+<tr class="cell">
+  <td>308</td>
+  <td>ID</td>
+  <td>1</td>
+  <td>X</td>
+  <td>DOKU_ID</td>
+  <td>DOKU_ID</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Document class</td>
+</tr>
+<tr class="cell">
+  <td>309</td>
+  <td>OBJECT</td>
+  <td>2</td>
+  <td>X</td>
+  <td>DOKU_OBJ</td>
+  <td>DOKU_OBJ</td>
+  <td>CHAR</td>
+  <td>60</td>
+  <td>&nbsp;</td>
+  <td>Documentation Object</td>
+</tr>
+<tr class="cell">
+  <td>310</td>
+  <td>LANGU</td>
+  <td>3</td>
+  <td>X</td>
+  <td>DOKU_LANGU</td>
+  <td>SPRAS</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Documentation language</td>
+</tr>
+<tr class="cell">
+  <td>311</td>
+  <td>TYP</td>
+  <td>4</td>
+  <td>X</td>
+  <td>DOKU_TYP</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Documentation type</td>
+</tr>
+<tr class="cell">
+  <td>312</td>
+  <td>VERSION</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>DOKVERS</td>
+  <td>AS4VERS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Version of Documentation Module</td>
+</tr>
+<tr class="cell">
+  <td>313</td>
+  <td>MASTERLANG</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>CHAR1</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Single-Character Flag</td>
+</tr>
+<tr class="cell">
+  <td>314</td>
+  <td>TXTLINES</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>TDTXTLINES</td>
+  <td>TDVALUE</td>
+  <td>NUMC</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Number of Text Lines in Line Table</td>
+</tr>
+<tr class="cell">
+  <td>315</td>
+  <td>DOKSTATE</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>DOKSTATE</td>
+  <td>AS4STATE</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Status of documentation module</td>
+</tr>
+<tr class="cell">
+  <td>316</td>
+  <td>SELFDEF</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>DOKU_SELFD</td>
+  <td>DOKU_SELFD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Object documentation status</td>
+</tr>
+<tr class="cell">
+  <td>317</td>
+  <td>FLDNAME</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DYNFNAM</td>
+  <td>DYNFNAM</td>
+  <td>CHAR</td>
+  <td>132</td>
+  <td>&nbsp;</td>
+  <td>Field name</td>
+</tr>
+<tr class="cell">
+  <td>318</td>
+  <td>FLDINH</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>SHVALUE_D</td>
+  <td>F4CHAR132</td>
+  <td>CHAR</td>
+  <td>132</td>
+  <td>X</td>
+  <td>Field contents, min./max. value</td>
+</tr>
+<tr class="cell">
+  <td>319</td>
+  <td>DYFLDNAME</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>DYNFNAM</td>
+  <td>DYNFNAM</td>
+  <td>CHAR</td>
+  <td>132</td>
+  <td>&nbsp;</td>
+  <td>Field name</td>
+</tr>
+<tr class="cell">
+  <td>320</td>
+  <td>LOWVALUE</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>SHVALUE_D</td>
+  <td>F4CHAR132</td>
+  <td>CHAR</td>
+  <td>132</td>
+  <td>X</td>
+  <td>Field contents, min./max. value</td>
+</tr>
+<tr class="cell">
+  <td>321</td>
+  <td>HIGHVALUE</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>SHVALUE_D</td>
+  <td>F4CHAR132</td>
+  <td>CHAR</td>
+  <td>132</td>
+  <td>X</td>
+  <td>Field contents, min./max. value</td>
+</tr>
+<tr class="cell">
+  <td>322</td>
+  <td>MANDT</td>
+  <td>1</td>
+  <td>X</td>
+  <td>MANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Client</td>
+</tr>
+<tr class="cell">
+  <td>323</td>
+  <td>SAPSCRIPT</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>EPSSSAPS</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>EPSS indicator for SAPScript display</td>
+</tr>
+<tr class="cell">
+  <td>324</td>
+  <td>MANDT</td>
+  <td>1</td>
+  <td>X</td>
+  <td>MANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Client</td>
+</tr>
+<tr class="cell">
+  <td>325</td>
+  <td>USERNAME</td>
+  <td>2</td>
+  <td>X</td>
+  <td>USERNAME</td>
+  <td>USERNAME</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>User Name</td>
+</tr>
+<tr class="cell">
+  <td>326</td>
+  <td>TABFIELD</td>
+  <td>3</td>
+  <td>X</td>
+  <td>TABNAME</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Table Name</td>
+</tr>
+<tr class="cell">
+  <td>327</td>
+  <td>FIELDFIELD</td>
+  <td>4</td>
+  <td>X</td>
+  <td>FIELDNAME</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Field Name</td>
+</tr>
+<tr class="cell">
+  <td>328</td>
+  <td>POSITION</td>
+  <td>5</td>
+  <td>X</td>
+  <td>POSITION</td>
+  <td>NUMC2</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Verification: Column position</td>
+</tr>
+<tr class="cell">
+  <td>329</td>
+  <td>USERNAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>USERNAME</td>
+  <td>USERNAME</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>User Name</td>
+</tr>
+<tr class="cell">
+  <td>330</td>
+  <td>TABFIELD</td>
+  <td>2</td>
+  <td>X</td>
+  <td>CHAR10</td>
+  <td>CHAR10</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Character Field with Length 10</td>
+</tr>
+<tr class="cell">
+  <td>331</td>
+  <td>FIELDFIELD</td>
+  <td>3</td>
+  <td>X</td>
+  <td>CHAR10</td>
+  <td>CHAR10</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Character Field with Length 10</td>
+</tr>
+<tr class="cell">
+  <td>332</td>
+  <td>VALUE</td>
+  <td>4</td>
+  <td>X</td>
+  <td>CHAR40</td>
+  <td>CHAR40</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>Character field of length 40</td>
+</tr>
+<tr class="cell">
+  <td>333</td>
+  <td>MANDT</td>
+  <td>1</td>
+  <td>X</td>
+  <td>MANDT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Client</td>
+</tr>
+<tr class="cell">
+  <td>334</td>
+  <td>USERNAME</td>
+  <td>2</td>
+  <td>X</td>
+  <td>USERNAME</td>
+  <td>USERNAME</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>User Name</td>
+</tr>
+<tr class="cell">
+  <td>335</td>
+  <td>TABFIELD</td>
+  <td>3</td>
+  <td>X</td>
+  <td>CHAR10</td>
+  <td>CHAR10</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Character Field with Length 10</td>
+</tr>
+<tr class="cell">
+  <td>336</td>
+  <td>FIELDFIELD</td>
+  <td>4</td>
+  <td>X</td>
+  <td>CHAR10</td>
+  <td>CHAR10</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Character Field with Length 10</td>
+</tr>
+<tr class="cell">
+  <td>337</td>
+  <td>VALUE</td>
+  <td>5</td>
+  <td>X</td>
+  <td>TEXT40</td>
+  <td>TEXT40</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>X</td>
+  <td>Text, 40 Characters Long</td>
+</tr>
+<tr class="cell">
+  <td>338</td>
+  <td>MEMO</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>F4TXT</td>
+  <td>F4TXT</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>X</td>
+  <td>Note in F4</td>
+</tr>
+<tr class="cell">
+  <td>339</td>
+  <td>DATUM</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>DATUM</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Date</td>
+</tr>
+<tr class="cell">
+  <td>340</td>
+  <td>ZEILE</td>
+  <td>1</td>
+  <td>X</td>
+  <td>SHLINE_I</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Line counter type I for performance reasons</td>
+</tr>
+<tr class="cell">
+  <td>341</td>
+  <td>TABNAME</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>TABNAME</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Table Name</td>
+</tr>
+<tr class="cell">
+  <td>342</td>
+  <td>FIELDNAME</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>FIELDNAME</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Field Name</td>
+</tr>
+<tr class="cell">
+  <td>343</td>
+  <td>LOWERCASE</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>CHAR1</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Single-Character Flag</td>
+</tr>
+<tr class="cell">
+  <td>344</td>
+  <td>INTENS</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>CHAR1</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Single-Character Flag</td>
+</tr>
+<tr class="cell">
+  <td>345</td>
+  <td>LENGTH</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>NUM2</td>
+  <td>NUM2</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Numeric, 2-digit value</td>
+</tr>
+<tr class="cell">
+  <td>346</td>
+  <td>KEYWORD</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>TEXT20</td>
+  <td>TEXT20</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>X</td>
+  <td>Text (20 Characters)</td>
+</tr>
+<tr class="cell">
+  <td>347</td>
+  <td>VALUE</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>TEXT50</td>
+  <td>TEXT50</td>
+  <td>CHAR</td>
+  <td>50</td>
+  <td>X</td>
+  <td>Text Field</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754</td>
+   </tr>
+</table>
+</body>
+</html>

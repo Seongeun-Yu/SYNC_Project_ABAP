@@ -1,0 +1,71 @@
+FUNCTION RFC_GET_ATTRIBUTES.
+*"----------------------------------------------------------------------
+*"*"Lokale Schnittstelle:
+*"  EXPORTING
+*"     VALUE(CALLER_DESTINATION) LIKE  RFCDISPLAY-RFCDEST
+*"     VALUE(CALLER_IP) LIKE  RFCDISPLAY-RFCDEST
+*"     VALUE(CALLER_TRUSTED) LIKE  RFCDISPLAY-RFCSLOGIN
+*"     VALUE(CALLER_RFC_TYPE) LIKE  RFCDES-RFCTYPE
+*"     VALUE(CALLER_CLIENT) LIKE  RFCDISPLAY-RFCCLIENT
+*"     VALUE(CALLER_WHOAMI) LIKE  RFCDISPLAY-RFCUSER
+*"     VALUE(CALLER_START_INFO) LIKE  RFCDISPLAY-RFCDEST
+*"     VALUE(CALLER_TCODE) LIKE  SY-TCODE
+*"     VALUE(CALLER_PROGRAM) LIKE  SY-CPROG
+*"     VALUE(CALLER_SYSTEM_ID) LIKE  SY-SYSID
+*"     VALUE(CALLER_SYSTEM_RELEASE) LIKE  SY-SAPRL
+*"     VALUE(CALLER_KERNEL_RELEASE) LIKE  SY-SAPRL
+*"     VALUE(CALLER_ASYNC_TYPE) LIKE  SY-BATCH
+*"     VALUE(CALLER_TRANS_TYPE) LIKE  SY-BATCH
+*"     VALUE(CALLER_PCS) LIKE  SY-BATCH
+*"     VALUE(CALLER_CODEPAGE) LIKE  TCP00-CPCODEPAGE
+*"     VALUE(CALLER_MDMP) TYPE  CHAR1
+*"     VALUE(CALLER_INSTALLATION_NUMBER) TYPE  SLIC_INST
+*"  EXCEPTIONS
+*"      SYSTEM_CALL_NOT_SUPPORTED
+*"      NO_RFC_COMMUNICATION
+*"      INTERNAL_ERROR
+*"----------------------------------------------------------------------
+
+  CALLER_MDMP  = '?'.
+
+  CALL 'RFCControl' ID 'CODE' FIELD 'B'
+                    ID 'CDEST' FIELD CALLER_DESTINATION
+                    ID 'CIP' FIELD CALLER_IP
+                    ID 'TRUSTED' FIELD CALLER_TRUSTED
+                    ID 'PARTNER_TYPE' FIELD CALLER_RFC_TYPE
+                    ID 'CCLIENT' FIELD CALLER_CLIENT
+                    ID 'WHOAMI' FIELD CALLER_WHOAMI
+                    ID 'START' FIELD CALLER_START_INFO
+                    ID 'TCODE' FIELD CALLER_TCODE
+                    ID 'PROGRAM' FIELD CALLER_PROGRAM
+                    ID 'SYSTEM' FIELD CALLER_SYSTEM_ID
+                    ID 'PARTNER_REL' FIELD CALLER_SYSTEM_RELEASE
+                    ID 'KERNEL_REL' FIELD CALLER_KERNEL_RELEASE
+                    ID 'ASYNC' FIELD CALLER_ASYNC_TYPE
+                    ID 'TRANS' FIELD CALLER_TRANS_TYPE
+*                   id 'SAME_DB' field caller_in_same_system
+*                   id 'CLIENT' field client
+*                   id 'USER' field user
+*                   id 'LANGU'  field caller_language
+*                   id 'STAMP' field rfcstamp
+*                   id 'OWN_REL' field own_rel. "->Ab 4.0
+                    ID 'PCS'       FIELD CALLER_PCS
+                    ID 'REMOTE_CP' FIELD CALLER_CODEPAGE
+                    ID 'CALLER_MDMP' FIELD CALLER_MDMP
+                    ID 'INSTALLATION_NUMBER' FIELD CALLER_INSTALLATION_NUMBER.
+
+  CASE SY-SUBRC.
+    WHEN 0.
+* everything O.K.
+    WHEN 1.
+      RAISE SYSTEM_CALL_NOT_SUPPORTED.
+    WHEN 4.
+      RAISE NO_RFC_COMMUNICATION.
+    WHEN OTHERS.
+      RAISE INTERNAL_ERROR.
+  ENDCASE.
+
+ENDFUNCTION.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

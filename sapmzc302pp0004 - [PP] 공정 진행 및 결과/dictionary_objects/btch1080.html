@@ -1,0 +1,1300 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=EUC-KR" />
+<title>Dictionary object- BTCH1080</title>
+<style type="text/css">
+  th{text-align:left}
+  .cell{
+     font-family:"Courier New", Courier, monospace;
+     color:#000;
+     font-size:12px;
+     background-color:#F2F4F7;
+  }
+  .cell td { border: thin solid #ccc; }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Table: BTCH1080</h2>
+  <h3>Description: Initial Screen for Event ID Maintenance / Display</h3></td>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Row</th>
+  <th>Field name</th>
+  <th>Position</th>
+  <th>Key</th>
+  <th>Data element</th>
+  <th>Domain</th>
+  <th>Datatype</th>
+  <th>Length</th>
+  <th>Lowercase</th>
+  <th>Domain text</th>
+</tr>
+<tr class="cell">
+  <td> 1</td>
+  <td>BTCSERVER</td>
+  <td>1</td>
+  <td>X</td>
+  <td>BTCSRVNAME</td>
+  <td>TEXT20</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>X</td>
+  <td>Server Name</td>
+</tr>
+<tr class="cell">
+  <td> 2</td>
+  <td>CTLOBJ</td>
+  <td>2</td>
+  <td>X</td>
+  <td>BTCCTRLOBJ</td>
+  <td>TEXT32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>X</td>
+  <td>ID for background processing control object</td>
+</tr>
+<tr class="cell">
+  <td> 3</td>
+  <td>BTCSYSTEM</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>BTCTGTSYS</td>
+  <td>TEXT32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>X</td>
+  <td>Target System to Run Background Job</td>
+</tr>
+<tr class="cell">
+  <td> 4</td>
+  <td>TIMSTMPDT</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>BTCTSDATE</td>
+  <td>SYDATS</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Date stamp in background processing</td>
+</tr>
+<tr class="cell">
+  <td> 5</td>
+  <td>TIMSTMPTM</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>BTCTSTIME</td>
+  <td>SYTIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Time stamp in background processing</td>
+</tr>
+<tr class="cell">
+  <td> 6</td>
+  <td>TRACELEVEL</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>BTCTRCLVL</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Trace level in background processing</td>
+</tr>
+<tr class="cell">
+  <td> 7</td>
+  <td>TRCTIMSTDT</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>BTCTSDATE</td>
+  <td>SYDATS</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Date stamp in background processing</td>
+</tr>
+<tr class="cell">
+  <td> 8</td>
+  <td>TRCTIMSTTM</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>BTCTSTIME</td>
+  <td>SYTIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Time stamp in background processing</td>
+</tr>
+<tr class="cell">
+  <td> 9</td>
+  <td>TRCCHUSR</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>BTCJCHNM</td>
+  <td>CHAR12</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Last job change made by</td>
+</tr>
+<tr class="cell">
+  <td>10</td>
+  <td>OPMODE</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>BTCOPMODE</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Operation mode in background processing</td>
+</tr>
+<tr class="cell">
+  <td>11</td>
+  <td>OPMODTSTDT</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>BTCTSDATE</td>
+  <td>SYDATS</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Date stamp in background processing</td>
+</tr>
+<tr class="cell">
+  <td>12</td>
+  <td>OPMODTSTTM</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>BTCTSTIME</td>
+  <td>SYTIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Time stamp in background processing</td>
+</tr>
+<tr class="cell">
+  <td>13</td>
+  <td>OPMODCHUSR</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>BTCJCHNM</td>
+  <td>CHAR12</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Last job change made by</td>
+</tr>
+<tr class="cell">
+  <td>14</td>
+  <td>OBJECT</td>
+  <td>1</td>
+  <td>X</td>
+  <td>BTCSDLOBJ</td>
+  <td>CHAR64</td>
+  <td>CHAR</td>
+  <td>64</td>
+  <td>&nbsp;</td>
+  <td>Object ID, for which a system log message was output</td>
+</tr>
+<tr class="cell">
+  <td>15</td>
+  <td>ERROR</td>
+  <td>2</td>
+  <td>X</td>
+  <td>BTCSDLERR</td>
+  <td>CHAR32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Problem cause that triggers a system log message</td>
+</tr>
+<tr class="cell">
+  <td>16</td>
+  <td>LOCATION</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>BTCSDLLOC</td>
+  <td>CHAR32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Output location ID for system log message</td>
+</tr>
+<tr class="cell">
+  <td>17</td>
+  <td>TRYCOUNT</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>BTCSDLTRY</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>No. output attempts for system log messages</td>
+</tr>
+<tr class="cell">
+  <td>18</td>
+  <td>OUTCOUNT</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>BTCSDLOUT</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>No. of system log messages output</td>
+</tr>
+<tr class="cell">
+  <td>19</td>
+  <td>TRYCNTNOUT</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>BTCSDLNOUT</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>No. of output attempts before the next system log message</td>
+</tr>
+<tr class="cell">
+  <td>20</td>
+  <td>EVENTID</td>
+  <td>1</td>
+  <td>X</td>
+  <td>BTCEVTID</td>
+  <td>CHAR32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Event ID for background processing</td>
+</tr>
+<tr class="cell">
+  <td>21</td>
+  <td>EVENTCOUNT</td>
+  <td>2</td>
+  <td>X</td>
+  <td>BTCEVTCNT</td>
+  <td>CHAR8</td>
+  <td>CHAR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Event number</td>
+</tr>
+<tr class="cell">
+  <td>22</td>
+  <td>ACTIVATED</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>BTCEVTACT</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation flag for event scheduling</td>
+</tr>
+<tr class="cell">
+  <td>23</td>
+  <td>EVENTPARM</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>BTCEVTPARM</td>
+  <td>TEXT64</td>
+  <td>CHAR</td>
+  <td>64</td>
+  <td>X</td>
+  <td>Background Event Parameters (Such as, Jobname/Jobcount)</td>
+</tr>
+<tr class="cell">
+  <td>24</td>
+  <td>JOBNAME</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>BTCJOB</td>
+  <td>CHAR32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Background job name</td>
+</tr>
+<tr class="cell">
+  <td>25</td>
+  <td>JOBCOUNT</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>BTCJOBCNT</td>
+  <td>TEXT8</td>
+  <td>CHAR</td>
+  <td>8</td>
+  <td>X</td>
+  <td>Job ID</td>
+</tr>
+<tr class="cell">
+  <td>26</td>
+  <td>PROCMODE</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>BTCEVTPROC</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag for event processing</td>
+</tr>
+<tr class="cell">
+  <td>27</td>
+  <td>SCHEDULED</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>BTCJSCHCNT</td>
+  <td>BTCSTATCNT</td>
+  <td>INT2</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Number of Background Jobs in State Scheduled</td>
+</tr>
+<tr class="cell">
+  <td>28</td>
+  <td>RELEASED</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>BTCJRELCNT</td>
+  <td>BTCSTATCNT</td>
+  <td>INT2</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Number of Background Jobs in State Released</td>
+</tr>
+<tr class="cell">
+  <td>29</td>
+  <td>READY</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>BTCJRDYCNT</td>
+  <td>BTCSTATCNT</td>
+  <td>INT2</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Number of Background Jobs in State Ready</td>
+</tr>
+<tr class="cell">
+  <td>30</td>
+  <td>ACTIVE</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>BTCJACTCNT</td>
+  <td>BTCSTATCNT</td>
+  <td>INT2</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Number of Background Jobs with State Active</td>
+</tr>
+<tr class="cell">
+  <td>31</td>
+  <td>FINISHED</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>BTCJFINCNT</td>
+  <td>BTCSTATCNT</td>
+  <td>INT2</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Number of Background Jobs in State Finished</td>
+</tr>
+<tr class="cell">
+  <td>32</td>
+  <td>ABORTED</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>BTCJABOCNT</td>
+  <td>BTCSTATCNT</td>
+  <td>INT2</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Number of Background Jobs in State Canceled</td>
+</tr>
+<tr class="cell">
+  <td>33</td>
+  <td>UNKNOWN</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>BTCJUKNCNT</td>
+  <td>BTCSTATCNT</td>
+  <td>INT2</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Number of Background Jobs in State Unknown</td>
+</tr>
+<tr class="cell">
+  <td>34</td>
+  <td>IMMED</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>BTCSTRTMOD</td>
+  <td>RADIOFIELD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Batch job start time</td>
+</tr>
+<tr class="cell">
+  <td>35</td>
+  <td>SDLSTRTDT</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>BTCSDATE</td>
+  <td>SYDATS</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Scheduled start date for background job</td>
+</tr>
+<tr class="cell">
+  <td>36</td>
+  <td>SDLSTRTTM</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>BTCSTIME</td>
+  <td>SYTIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Scheduled start time for background Job</td>
+</tr>
+<tr class="cell">
+  <td>37</td>
+  <td>LASTSTRTDT</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>BTCLSDATE</td>
+  <td>SYDATS</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Latest Execution Date for a Background Job</td>
+</tr>
+<tr class="cell">
+  <td>38</td>
+  <td>LASTSTRTTM</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>BTCLSTIME</td>
+  <td>SYTIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Latest Execution Time for Background Job</td>
+</tr>
+<tr class="cell">
+  <td>39</td>
+  <td>PREDJOB</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>BTCPREDNAM</td>
+  <td>CHAR32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Name of previous job</td>
+</tr>
+<tr class="cell">
+  <td>40</td>
+  <td>PREDJOBCNT</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>BTCJOBCNT</td>
+  <td>TEXT8</td>
+  <td>CHAR</td>
+  <td>8</td>
+  <td>X</td>
+  <td>Job ID</td>
+</tr>
+<tr class="cell">
+  <td>41</td>
+  <td>CHECKSTAT</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>BTCCKSTAT</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Job status check indicator for subsequent job start</td>
+</tr>
+<tr class="cell">
+  <td>42</td>
+  <td>EVENTID</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>BTCEVENTID</td>
+  <td>CHAR32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>Background Processing Event</td>
+</tr>
+<tr class="cell">
+  <td>43</td>
+  <td>EVENTPARM</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>BTCEVTPARM</td>
+  <td>TEXT64</td>
+  <td>CHAR</td>
+  <td>64</td>
+  <td>X</td>
+  <td>Background Event Parameters (Such as, Jobname/Jobcount)</td>
+</tr>
+<tr class="cell">
+  <td>44</td>
+  <td>PERIODIC</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>BTCPFLAG</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Periodic Jobs Indicator</td>
+</tr>
+<tr class="cell">
+  <td>45</td>
+  <td>OPMODE</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>PFEBANAME</td>
+  <td>TEXT20</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>X</td>
+  <td>Name of Operation Mode</td>
+</tr>
+<tr class="cell">
+  <td>46</td>
+  <td>TMZONE</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>TZNZONE</td>
+  <td>TZNZONE</td>
+  <td>CHAR</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Time Zone</td>
+</tr>
+<tr class="cell">
+  <td>47</td>
+  <td>SYTMZONE</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>TZNZONE</td>
+  <td>TZNZONE</td>
+  <td>CHAR</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Time Zone</td>
+</tr>
+<tr class="cell">
+  <td>48</td>
+  <td>TMZONEFLAG</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>BTCTZFLAG</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Alternative Time Zone</td>
+</tr>
+<tr class="cell">
+  <td>49</td>
+  <td>WDAYNO</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>BTCWORKDAY</td>
+  <td>NUM02</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>No. of workday on which a job is to start</td>
+</tr>
+<tr class="cell">
+  <td>50</td>
+  <td>CALENDARID</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>BTCCALID</td>
+  <td>CHAR2</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Factory calendar ID for background processing</td>
+</tr>
+<tr class="cell">
+  <td>51</td>
+  <td>SDLSTRTTM</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>BTCSTIME</td>
+  <td>SYTIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Scheduled start time for background Job</td>
+</tr>
+<tr class="cell">
+  <td>52</td>
+  <td>PRDMONTHS</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>BTCPMNTH</td>
+  <td>NUM02</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Duration period (in months) for a batch job</td>
+</tr>
+<tr class="cell">
+  <td>53</td>
+  <td>BOFMONTH</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>BTCWDCDSEL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Select count direction for 'on workday' start date</td>
+</tr>
+<tr class="cell">
+  <td>54</td>
+  <td>EOFMONTH</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>BTCWDCDSEL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Select count direction for 'on workday' start date</td>
+</tr>
+<tr class="cell">
+  <td>55</td>
+  <td>NOTBEFORE</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>BTCSDATE</td>
+  <td>SYDATS</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Scheduled start date for background job</td>
+</tr>
+<tr class="cell">
+  <td>56</td>
+  <td>BTCSERVER</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>BTCSRVNAME</td>
+  <td>TEXT20</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>X</td>
+  <td>Server Name</td>
+</tr>
+<tr class="cell">
+  <td>57</td>
+  <td>BTCSYSTEM</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>BTCTGTSYS</td>
+  <td>TEXT32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>X</td>
+  <td>Target System to Run Background Job</td>
+</tr>
+<tr class="cell">
+  <td>58</td>
+  <td>CTLOBJ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>BTCCTRLOBJ</td>
+  <td>TEXT32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>X</td>
+  <td>ID for background processing control object</td>
+</tr>
+<tr class="cell">
+  <td>59</td>
+  <td>TIMESDL</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>BTCTRCSEL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Trace level selection for background processing</td>
+</tr>
+<tr class="cell">
+  <td>60</td>
+  <td>EVTSDL</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>BTCTRCSEL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Trace level selection for background processing</td>
+</tr>
+<tr class="cell">
+  <td>61</td>
+  <td>JOBSTRT</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>BTCTRCSEL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Trace level selection for background processing</td>
+</tr>
+<tr class="cell">
+  <td>62</td>
+  <td>ZOMBIECLUP</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>BTCTRCSEL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Trace level selection for background processing</td>
+</tr>
+<tr class="cell">
+  <td>63</td>
+  <td>STRTXPG</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>BTCTRCSEL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Trace level selection for background processing</td>
+</tr>
+<tr class="cell">
+  <td>64</td>
+  <td>AUTOJOBDEL</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>BTCTRCSEL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Trace level selection for background processing</td>
+</tr>
+<tr class="cell">
+  <td>65</td>
+  <td>OPMODESW</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>BTCTRCSEL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Trace level selection for background processing</td>
+</tr>
+<tr class="cell">
+  <td>66</td>
+  <td>TRCOFF</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>BTCTRCSEL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Trace level selection for background processing</td>
+</tr>
+<tr class="cell">
+  <td>67</td>
+  <td>TRCLVL1</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>BTCTRCSEL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Trace level selection for background processing</td>
+</tr>
+<tr class="cell">
+  <td>68</td>
+  <td>TRCLVL2</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>BTCTRCSEL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Trace level selection for background processing</td>
+</tr>
+<tr class="cell">
+  <td>69</td>
+  <td>OLDTRCLVL</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>BTCTRCLVL</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Trace level in background processing</td>
+</tr>
+<tr class="cell">
+  <td>70</td>
+  <td>TRCPERMAN</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>BTCTRCSEL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Trace level selection for background processing</td>
+</tr>
+<tr class="cell">
+  <td>71</td>
+  <td>TRCONCE</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>BTCTRCSEL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Trace level selection for background processing</td>
+</tr>
+<tr class="cell">
+  <td>72</td>
+  <td>OPMODACT</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>BTCOPMSEL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Operation mode selection for background processing</td>
+</tr>
+<tr class="cell">
+  <td>73</td>
+  <td>OPMODDEACT</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>BTCOPMSEL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Operation mode selection for background processing</td>
+</tr>
+<tr class="cell">
+  <td>74</td>
+  <td>OPMODSIMUL</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>BTCOPMSEL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Operation mode selection for background processing</td>
+</tr>
+<tr class="cell">
+  <td>75</td>
+  <td>OLDOPMODE</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>BTCOPMODE</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Operation mode in background processing</td>
+</tr>
+<tr class="cell">
+  <td>76</td>
+  <td>BTCSERVER</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>BTCSRVNAME</td>
+  <td>TEXT20</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>X</td>
+  <td>Server Name</td>
+</tr>
+<tr class="cell">
+  <td>77</td>
+  <td>BTCSYSTEM</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>BTCTGTSYS</td>
+  <td>TEXT32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>X</td>
+  <td>Target System to Run Background Job</td>
+</tr>
+<tr class="cell">
+  <td>78</td>
+  <td>CTLOBJ</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>BTCCTRLOBJ</td>
+  <td>TEXT32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>X</td>
+  <td>ID for background processing control object</td>
+</tr>
+<tr class="cell">
+  <td>79</td>
+  <td>TIMSTMPDT</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>BTCTSDATE</td>
+  <td>SYDATS</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Date stamp in background processing</td>
+</tr>
+<tr class="cell">
+  <td>80</td>
+  <td>TIMSTMPTM</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>BTCTSTIME</td>
+  <td>SYTIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Time stamp in background processing</td>
+</tr>
+<tr class="cell">
+  <td>81</td>
+  <td>TRCTIMSTDT</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>BTCTSDATE</td>
+  <td>SYDATS</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Date stamp in background processing</td>
+</tr>
+<tr class="cell">
+  <td>82</td>
+  <td>TRCTIMSTTM</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>BTCTSTIME</td>
+  <td>SYTIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Time stamp in background processing</td>
+</tr>
+<tr class="cell">
+  <td>83</td>
+  <td>TRCCHUSR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>BTCJCHNM</td>
+  <td>CHAR12</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Last job change made by</td>
+</tr>
+<tr class="cell">
+  <td>84</td>
+  <td>OPMODTSTDT</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>BTCTSDATE</td>
+  <td>SYDATS</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Date stamp in background processing</td>
+</tr>
+<tr class="cell">
+  <td>85</td>
+  <td>OPMODTSTTM</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>BTCTSTIME</td>
+  <td>SYTIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Time stamp in background processing</td>
+</tr>
+<tr class="cell">
+  <td>86</td>
+  <td>OPMODCHUSR</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>BTCJCHNM</td>
+  <td>CHAR12</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Last job change made by</td>
+</tr>
+<tr class="cell">
+  <td>87</td>
+  <td>SHOW</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>BTCEDMODE</td>
+  <td>RADIOFIELD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Edit mode in background processing</td>
+</tr>
+<tr class="cell">
+  <td>88</td>
+  <td>EDIT</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>BTCEDMODE</td>
+  <td>RADIOFIELD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Edit mode in background processing</td>
+</tr>
+<tr class="cell">
+  <td>89</td>
+  <td>PRD_HOURLY</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>BTCPDFLAG</td>
+  <td>RADIOFIELD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Specification of frequency for periodic batch jobs</td>
+</tr>
+<tr class="cell">
+  <td>90</td>
+  <td>PRD_DAILY</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>BTCPDFLAG</td>
+  <td>RADIOFIELD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Specification of frequency for periodic batch jobs</td>
+</tr>
+<tr class="cell">
+  <td>91</td>
+  <td>PRD_WEEKLY</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>BTCPDFLAG</td>
+  <td>RADIOFIELD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Specification of frequency for periodic batch jobs</td>
+</tr>
+<tr class="cell">
+  <td>92</td>
+  <td>PRD_MNTHLY</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>BTCPDFLAG</td>
+  <td>RADIOFIELD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Specification of frequency for periodic batch jobs</td>
+</tr>
+<tr class="cell">
+  <td>93</td>
+  <td>PRD_EXPLIC</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>BTCPDFLAG</td>
+  <td>RADIOFIELD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Specification of frequency for periodic batch jobs</td>
+</tr>
+<tr class="cell">
+  <td>94</td>
+  <td>PRD_MINS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>BTCPMIN</td>
+  <td>NUM02</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Duration period (in minutes) for a batch job</td>
+</tr>
+<tr class="cell">
+  <td>95</td>
+  <td>PRD_HOURS</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>BTCPHOUR</td>
+  <td>NUM02</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Duration period (in hours) for a batch job</td>
+</tr>
+<tr class="cell">
+  <td>96</td>
+  <td>PRD_DAYS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>BTCPDAY</td>
+  <td>NUM03</td>
+  <td>NUMC</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Duration (in days) of DBA action</td>
+</tr>
+<tr class="cell">
+  <td>97</td>
+  <td>PRD_WEEKS</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>BTCPWEEK</td>
+  <td>NUM02</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Duration period (in weeks) for a batch job</td>
+</tr>
+<tr class="cell">
+  <td>98</td>
+  <td>PRD_MONTHS</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>BTCPMNTH</td>
+  <td>NUM02</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Duration period (in months) for a batch job</td>
+</tr>
+<tr class="cell">
+  <td>99</td>
+  <td>SHOW_SYSEV</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>BTCEDMODE</td>
+  <td>RADIOFIELD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Edit mode in background processing</td>
+</tr>
+<tr class="cell">
+  <td>100</td>
+  <td>EDIT_SYSEV</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>BTCEDMODE</td>
+  <td>RADIOFIELD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Edit mode in background processing</td>
+</tr>
+<tr class="cell">
+  <td>101</td>
+  <td>SHOW_USREV</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>BTCEDMODE</td>
+  <td>RADIOFIELD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Edit mode in background processing</td>
+</tr>
+<tr class="cell">
+  <td>102</td>
+  <td>EDIT_USREV</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>BTCEDMODE</td>
+  <td>RADIOFIELD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Edit mode in background processing</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754</td>
+   </tr>
+</table>
+</body>
+</html>

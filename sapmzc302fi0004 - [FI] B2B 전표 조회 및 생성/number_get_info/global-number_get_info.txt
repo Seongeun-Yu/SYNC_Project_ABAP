@@ -1,0 +1,37 @@
+* regenerated at 05.11.2014 18:06:47
+FUNCTION-POOL snr3 MESSAGE-ID nr.
+
+TABLES: tnro, nrivshadow, nriv, bnriv.  "#EC NEEDED
+
+CONSTANTS: yes VALUE 'X',
+           no  VALUE ' '.
+
+TYPES: BEGIN OF t_mixed,
+         object    TYPE nrobj,
+         subobject TYPE nrsobj,
+         nrrangenr TYPE nrnr,
+         toyear    TYPE nryear,
+         instanz   TYPE nrinstlg,
+       END OF t_mixed,
+       tt_mixed TYPE STANDARD TABLE OF t_mixed.
+
+DATA: global_shadow TYPE nrivshadow.  "syslog rollback
+DATA: gv_guid       TYPE sysuuid_c32. "trace
+DATA: gt_nkparms    TYPE nkparms_tt,  "check trace
+      gv_check      TYPE c,           "check trace (only once executed)
+      gv_wpindex    TYPE wpindex,
+      gt_nriv_mixed TYPE tt_mixed.
+* lokale Variablen, die aus Performancegründen global definiert werden
+
+DATA: g_noivbuffer       TYPE nriv-nrlevel.  "Anz. gepufferter Nummern
+
+DATA: act_object TYPE tnro-object VALUE ' '.
+
+* global table for local buffers
+DATA: gt_nrivshadow TYPE STANDARD TABLE OF nrivshadow.
+
+* for ascii check in fm NUMBER_CHECK
+CLASS cl_abap_char_utilities DEFINITION LOAD.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

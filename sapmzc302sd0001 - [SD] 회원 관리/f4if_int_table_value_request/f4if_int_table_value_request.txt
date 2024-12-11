@@ -1,0 +1,392 @@
+FUNCTION f4if_int_table_value_request.
+*"----------------------------------------------------------------------
+*"*"Lokale Schnittstelle:
+*"  IMPORTING
+*"     VALUE(DDIC_STRUCTURE) TYPE  TABNAME DEFAULT SPACE
+*"     VALUE(RETFIELD) TYPE  DFIES-FIELDNAME
+*"     VALUE(PVALKEY) TYPE  DDSHPVKEY DEFAULT SPACE
+*"     VALUE(DYNPPROG) TYPE  SY-REPID DEFAULT SPACE
+*"     VALUE(DYNPNR) TYPE  SY-DYNNR DEFAULT SPACE
+*"     VALUE(DYNPROFIELD) TYPE  HELP_INFO-DYNPROFLD DEFAULT SPACE
+*"     VALUE(STEPL) TYPE  SY-STEPL DEFAULT 0
+*"     VALUE(WINDOW_TITLE) TYPE  C OPTIONAL
+*"     VALUE(VALUE) TYPE  HELP_INFO-FLDVALUE DEFAULT SPACE
+*"     VALUE(VALUE_ORG) TYPE  DDBOOL_D DEFAULT 'C'
+*"     VALUE(MULTIPLE_CHOICE) TYPE  DDBOOL_D DEFAULT SPACE
+*"     VALUE(DISPLAY) TYPE  DDBOOL_D DEFAULT SPACE
+*"     VALUE(CALLBACK_PROGRAM) TYPE  SY-REPID DEFAULT SPACE
+*"     VALUE(CALLBACK_FORM) TYPE  SY-XFORM DEFAULT SPACE
+*"     REFERENCE(CALLBACK_METHOD) TYPE
+*"EF TO IF_F4CALLBACK_VALUE_REQUEST OPTIONAL
+*"     REFERENCE(MARK_TAB) TYPE  DDSHMARKS OPTIONAL
+*"  EXPORTING
+*"     VALUE(USER_RESET) TYPE  C
+*"  TABLES
+*"      VALUE_TAB
+*"      FIELD_TAB STRUCTURE  DFIES OPTIONAL
+*"      RETURN_TAB STRUCTURE  DDSHRETVAL OPTIONAL
+*"      DYNPFLD_MAPPING STRUCTURE  DSELC OPTIONAL
+*"  EXCEPTIONS
+*"      PARAMETER_ERROR
+*"      NO_VALUES_FOUND
+*"----------------------------------------------------------------------
+  DATA help_info LIKE help_info.
+  DATA ocx_help_info LIKE help_info.
+  DATA shlp_top TYPE shlp_descr.
+  DATA shlp_tab TYPE shlp_desct.
+  DATA dynpfields LIKE dynpread OCCURS 0 WITH HEADER LINE.
+  DATA interface_wa LIKE ddshiface.
+  DATA fieldprop_wa LIKE ddshfprop.
+  DATA dfies TYPE LINE OF shlp_descr-fielddescr.
+  DATA callcontrol LIKE ddshf4ctrl.
+  DATA: ocxinterface LIKE ddshocxint.
+  DATA irc LIKE sy-subrc.
+  DATA offset LIKE dfies-offset.
+  DATA record_tab LIKE seahlpres OCCURS 0 WITH HEADER LINE.
+  DATA mapping_tab TYPE shlp_descr-fielddescr.
+* Flag, ob direkt ins Dynpro zurückgestellt werden soll.
+  DATA dynp_update.
+  FIELD-SYMBOLS: <if> TYPE ddshiface.
+  FIELD-SYMBOLS: <dfies> TYPE LINE OF shlp_descr-fielddescr.
+* Dummy-Variablen für Forms aus dem F4-Prozessor:
+  DATA: selection, select_value LIKE help_info-fldvalue.
+* Abschneiden der Unterstriche, die DYNP_VALUES_READ für
+* vom Dynp verdeckte Stellen am Ende anhängt.
+  FIELD-SYMBOLS: <c>.
+* Casting wg. Unicode:
+  FIELD-SYMBOLS: <r> TYPE x, <v> TYPE x.
+  DATA len TYPE i.
+  DATA tabix LIKE sy-tabix.
+  DATA lfieldname LIKE dfies-lfieldname.
+
+  CLEAR return_tab[].
+  shlp_top-shlptype = 'IN'.
+  IF pvalkey <> space.
+    shlp_top-shlpname = pvalkey.
+  ELSE.
+    shlp_top-shlpname = '~'.   "Sonst steigt der F4-Prozessor aus.
+    callcontrol-pvalues = 'D'.
+    callcontrol-personaliz = 'D'.
+  ENDIF.
+  shlp_top-intdescr-dialoginfo = 'X'.
+  shlp_top-intdescr-dialogtype = 'D'.
+  shlp_top-intdescr-issimple = 'X'.
+  shlp_top-intdescr-title = window_title.
+  shlp_top-intdescr-ddtext = text-100.    "Einschränkungen
+  IF value_org = 'S' AND
+     ddic_structure IS INITIAL AND
+     field_tab[] IS INITIAL.
+    PERFORM get_fields_of_value_tab
+            TABLES value_tab field_tab
+            CHANGING retfield.
+  ENDIF.
+  PERFORM set_help_info_from_focus CHANGING help_info.
+  "store informations for Read Acess Logging
+  CALL METHOD ('CL_F4_SRAL_SETTINGS_DIALOG')=>('SET_DYNPFIELD_PATH')
+        EXPORTING
+             i_helpinfos = help_info.
+  IF dynpprog <> space AND dynpnr <> space AND dynprofield <> space.
+*   Update wird vom Baustein (oder vom ActiveX) selbst gemacht.
+    IF help_info-dynprofld <> space.
+      dynp_update = 'X'.
+*     Dynprofield gleich noch richtig stellen.
+      dynprofield = help_info-dynprofld.
+    ENDIF.
+  else.
+    clear help_info.
+  ENDIF.
+* Eine Suchhilfe entsprechend den übergebenen Feldern zusammenbasteln.
+  IF ddic_structure <> space.
+    CALL FUNCTION 'DDIF_FIELDINFO_GET'
+      EXPORTING
+        tabname   = ddic_structure
+      TABLES
+        dfies_tab = field_tab
+      EXCEPTIONS
+        OTHERS    = 3.
+    IF sy-subrc <> 0.
+      MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+              WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4
+              RAISING parameter_error.
+    ENDIF.
+  ENDIF.
+  LOOP AT field_tab.
+    IF field_tab-tabname <> space AND
+       field_tab-fieldname <> space AND
+       field_tab-inttype = space.
+      lfieldname = field_tab-fieldname.
+      CALL FUNCTION 'DDIF_FIELDINFO_GET'
+        EXPORTING
+          tabname    = field_tab-tabname
+          lfieldname = lfieldname
+        IMPORTING
+          dfies_wa   = field_tab
+        EXCEPTIONS
+          OTHERS     = 3.
+      IF sy-subrc <> 0.
+*       Weiter, wie bei leerem TABNAME
+      ENDIF.
+    ENDIF.                             "Tabname <> space
+    IF value_org = 'C'.
+*     Offset aufsteigend vergeben. Dabei aber darauf achten, daß
+*     alignments korrekt sind.
+      PERFORM get_next_aligned_offset(saplsdf4)
+              USING offset
+                    field_tab-datatype
+              CHANGING field_tab-offset.
+      offset = field_tab-offset.
+      ADD field_tab-intlen TO offset.
+    ENDIF.
+    MODIFY field_tab.
+    fieldprop_wa-fieldname = field_tab-fieldname.
+    ADD 1 TO fieldprop_wa-shlpselpos.
+    ADD 1 TO fieldprop_wa-shlplispos.
+    CLEAR fieldprop_wa-shlpoutput.
+    fieldprop_wa-shlpoutput = 'X'.
+    fieldprop_wa-shlpinput = 'X'.
+    IF field_tab-fieldname = retfield.
+      interface_wa-shlpfield = retfield.
+      IF dynprofield <> space.
+        interface_wa-valfield = dynprofield.
+      ELSE.
+        interface_wa-valfield = '~'.   "Irgendwas <> SPACE
+      ENDIF.
+      interface_wa-f4field = 'X'.
+      APPEND interface_wa TO shlp_top-interface.
+      IF window_title = space.
+        shlp_top-intdescr-title = field_tab-scrtext_l.
+      ENDIF.
+    ENDIF.
+    APPEND fieldprop_wa TO shlp_top-fieldprop.
+  ENDLOOP.
+  shlp_top-fielddescr[] = field_tab[].
+* Jetzt die Daten in die Record_Tab übertragen.
+  IF value_org = 'C'.
+    PERFORM column_2_recordtab
+            TABLES value_tab
+                   shlp_top-fielddescr
+                   record_tab.
+  ELSE.
+    PERFORM flatten_fielddescr CHANGING shlp_top irc.
+    IF irc <> 0.
+      mapping_tab = shlp_top-fielddescr.
+*   Da Feldnamen z.T. künstlich vergeben werden,
+*   muß das Mapping über die Position erfolgen.
+      CLEAR dfies-lfieldname.
+      MODIFY mapping_tab FROM dfies
+             TRANSPORTING lfieldname
+             WHERE lfieldname <> space.
+      PERFORM map_itab_to_record_tab(saplsdsd)
+              TABLES
+                 value_tab
+              USING
+                 shlp_top-fielddescr
+                 mapping_tab
+              CHANGING
+                 record_tab[].
+    ELSE.
+*     1:1-Mapping wie bisher
+      ASSIGN value_tab TO <v> CASTING.
+      ASSIGN record_tab-string TO <r> CASTING.
+      LOOP AT value_tab.
+        <r> = <v>.
+        APPEND record_tab.
+      ENDLOOP.
+    ENDIF.
+  ENDIF.
+* Jetzt kann schließlich die Position aufsteigend
+* vergeben werden.
+  LOOP AT shlp_top-fielddescr ASSIGNING <dfies>.
+    <dfies>-position = sy-tabix.
+  ENDLOOP.
+  IF dynp_update = 'X'.
+    CALL FUNCTION 'DYNP_VALUES_READ'
+      EXPORTING
+        dyname     = help_info-dynpprog
+        dynumb     = help_info-dynpro
+        request    = 'A'
+      TABLES
+        dynpfields = dynpfields
+      EXCEPTIONS
+        OTHERS     = 9.
+*   Inhalt des F4-Feldes wird gleich mit übernommen
+    IF value = space.
+      SORT dynpfields BY fieldname stepl.
+      READ TABLE dynpfields
+           WITH KEY fieldname = dynprofield
+                     stepl = stepl BINARY SEARCH.
+      IF sy-subrc = 0.
+*       Unterstriche am Ende entfernen
+        len = strlen( dynpfields-fieldvalue ) - 1.
+        WHILE len > 0.
+          ASSIGN dynpfields-fieldvalue+len(1) TO <c>.
+          IF <c> <> '_'.
+            EXIT.
+          ENDIF.
+          <c> = space.
+          SUBTRACT 1 FROM len.
+        ENDWHILE.
+        help_info-fldvalue = dynpfields-fieldvalue.
+        IF dynpfields-fieldinp = space.
+          callcontrol-disponly = 'X'.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+  ENDIF.
+  IF value <> space.
+    help_info-fldvalue = value.
+  ENDIF.
+  IF help_info-fldvalue CA '*+'.
+    interface_wa-value = help_info-fldvalue.
+    MODIFY shlp_top-interface FROM interface_wa
+           TRANSPORTING value
+           WHERE f4field = 'X'.
+  ENDIF.
+* Mapping auf Dynpro-Felder falls mitgegeben.
+  LOOP AT dynpfld_mapping.
+    READ TABLE shlp_top-fielddescr TRANSPORTING NO FIELDS
+         WITH KEY fieldname = dynpfld_mapping-fldname.
+    CHECK sy-subrc = 0.
+    READ TABLE shlp_top-interface ASSIGNING <if>
+         WITH KEY shlpfield = dynpfld_mapping-fldname.
+    IF sy-subrc = 0.
+      <if>-valtabname = space.
+      <if>-valfield = dynpfld_mapping-dyfldname.
+    ELSE.
+      CLEAR interface_wa.
+      interface_wa-shlpfield = dynpfld_mapping-fldname.
+      interface_wa-valfield = dynpfld_mapping-dyfldname.
+      APPEND interface_wa TO shlp_top-interface.
+    ENDIF.
+  ENDLOOP.
+* Die Beschränkung auf MAXRECORDS ist unsinnig, wenn die Daten
+* von außen übergeben werden.
+  callcontrol-no_maxdisp = 'X'.
+* CALLCONTROL-MAXRECORDS = 500.
+* Bei Mehrfachauswahl ist z.Zt. kein automatisches Update des
+* Dynp-Feldes möglich. Außerdem kann das ActiveX noch keine
+* Merhfachauswahl (auch amodal nicht)
+  IF multiple_choice = 'X'.
+    callcontrol-multisel = 'X'.
+    dynp_update = space.
+    callcontrol-ocx_off = 'X'.
+  ENDIF.
+* ActiveX kann keine Mehrfachauswahl, deshalb bei übergebener
+* Markierungstabelle ausschalten
+  if mark_tab is not initial.
+    callcontrol-ocx_off = 'X'.
+  endif.
+* Bei F4 auf OCX ist auch kein Rückstellen möglich
+  IF ocxinterface-ctrlparent <> 0.
+    dynp_update = space.
+  ENDIF.
+* Bei DISPLAY = 'F' wie FORCE, wird auch dann zurückgestellt,
+* wenn das Feld auf dem Dynpro nicht eingabebereit ist.
+  IF display = 'X'.
+    callcontrol-disponly = 'X'.
+  ELSEIF display = 'F'.
+    callcontrol-disponly = ' '.        "Auch wenn es vorher gesetzt war
+*   Das ActiveX verläßt sich auf das Interface.
+    interface_wa-dispfield = 'T'.
+    MODIFY shlp_top-interface FROM interface_wa
+           TRANSPORTING dispfield
+           WHERE f4field = 'X'.
+  ENDIF.
+  IF help_info-fldvalue(1) = '='.
+    callcontrol-shortcut = 'X'.
+  ENDIF.
+* Keine Sortierung der übergebenen Werte
+  callcontrol-sortoff = 'X'.
+  callcontrol-curow = sy-curow.
+  callcontrol-cucol = sy-cucol.
+   IF callback_method IS BOUND.
+    callback_method->f4_call_callback(
+                  changing
+                    ct_record      = record_tab[]
+                    cs_shlp        = shlp_top
+                    cs_callcontrol = callcontrol ).
+  ELSEIF callback_form <> space.
+    PERFORM (callback_form) IN PROGRAM (callback_program)
+            TABLES record_tab
+            CHANGING shlp_top callcontrol.
+  ENDIF.
+************************************************************************
+  PERFORM put_values_in(saplsdsd)
+          TABLES record_tab CHANGING shlp_top.
+* Für's OCX exportieren wir auch noch die HELP_INFO
+* Das amodale OCX kann nur gestartet werden, wenn das direkte
+* Zurückstellen ins Dynpro funktioniert.
+* Auserdem macht ein amodaler Aufruf keinen Sinn, wenn der Aufrufer
+* hinterher die RETURN_TAB auswerten will.
+* Das OCX läuft automatisch modal, wenn in HELP_INFOS keine Information
+* zum Dynpro steckt.
+
+*- Ein amodaler des OCX ist nicht mehr möglich, da es keinen definierten
+*  Zeitpunkt gibt, zu dem man dann den Storage löschen kann.
+  ocx_help_info = help_info.
+  IF dynp_update = space OR return_tab IS REQUESTED.
+    CLEAR: ocx_help_info-dynpprog, ocx_help_info-dynpro.
+  ENDIF.
+  PERFORM put_help_infos(saplsdsd)
+          USING ocx_help_info CHANGING shlp_top.
+* Markierungstabelle wegschreiben.
+  PERFORM put_marktab(saplsdsd)
+          USING mark_tab CHANGING shlp_top.
+* ********************* Aufruf des F4-Dialogs ************************
+  PERFORM f4proz(saplsdsd)
+          TABLES return_tab
+          USING shlp_top
+          CHANGING callcontrol ocxinterface
+                   irc.
+  IF ocxinterface-ctrlparent <> 0.
+    EXPORT ocxinterface TO MEMORY ID 'OCXINT'.
+  ENDIF.
+  CLEAR user_reset.
+  IF irc = 4.
+* MSG DH801: Keine Werte gefunden
+    MESSAGE s801(dh)
+            RAISING no_values_found.
+  ENDIF.
+  IF irc = 12.
+    MOVE 'X' TO user_reset.
+  ENDIF.
+  CHECK irc = 0.
+
+* Falls automatische Rückgabe erfolgen soll, die SH-Parameter
+* auf die Dynp-Felder mappen und ins Dynpro zurückschreiben.
+* Das Ergebnis jetzt wieder auf die Dynp-Felder mappen
+  IF dynp_update <> space.
+    PERFORM map_shfields_to_dynpfields(saplsdsd)
+            TABLES shlp_top-interface
+                   dynpfields
+                   return_tab
+            USING help_info
+            CHANGING selection select_value.
+    CALL FUNCTION 'DYNP_VALUES_UPDATE'
+      EXPORTING
+        dyname     = dynpprog
+        dynumb     = dynpnr
+      TABLES
+        dynpfields = dynpfields
+      EXCEPTIONS
+        OTHERS     = 8.
+  ENDIF.
+  "clear informations for Read Acess Logging
+  CALL METHOD ('CL_F4_SRAL_SETTINGS_DIALOG')=>('FREE').
+ENDFUNCTION.
+
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: DH
+*801   No values found
+*804   No input help is available
+*805   Display not possible (inconsistency in the input help)
+*811   Search help & does not exist
+*
+* Message class: TL
+*080   Language & not in system
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

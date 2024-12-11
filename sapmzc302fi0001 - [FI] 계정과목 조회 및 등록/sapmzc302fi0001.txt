@@ -35,5 +35,13 @@ INCLUDE sapmzc302fi0001f01                      .  " FORM-Routines
 * I01 데이터가 성공적으로 저장되었습니다.
 * I02 데이터 저장에 실패하였습니다.
 
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: K5
+*001   & & & &
+*102   Data has been saved
+
 ----------------------------------------------------------------------------------
 Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

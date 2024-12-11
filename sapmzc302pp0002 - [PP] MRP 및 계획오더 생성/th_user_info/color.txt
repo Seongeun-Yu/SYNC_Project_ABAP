@@ -1,0 +1,25 @@
+***INCLUDE <COLOR> .
+*-----------------------------------------------------------------------
+*  Instead of statement 'INCLUDE <color>.', please use
+*  statement 'TYPE-POOLS: col.' directly.
+*-----------------------------------------------------------------------
+TYPE-POOLS: col.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

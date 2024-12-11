@@ -1,0 +1,72 @@
+*----------------------------------------------------------------------*
+*   INCLUDE LV56GIT1                                                   *
+*----------------------------------------------------------------------*
+
+* Internal tables for temporary data
+  DATA: VTTS_TMP LIKE VTTS OCCURS 0 WITH HEADER LINE.  "Sel. of VTTS
+  DATA: VBFA_TMP LIKE VBFA OCCURS 0 WITH HEADER LINE.  "Sel. of VBFA
+  DATA: VTTP_TMP LIKE VTTP OCCURS 0 WITH HEADER LINE.  "Sel. of VTTP
+  DATA: VTTK_TMP LIKE VTTK OCCURS 0 WITH HEADER LINE.  "Sel. of VTTK
+  DATA: VTSP_TMP LIKE VTSP OCCURS 0 WITH HEADER LINE.  "Sel. of VTSP
+  DATA: LIKP_TMP LIKE LIKP OCCURS 0 WITH HEADER LINE.  "Sel. of LIKP
+  DATA: KNA1_TMP LIKE KNA1 OCCURS 0 WITH HEADER LINE.  "Sel. of KNA1
+  DATA: T173_TMP LIKE T173 OCCURS 0 WITH HEADER LINE.  "Sel. of T173
+  DATA: T173T_TMP LIKE T173T OCCURS 0 WITH HEADER LINE.  "Sel. of T173T
+
+  DATA: BEGIN OF DELIV_TMP OCCURS 0.  "Target for deliveries
+          INCLUDE STRUCTURE VBELNTMP.  "and selected deliveries
+  DATA: END OF DELIV_TMP.
+
+  DATA: BEGIN OF SHIPM_TMP OCCURS 0.  "Target for shipments
+          INCLUDE STRUCTURE VBELNTMP.  "and selected shipments
+  DATA: END OF SHIPM_TMP.
+
+  DATA: BEGIN OF DELIV_TEMP OCCURS 0.  "Temporary table for deliveries
+          INCLUDE STRUCTURE VBELNTMP.  "and selected deliveries
+  DATA: END OF DELIV_TEMP.
+
+  DATA: BEGIN OF SHIPM_TEMP OCCURS 0.  "Temporary table for shipments
+          INCLUDE STRUCTURE VBELNTMP.  "and selected shipments
+  DATA: END OF SHIPM_TEMP.
+
+  DATA: BEGIN OF DELIV_SAV OCCURS 0.  "Save for deliveries
+          INCLUDE STRUCTURE VBELNTMP.  "and selected deliveries
+  DATA: END OF DELIV_SAV.
+
+  DATA: BEGIN OF SHIPM_SAV OCCURS 0.  "Save for shipments
+          INCLUDE STRUCTURE VBELNTMP.  "and selected shipments
+  DATA: END OF SHIPM_SAV.
+
+* Size information for parameter-tables (XVTTK,...)
+DATA: XVTTK_SIZE TYPE I.
+DATA: XVTTP_SIZE TYPE I.
+DATA: XVTTS_SIZE TYPE I.
+DATA: XVTSP_SIZE TYPE I.
+
+* Internal tables for delivery and shipment data
+  DATA  BEGIN OF DELIVERIES OCCURS 1.
+          INCLUDE STRUCTURE VBELNTMP.
+  DATA  END   OF DELIVERIES.
+
+  DATA  BEGIN OF SHIPMENTS OCCURS 1.
+          INCLUDE STRUCTURE VBELNTMP.
+  DATA  END   OF SHIPMENTS.
+
+  DATA  BEGIN OF ORDERS OCCURS 1.
+          INCLUDE STRUCTURE VBELNTMP.
+  DATA  END   OF ORDERS.
+
+  DATA:  BEGIN OF CUSTOMERS OCCURS 50,
+          KUNNR LIKE KNA1-KUNNR,
+        END OF CUSTOMERS.
+
+  RANGES: ORDER_RANGE FOR VBAK-VBELN,
+          DELIV_RANGE FOR LIKP-VBELN.
+
+* Tables for system usage
+  DATA: BEGIN OF EXCLUDE_TAB OCCURS 5,        "Menuitems to be excluded
+          FCODE(4),
+        END OF EXCLUDE_TAB.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

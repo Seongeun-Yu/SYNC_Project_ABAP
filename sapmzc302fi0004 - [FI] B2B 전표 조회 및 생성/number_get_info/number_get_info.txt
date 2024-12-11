@@ -1,0 +1,92 @@
+FUNCTION number_get_info.
+*"----------------------------------------------------------------------
+*"*"Lokale Schnittstelle:
+*"  IMPORTING
+*"     VALUE(NR_RANGE_NR) LIKE  INRI-NRRANGENR OPTIONAL
+*"     VALUE(OBJECT) LIKE  INRI-OBJECT
+*"     VALUE(SUBOBJECT) DEFAULT SPACE
+*"     VALUE(TOYEAR) LIKE  INRI-TOYEAR DEFAULT '0000'
+*"  EXPORTING
+*"     VALUE(INTERVAL) LIKE  NRIV STRUCTURE  NRIV
+*"     REFERENCE(NRIV) TYPE  NRIV_TT
+*"  EXCEPTIONS
+*"      INTERVAL_NOT_FOUND
+*"      OBJECT_NOT_FOUND
+*"----------------------------------------------------------------------
+
+  IF act_object = space OR act_object NE object.
+     PERFORM read_tnro USING object.
+  ENDIF.
+
+  IF tnro-yearind = space.
+*   Nummernkreise sind jahresunabhängig
+    IF nr_range_nr IS INITIAL.
+      SELECT * FROM nriv
+               INTO TABLE nriv
+               WHERE object    = object
+                 AND subobject = subobject
+                 AND toyear    = '0000'.
+    ELSE.
+      SELECT SINGLE * FROM  nriv
+                      INTO  interval
+                      WHERE object    = object
+                        AND subobject = subobject
+                        AND nrrangenr = nr_range_nr
+                        AND toyear    = '0000'.
+    ENDIF.
+    IF sy-subrc NE 0.
+      MESSAGE e751 RAISING interval_not_found WITH object
+                                                   subobject
+                                                   nr_range_nr
+                                                   tnro-code.
+    ENDIF.
+  ELSE.
+*    Nummernkreise sind jahresabhängig
+    IF nr_range_nr IS INITIAL.
+      SELECT * FROM nriv
+               INTO TABLE nriv
+               WHERE object    = object
+                 AND subobject = subobject
+                 AND toyear   GE toyear.
+    ELSE.
+      SELECT * FROM  nriv
+               INTO  interval
+               WHERE object    = object
+                 AND subobject = subobject
+                 AND nrrangenr = nr_range_nr
+                 AND toyear   GE toyear
+               ORDER BY toyear.
+        EXIT.
+      ENDSELECT.
+    ENDIF.
+     IF sy-subrc NE 0.
+        MESSAGE e751 RAISING interval_not_found WITH object
+                                                   subobject
+                                                   nr_range_nr
+                                                   tnro-code.
+     ENDIF.
+  ENDIF.
+
+ENDFUNCTION.
+
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: NR
+*002   Object & does not exist
+*028   No transfer of interval &1 &2 for object &3
+*029   Choose number of numbers to be assigned greater than 0
+*030   Number of numbers to be assigned must be 1
+*031   Object &: Buffer is too small (see long text)
+*032   Object &, interval &: Error when filling the buffer, subrc &
+*061   & & & : & error when drawing the number
+*070   No number could be identified & & & &
+*751   Interval &3/to year &4 does not exist for object &1 &2
+*752   Specify an internal interval
+*753   Specify an external interval
+*754   Interval &3 for year &4 does not exist for object &1 &2
+*755   Instance name &1 is longer than 17 characters (see SAP Note 2599056)
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

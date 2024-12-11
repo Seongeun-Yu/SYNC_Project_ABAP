@@ -1,0 +1,514 @@
+FUNCTION f4_date.
+*"----------------------------------------------------------------------
+*"*"Lokale Schnittstelle:
+*"  IMPORTING
+*"     VALUE(DATE_FOR_FIRST_MONTH) LIKE  WORKFLDS-GKDAY DEFAULT
+*"       SY-DATUM
+*"     VALUE(DISPLAY) LIKE  WORKFLDS-DISPL DEFAULT SPACE
+*"     VALUE(FACTORY_CALENDAR_ID) LIKE  WORKFLDS-CALID DEFAULT SPACE
+*"     VALUE(GREGORIAN_CALENDAR_FLAG) DEFAULT SPACE
+*"     VALUE(HOLIDAY_CALENDAR_ID) LIKE  WORKFLDS-HIDENT DEFAULT SPACE
+*"     VALUE(PROGNAME_FOR_FIRST_MONTH) LIKE  SY-REPID DEFAULT SPACE
+*"     VALUE(DATE_POSITION) TYPE  CHAR1 DEFAULT SPACE
+*"  EXPORTING
+*"     VALUE(SELECT_DATE) LIKE  WORKFLDS-GKDAY
+*"     VALUE(SELECT_WEEK) LIKE  SCAL-WEEK
+*"     VALUE(SELECT_WEEK_BEGIN) LIKE  SY-DATUM
+*"     VALUE(SELECT_WEEK_END) LIKE  SY-DATUM
+*"  EXCEPTIONS
+*"      CALENDAR_BUFFER_NOT_LOADABLE
+*"      DATE_AFTER_RANGE
+*"      DATE_BEFORE_RANGE
+*"      DATE_INVALID
+*"      FACTORY_CALENDAR_NOT_FOUND
+*"      HOLIDAY_CALENDAR_NOT_FOUND
+*"      PARAMETER_CONFLICT
+*"----------------------------------------------------------------------
+  DATA: idate         LIKE workflds-gkday,
+        h_select      LIKE  workflds-displ,
+        h_supported   TYPE ddbool_d,
+        l_factory_calendar_id LIKE workflds-calid,
+        l_holiday_calendar_id LIKE workflds-hident,
+        l_accessibility_on TYPE os_boolean,
+        datfm type xudatfm,
+        use_alv_val type c length 1,
+        cal_badi             type ref to calendar_definition,
+        start_day            type sc_day_txt,
+        month_first_week     type kmonat,
+        day_first_week       type ktag,
+        start_weekday_number type c.
+
+  CONSTANTS: c_yes TYPE c VALUE 'X',
+             c_no  TYPE c VALUE ' '.
+
+*----------------------------------------------------------------------
+* Initialization
+*----------------------------------------------------------------------
+
+  PERFORM check_personal_settings CHANGING h_supported.
+
+  IF NOT h_supported IS INITIAL.
+    CLEAR h_supported.
+    PERFORM check_activex CHANGING h_supported.
+  ENDIF.
+
+  CALL FUNCTION 'GET_ACCESSIBILITY_MODE'
+    IMPORTING
+      ACCESSIBILITY           = l_accessibility_on
+    EXCEPTIONS
+      OTHERS                  = 2.
+
+  call method CL_ABAP_DATFM=>get_datfm
+    RECEIVING
+      DATFM = datfm.
+
+  call method CL_I18N_SYSTEM_SETTINGS=>GET_ALV_CALENDAR
+    exporting
+      IM_DATFM = datfm
+    receiving
+      re_use_alv = use_alv_val.
+
+  IF ( sy-saprl    >= '46C' AND
+       h_supported =  c_yes ) or
+     l_accessibility_on = c_yes or
+     use_alv_val = 'X'.
+
+    IF select_week IS REQUESTED.
+      h_select = c_yes.
+    ELSE.
+      h_select = c_no.
+    ENDIF.
+
+    PERFORM get_calendars USING    factory_calendar_id
+                                   holiday_calendar_id
+                                   gregorian_calendar_flag
+                          CHANGING l_factory_calendar_id
+                                   l_holiday_calendar_id.
+*   check for dummy date
+    if date_for_first_month(4) >= '9000' or
+      date_for_first_month(4) <= '1000'.
+      date_for_first_month = sy-datlo.  " = sy-datum.  ad 19.04.2004
+    endif.
+
+*   determine day and week numbering
+    if cal_badi is initial.
+      get badi cal_badi.
+      call badi cal_badi->GET_FIRST_DAY_OF_WEEK
+            changing weekday = start_day.
+      call badi cal_badi->get_date_in_first_week
+             changing month = month_first_week
+                      day   = day_first_week.
+      case start_day.
+        WHEN if_calendar_definition=>c_monday.
+          start_weekday_number = '1'.
+        WHEN if_calendar_definition=>c_tuesday.
+          start_weekday_number = '2'.
+        WHEN if_calendar_definition=>c_wednesday.
+          start_weekday_number = '3'.
+        WHEN if_calendar_definition=>c_thursday.
+          start_weekday_number = '4'.
+        WHEN if_calendar_definition=>c_friday.
+          start_weekday_number = '5'.
+        WHEN if_calendar_definition=>c_saturday.
+          start_weekday_number = '6'.
+        WHEN if_calendar_definition=>c_sunday.
+          start_weekday_number = '7'.
+      endcase.
+    endif.
+
+    if use_alv_val = 'X'.
+
+      CALL FUNCTION 'S_DISPLAY_ALV_CAL'
+        EXPORTING
+          DATE_FOR_FIRST_MONTH               = date_for_first_month
+          DISPLAY                            = display
+          FACTORY_CALENDAR_ID                = l_factory_calendar_id
+          GREGORIAN_CALENDAR_FLAG            = gregorian_calendar_flag
+          HOLIDAY_CALENDAR_ID                = l_holiday_calendar_id
+*         HOLIDAY_STYLE                      = '6'
+          PROGNAME_FOR_FIRST_MONTH           = progname_for_first_month
+          WEEK_BEGIN_DAY                     = start_weekday_number
+          SELECT_OPTION_WEEK                 = h_select
+*         SELECT_OPTION_MONTH                = ' '
+        IMPORTING
+          SELECT_DATE                        = select_date
+          SELECT_WEEK                        = select_week
+          SELECT_WEEK_BEGIN                  = select_week_begin
+          SELECT_WEEK_END                    = select_week_end
+*         SELECT_MONTH                       =
+       EXCEPTIONS
+         CALENDAR_BUFFER_NOT_LOADABLE       = 1
+         DATE_AFTER_RANGE                   = 2
+         DATE_BEFORE_RANGE                  = 3
+         DATE_INVALID                       = 4
+         FACTORY_CALENDAR_NOT_FOUND         = 5
+         HOLIDAY_CALENDAR_NOT_FOUND         = 6
+         PARAMETER_CONFLICT                 = 7
+         OTHERS                             = 8.
+
+    else.
+
+      CALL FUNCTION 'F4_DATE_CONTROL'
+         EXPORTING
+              date_for_first_month         = date_for_first_month
+              display                      = display
+              factory_calendar_id          = l_factory_calendar_id
+              gregorian_calendar_flag      = gregorian_calendar_flag
+              holiday_calendar_id          = l_holiday_calendar_id
+              progname_for_first_month     = progname_for_first_month
+              WEEK_BEGIN_DAY               = start_weekday_number
+              select_option_week           = h_select
+              date_position                = date_position
+         IMPORTING
+              select_date                  = select_date
+              select_week                  = select_week
+              select_begin                 = select_week_begin
+              select_end                   = select_week_end
+         EXCEPTIONS
+              calendar_buffer_not_loadable = 1
+              date_after_range             = 2
+              date_before_range            = 3
+              date_invalid                 = 4
+              factory_calendar_not_found   = 5
+              holiday_calendar_not_found   = 6
+              parameter_conflict           = 7
+              OTHERS                       = 8.
+
+    endif.
+
+    CASE sy-subrc.
+
+      WHEN 1.
+        MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+                 RAISING calendar_buffer_not_loadable
+                 WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+      WHEN 2.
+        MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+                 RAISING date_after_range
+                 WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+      WHEN 3.
+        MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+                 RAISING date_before_range
+                 WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+      WHEN 4.
+        MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+                 RAISING date_invalid
+                 WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+      WHEN 5.
+        MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+                 RAISING factory_calendar_not_found
+                 WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+      WHEN 6.
+        MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+                 RAISING holiday_calendar_not_found
+                 WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+      WHEN 7.
+        MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+                 RAISING parameter_conflict
+                 WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+
+    ENDCASE.
+
+  ELSE.
+
+* Neu zu 46A
+    CLEAR: g_sel_week.
+*         g_sel_month.
+* Neu zu 46A
+
+* copy input parameters to global parameters
+    CLEAR workflds.                                         "
+    workflds-displ = display.          "Display option
+    workflds-statu = init.             "status -> (MODULE INIT)
+* copy input parameters to local variables
+    idate       = date_for_first_month.
+
+    IF idate(4) => '9000' or idate(4) <= '1000'.
+      idate = sy-datlo.  " = sy-datum.   ad 19.04.2004
+    ENDIF.
+
+    PERFORM date_check_plausibility CHANGING idate.
+
+*----------------------------------------------------------------------
+* get calendar
+*----------------------------------------------------------------------
+* (1) gregorian calendar if par. GREGORIAN_CALENDAR is set
+*   (2) from input parameter (if <> SPACE)
+*    (3) from last call of CALENDAR_FOR_F4_DATE.
+*      (4) work on without cal. (take gregorian cal.)
+*  old way: (unused)
+*     (4) from SPA/GPA parameter 'WRK' (plant) or if no parameter set
+*      (5) work on without fact. cal. (take gregorian cal.)
+*----------------------------------------------------------------------
+    IF  NOT factory_calendar_id IS INITIAL
+    AND NOT holiday_calendar_id IS INITIAL.
+      RAISE parameter_conflict.
+    ENDIF.
+    CLEAR workflds-calid.
+    CLEAR workflds-hident.
+
+* neu 21.11.94 Christina Heyden
+    CLEAR: h_cal_art,
+           h_hoc_vjahr,
+           h_hoc_bjahr,
+           h_fac_vjahr,
+           h_fac_bjahr,
+           h_hoc_id,
+           h_fac_id.
+*
+
+    IF gregorian_calendar_flag = space.
+      IF NOT factory_calendar_id IS INITIAL.                "(2a)
+        workflds-calid = factory_calendar_id.
+
+* neu 21.11.94 Christina Heyden
+        h_fac_id    = factory_calendar_id.
+        h_cal_art   = 'F'.
+*
+
+      ELSEIF NOT holiday_calendar_id IS INITIAL.            "(2b)
+        workflds-hident = holiday_calendar_id.
+
+* neu 21.11.94 Christina Heyden
+        h_hoc_id     = holiday_calendar_id.
+        h_cal_art   = 'H'.
+*
+
+      ELSEIF NOT calid IS INITIAL.                          "(3a)
+        workflds-calid = calid.
+
+* neu 21.11.94 Christina Heyden
+        h_fac_id     = calid.
+        h_cal_art   = 'F'.
+*
+
+      ELSEIF NOT hident IS INITIAL.                         "(3b)
+        workflds-hident = hident.
+
+* neu 21.11.94 Christina Heyden
+        h_hoc_id     = hident.
+        h_cal_art   = 'H'.
+*
+
+      ENDIF.                           "(4)
+    ENDIF.                             "(1)
+
+*----------------------------------------------------------------------
+* Determine the month that will be displayed
+* (1) from DATE_FOR_FIRST_MONTH   or if not given
+*   (2) from the screen (using PROGNAME_FOR_FIRST_MONTH) or
+*     (3) from SY-DATUM
+*----------------------------------------------------------------------
+    IF idate = space OR idate IS INITIAL.
+      IF NOT progname_for_first_month IS INITIAL.
+        PERFORM get_date_from_screen USING progname_for_first_month  "(2)
+                                            idate.
+      ENDIF.
+    ENDIF.
+    IF idate = space OR idate IS INITIAL."(3)
+      workflds-gkday = sy-datlo.       "default = SY-DATUM
+    ELSE.
+      workflds-gkday = idate.          "(1)
+    ENDIF.
+
+* Check: Month in calendar ?
+    PERFORM check_month USING workflds-gkday result.
+    IF result NE 0.
+      PERFORM raise_exception USING result.
+      EXIT.
+    ENDIF.
+*
+
+* Neu 21.11.94 Christina Heyden
+    PERFORM check_calendar.
+
+* Einstiegsjahr festhalten
+    CLEAR:   g_number_of_year,
+             year_tab.
+
+    REFRESH: year_tab.
+
+*    move date_for_first_month(4) to g_year.
+    MOVE idate(4) TO g_year.
+    IF g_year IS INITIAL OR
+       g_year = space.
+      MOVE sy-datum(4) TO g_year.
+    ENDIF.
+
+*----------------------------------------------------------------------
+*  display calendar
+*----------------------------------------------------------------------
+    IF display = space.
+
+      CALL SCREEN 200 STARTING AT 20 05. " with combobox
+
+*   call screen 100 starting at 20 05      " without combobox
+*                   ending   at 48 17.
+
+
+    ELSE.
+
+      CALL SCREEN 210 STARTING AT 20 05. " with combobox
+
+*   call screen 110 starting at 20 05      " without combobox
+*                   ending   at 48 17.
+
+
+    ENDIF.
+*----------------------------------------------------------------------
+* set output parameter
+*----------------------------------------------------------------------
+    IF display = space.
+
+      IF workflds-statu = selected.
+        select_date     = workflds-gkday.
+
+* Neu zu 46A
+        select_week       = g_sel_week-week.
+        select_week_begin = g_sel_week-begin.
+        select_week_end   = g_sel_week-end.
+
+*      select_month       = g_sel_month-month.
+*      select_month_begin = g_sel_month-begin.
+*      select_month_end   = g_sel_month-end.
+
+* Neu zu 46A
+
+      ELSEIF workflds-statu = aborted.
+
+      ELSE.
+        select_date = idate.
+      ENDIF.
+
+    ENDIF.
+
+  ENDIF.
+
+ENDFUNCTION.
+
+*---------------------------------------------------------------------*
+*  FORM check_personal_settings
+*---------------------------------------------------------------------*
+FORM check_personal_settings CHANGING supported TYPE ddbool_d.
+
+  DATA: l_pers_shlp_all TYPE pers_shlp_all,
+        l_pers_shlp_sys TYPE pers_shlp_all,
+        l_f4setting     TYPE f4setting.
+
+*  perform get_personal in program saplsdh4 changing l_pers_shlp_all
+*                                                    l_pers_shlp_sys
+*                                                    l_f4setting.
+
+  PERFORM get_personal CHANGING l_f4setting.
+
+  IF     NOT l_f4setting-activex    IS INITIAL.
+    supported = 'X'.
+  ELSEIF NOT l_f4setting-noactivex  IS INITIAL.
+    CLEAR supported.
+  ELSEIF NOT l_f4setting-sysdefault IS INITIAL.
+    IF NOT l_f4setting-g_activex  IS INITIAL.
+      supported = 'X'.
+    ELSEIF NOT l_f4setting-g_nactivex IS INITIAL.
+      CLEAR supported.
+    ENDIF.
+  ENDIF.
+
+ENDFORM.                    "check_personal_settings
+
+*---------------------------------------------------------------------*
+*       FORM get_calendars                                            *
+*---------------------------------------------------------------------*
+FORM get_calendars
+                  USING    factory_calendar_id     LIKE workflds-calid
+                           holiday_calendar_id     LIKE workflds-hident
+                           gregorian_calendar_flag TYPE c
+                  CHANGING l_factory_calendar_id   LIKE workflds-calid
+                           l_holiday_calendar_id   LIKE workflds-hident.
+* get calendar either from interface of function module or from
+* function modul CALENDER_FOR_F4_DATE
+
+  CHECK gregorian_calendar_flag IS INITIAL.
+
+  IF NOT factory_calendar_id IS INITIAL.
+    l_factory_calendar_id = factory_calendar_id.
+  ELSEIF NOT holiday_calendar_id IS INITIAL.
+    l_holiday_calendar_id = holiday_calendar_id.
+  ELSEIF NOT calid IS INITIAL.
+    l_factory_calendar_id = calid.
+  ELSEIF NOT hident IS INITIAL.
+    l_holiday_calendar_id = hident.
+  ENDIF.
+
+ENDFORM.                    "get_calendars
+
+
+*---------------------------------------------------------------------*
+*  FORM get_personal
+*---------------------------------------------------------------------*
+*  get personal settings of f4
+*---------------------------------------------------------------------*
+*  -->  G_PERS_SHLP_ALL
+*  -->  G_PERS_SHLP_SYS
+*  -->  F4SETTING
+*---------------------------------------------------------------------*
+FORM get_personal CHANGING f4setting TYPE f4setting.
+
+  DATA: personal TYPE REF TO cl_f4custom.
+
+  CALL METHOD cl_f4custom=>get_exist_reference
+    EXPORTING
+      mandant     = sy-mandt
+      username    = sy-uname
+      shlpname    = ' '
+      shlptype    = ' '
+    RECEIVING
+      reference   = personal
+    EXCEPTIONS
+      no_instance = 1
+      OTHERS      = 2.
+  IF sy-subrc <> 0.
+  ENDIF.
+
+  IF personal IS INITIAL.
+    CREATE OBJECT personal
+      EXPORTING
+        reference            = personal
+        mandant              = sy-mandt
+        username             = sy-uname
+      EXCEPTIONS
+        no_personal_settings = 1
+        OTHERS               = 2
+        .
+    IF sy-subrc <> 0.
+      EXIT.
+    ENDIF.
+  ENDIF.
+  IF NOT personal IS INITIAL.
+    CALL METHOD personal->if_f4custom~get_property_value
+      EXPORTING
+        property_name  = cl_f4custom=>p_activex_setting
+      IMPORTING
+        property_value = f4setting.
+  ENDIF.
+
+
+ENDFORM.                    "get_personal
+
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: FK
+*033   Date cannot be before 01.01.0001 (see long text)
+*034   Date cannot be after 31.12.9999 (see long text)
+*036   Specify a month which is in the selection list
+*037   Specify a year which is in the selection list
+*881   Please position the cursor on a valid date
+*882   The month &/& is outside the factory calendar range
+*883   Factory calendar read error
+*884   Date is outside the factory calendar range
+*885   Specify a valid date
+*886   The factory calendar & not found
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

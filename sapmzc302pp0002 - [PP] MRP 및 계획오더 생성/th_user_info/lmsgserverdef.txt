@@ -1,0 +1,461 @@
+*----------------------------------------------------------------------*
+*   INCLUDE LMSGSERVERDEF                                              *
+*----------------------------------------------------------------------*
+
+*****************************************************************
+*
+*     SAP AG Walldorf
+*     Systeme, Anwendungen und Produkte in der Datenverarbeitung
+*
+*     (C) Copyright SAP AG 1991
+*
+*****************************************************************
+*
+*  Project:          R/3 Message Server Monitor
+*  Entwickl.-Stand:  BIN-Datenbank
+*
+*  Source-Typ:       Include
+*
+*  Autor:            Werner Rehm , Basis
+*
+*****************************************************************
+*
+*  Entwicklungslog:
+*  22.10.1999 rehm first implementation
+*  13.03.2000 rehm added MS_DUMP_STATISTIC
+*  22.03.2000 rehm added MS_SET_LOGON,MS_GET_LOGON ans LOGON types
+*  04.07.2000 rehm added MS_SERVER_DEL opcode
+*  07.07.2000 rehm added MS_DUMP_NIBUFFER adjusted MS_DUMP_MAX
+*  25.09.2000 rehm added internal Logon Data
+*   6.11.2000 rehm added MS_STATE_... types
+*  23.08.2001 rehm added RELOAD Types
+*  28.04.2003 rehm added MS_LOGON_P4
+*   8.07.2003 rehm added MS_SET_PROPERTY,MS_GET_PROPERTY,MS_DEL_PROPERTY
+*                        and MS_PROPERTY_TEXT
+*  20.10.2003 rehm added MS_PROPERTY_PARAM
+*  27.01.2005 rehm added MS_PROPERTY_SERVICE and
+*                        MS_SYSTEM_SERVICE*
+*                        MS_APPL_SERVICE*
+*
+*****************************************************************
+*
+*  Beschreibung:
+*
+*   Allgemeine Makros
+*
+*****************************************************************
+
+*---------------------------------------------------------------------
+* Opcodes defined in msxxinfo.h
+*---------------------------------------------------------------------
+
+* Konstanten fuer Aenderungen in der Server-Liste --------------------
+##NEEDED
+CONSTANTS: ms_server_chg           TYPE i VALUE  1,
+           ms_server_add           TYPE i VALUE  2,
+           ms_server_sub           TYPE i VALUE  3,
+           ms_server_mod           TYPE i VALUE  4,
+           ms_server_lst           TYPE i VALUE  5,
+
+* Konstanten fuer Ip-Adressen Aenderung ------------------------------
+           ms_change_ip            TYPE i VALUE  6,
+
+* Konstanten fuer Security Keys --------------------------------------
+           ms_set_security_key     TYPE i VALUE 7,
+           ms_get_security_key     TYPE i VALUE 8,
+           ms_get_security_key2    TYPE i VALUE 9,
+
+* Konstanten fuer Hardware ID ---------------------------------------
+           ms_get_hwid             TYPE i VALUE 10,
+
+* Konstanten fuer Trace ---------------------------------------------
+           ms_incre_trace          TYPE i VALUE 11,
+           ms_decre_trace          TYPE i VALUE 12,
+           ms_reset_trace          TYPE i VALUE 13,
+* Konstanten fuer Statistik -----------------------------------------
+           ms_act_statistic        TYPE i VALUE 14,
+           ms_deact_statistic      TYPE i VALUE 15,
+           ms_reset_statistic      TYPE i VALUE 16,
+           ms_get_statistic        TYPE i VALUE 17,
+
+* Konstanten fuer NiPuffer ------------------------------------------
+           ms_dump_nibuffer        TYPE i VALUE 18,
+           ms_reset_nibuffer       TYPE i VALUE 19,
+
+* Konstanten fuer die Liste der offenen Requests --------------------
+           ms_open_req_lst         TYPE i VALUE 20,
+
+* Info des Message Servers an den Super Message Server --------------
+           ms_server_info          TYPE i VALUE 21,
+           ms_server_list          TYPE i VALUE 22,
+           ms_server_entry         TYPE i VALUE 23,
+
+* Info der Super Message Servers an andere Super Message Server -----
+           ms_domain_info          TYPE i VALUE 24,
+           ms_domain_list          TYPE i VALUE 25,
+           ms_domain_entry         TYPE i VALUE 26,
+
+* Konstante um eine URL zu einem Connect-String zu verwandeln -------
+           ms_map_url_to_addr      TYPE i VALUE 27,
+
+* Konstante um die Codepage des Message Servers zu holen ------------
+           ms_get_codepage         TYPE i VALUE 28,
+
+* Konstante um den Server kontrolliert runterzufahren ---------------
+           ms_soft_shutdown        TYPE i VALUE 29,
+
+* Konstante um Infos ins Trace-File zu schreiben --------------------
+           ms_dump_info            TYPE i VALUE 30,
+
+* Konstante um Dateien nochmals zu laden ----------------------------
+           ms_file_reload          TYPE i VALUE 31,
+
+* Konstante um die Connect-Versuche zu den Domain Server zurueckzus
+           ms_reset_domain_conn    TYPE i VALUE 32,
+
+* Konstante fuer NOOP -----------------------------------------------
+           ms_noop                 TYPE i VALUE 33,
+
+* Konstante fuer Text schreiben/lesen--------------------------------
+           ms_set_txt              TYPE i VALUE 34,
+           ms_get_txt              TYPE i VALUE 35,
+
+* Konstante fuer Counter --------------------------------------------
+           ms_counter_create       TYPE i VALUE 36,
+           ms_counter_delete       TYPE i VALUE 37,
+           ms_counter_increment    TYPE i VALUE 38,
+           ms_counter_decrement    TYPE i VALUE 39,
+           ms_counter_register     TYPE i VALUE 40,
+           ms_counter_get          TYPE i VALUE 41,
+           ms_counter_lst          TYPE i VALUE 42,
+
+* Konstante fuer Logon Daten setzen/holen ---------------------------
+           ms_set_logon            TYPE i VALUE 43,
+           ms_get_logon            TYPE i VALUE 44,
+           ms_del_logon            TYPE i VALUE 45,
+
+* Konstante fuer Serververbindung abbauen ---------------------------
+           ms_server_disconnect    TYPE i VALUE 46,
+
+* Konstante fuer Server beenden -------------------------------------
+           ms_server_shutdown      TYPE i VALUE 47,
+           ms_server_soft_shutdown TYPE i VALUE 48,
+
+* Konstanten fuer Opcodes vom Type MSJ2EE_CLUSTERNODE ---------------
+           ms_j2ee_clusternode_chg TYPE i VALUE 49,
+           ms_j2ee_clusternode_add TYPE i VALUE 50,
+           ms_j2ee_clusternode_sub TYPE i VALUE 51,
+           ms_j2ee_clusternode_mod TYPE i VALUE 52,
+           ms_j2ee_clusternode_lst TYPE i VALUE 53,
+
+* Konstanten fuer Opcodes vom Type MSJ2EE_SERVICE -------------------
+           ms_j2ee_service_reg     TYPE i VALUE 54,
+           ms_j2ee_service_unreg   TYPE i VALUE 55,
+           ms_j2ee_service_lst     TYPE i VALUE 56,
+           ms_j2ee_service_add     TYPE i VALUE 57,
+           ms_j2ee_service_sub     TYPE i VALUE 58,
+           ms_j2ee_service_mod     TYPE i VALUE 59,
+           ms_j2ee_mod_state       TYPE i VALUE 60,
+           ms_j2ee_service_get     TYPE i VALUE 61,
+           ms_j2ee_service_reg2    TYPE i VALUE 62,
+
+* NI Trace (de)aktivieren -------------------------------------------
+           ms_nitrace_setget       TYPE i VALUE 63,
+
+* Client kann lange Listen empfangen --------------------------------
+           ms_server_long_list     TYPE i VALUE 64,
+
+* Konstanten fuer Opcodes vom Type MS_J2EE_DEBUG --------------------
+           ms_j2ee_debug_enable    TYPE i VALUE 65,
+           ms_j2ee_debug_disable   TYPE i VALUE 66,
+
+* Konstanten fuer Property seten/holen/loeschen ---------------------
+           ms_set_property         TYPE i VALUE 67,
+           ms_get_property         TYPE i VALUE 68,
+           ms_del_property         TYPE i VALUE 69,
+
+* Konstante fuer Ermittlung des Appl-Server-Namen -------------------
+           ms_ip_port_to_name      TYPE i VALUE 70,
+
+* Konstante fuer Ermittlung einer gueltigen Anmeldung ---------------
+           ms_check_acl            TYPE i VALUE 71,
+
+* Konstante fuer Ermittlung einer gueltigen Anmeldung ---------------
+           ms_license_srv          TYPE i VALUE 72,
+
+* Konstante fuer Mitteilung einer Inkompatibilitaet -----------------
+           ms_server_inc           TYPE i VALUE 73,
+
+
+* constant for server list (server soft shutdown)
+           ms_server_test_soft_shutdown TYPE i VALUE 74,
+
+* constant for AS Java reconnect (end phase one)
+           ms_j2ee_reconnect_p1    TYPE i VALUE 75,
+
+* constant for AS Java reconnect (end phase two)
+           ms_j2ee_reconnect_p2    TYPE i VALUE 76,
+
+* constant for server list (get complete list and ignore subsystem)
+           ms_server_lst_subsystem TYPE i VALUE 77.
+
+* Konstanten fuer Properties ----------------------------------------
+##NEEDED
+CONSTANTS: ms_property_text    TYPE i VALUE 1,
+           ms_property_vhost   TYPE i VALUE 2,
+           ms_property_ipadr   TYPE i VALUE 3,
+           ms_property_param   TYPE i VALUE 4,
+           ms_property_service TYPE i VALUE 5,
+           ms_property_delalt  TYPE i VALUE 6,
+           ms_property_relinfo TYPE i VALUE 7,
+           ms_property_info    TYPE i VALUE 8.
+
+*--------------------------------------------------------------------
+* Fehler Codes die der Message Server an die Clients schickt, falls
+* ein Fehler auftritt
+*--------------------------------------------------------------------
+##NEEDED
+CONSTANTS: msop_ok                  TYPE i VALUE 0,
+           msop_unknown_opcode      TYPE i VALUE 1,
+           msop_nomem               TYPE i VALUE 2,
+           msop_security_key_notset TYPE i VALUE 3,
+           msop_unknown_client      TYPE i VALUE 4,
+           msop_access_denied       TYPE i VALUE 5,
+           msop_request_required    TYPE i VALUE 6,
+           msop_name_required       TYPE i VALUE 7,
+           msop_get_hwid_failed     TYPE i VALUE 8,
+           msop_send_failed         TYPE i VALUE 9,
+           msop_unknown_domain      TYPE i VALUE 10,
+           msop_unknown_server      TYPE i VALUE 11,
+           msop_no_domain_server    TYPE i VALUE 12,
+           msop_invalid_url         TYPE i VALUE 13,
+           msop_unknown_dump_req    TYPE i VALUE 14,
+           msop_filenotfound        TYPE i VALUE 15,
+           msop_unknown_reload_req  TYPE i VALUE 16,
+           msop_filenotdefined      TYPE i VALUE 17,
+           msop_convert_failed      TYPE i VALUE 18,
+           msop_notset              TYPE i VALUE 19,
+           msop_counter_exceeded    TYPE i VALUE 20,
+           msop_counter_notfound    TYPE i VALUE 21,
+           msop_counter_deleted     TYPE i VALUE 22,
+           msop_counter_exists      TYPE i VALUE 23,
+           msop_einval              TYPE i VALUE 24,
+           msop_no_j2ee_clusternode TYPE i VALUE 25,
+           msop_unknown_property    TYPE i VALUE 26,
+           msop_unknown_version     TYPE i VALUE 27,
+           msop_icterror            TYPE i VALUE 28,
+           msop_kernel_incompatible TYPE i VALUE 29,
+           msop_niaclcreate_failed  TYPE i VALUE 30,
+           msop_niaclsyntax_error   TYPE i VALUE 31,
+
+           msop_not_authorized      TYPE i VALUE 900,
+           msop_internal_error      TYPE i VALUE 901,
+           msop_unexpected_error    TYPE i VALUE 999.
+
+*--------------------------------------------------------------------
+* constants for dump commands
+*--------------------------------------------------------------------
+##NEEDED
+CONSTANTS: ms_dump_msadm             TYPE i VALUE 1,
+           ms_dump_con               TYPE i VALUE 2,
+           ms_dump_params            TYPE i VALUE 3,
+           ms_dump_all_clients       TYPE i VALUE 4,
+           ms_dump_all_server        TYPE i VALUE 5,
+           ms_dump_all_domain        TYPE i VALUE 6,
+           ms_dump_domain_conn       TYPE i VALUE 7,
+           ms_dump_release           TYPE i VALUE 8,
+           ms_dump_sizeof            TYPE i VALUE 9,
+           ms_dump_fiadm             TYPE i VALUE 10,
+           ms_dump_ficon             TYPE i VALUE 11,
+           ms_dump_counter           TYPE i VALUE 12,
+           ms_dump_statistic         TYPE i VALUE 13,
+           ms_dump_nibuffer2         TYPE i VALUE 14,
+           ms_dump_urlmap            TYPE i VALUE 15,
+           ms_dump_urlprefix         TYPE i VALUE 16,
+           ms_dump_urlhandler        TYPE i VALUE 17,
+           ms_dump_noserver          TYPE i VALUE 18,
+           ms_dump_aclinfo           TYPE i VALUE 19,
+           ms_dump_permission_table  TYPE i VALUE 20,
+           ms_dump_j2ee_cluster_stat TYPE i VALUE 21,
+           ms_dump_acl_file_ext      TYPE i VALUE 22,
+           ms_dump_acl_file_int      TYPE i VALUE 23,
+           ms_dump_acl_file_admin    TYPE i VALUE 24,
+           ms_dump_acl_file_extbnd   TYPE i VALUE 25,
+           ms_dump_acl_file_http     TYPE i VALUE 26,
+           ms_dump_acl_file_https    TYPE i VALUE 27.
+
+##NEEDED
+CONSTANTS ms_dump_max          TYPE i VALUE 21.
+
+*--------------------------------------------------------------------
+* constants for protocols
+* see msxxlist.h
+*--------------------------------------------------------------------
+##NEEDED
+CONSTANTS: ms_logon_diag_lb  TYPE i VALUE 0,
+           ms_logon_diag_lbs TYPE i VALUE 1,
+           ms_logon_diag     TYPE i VALUE 2,
+           ms_logon_diags    TYPE i VALUE 3,
+           ms_logon_rfc      TYPE i VALUE 4,
+           ms_logon_rfcs     TYPE i VALUE 5,
+           ms_logon_http     TYPE i VALUE 6,
+           ms_logon_https    TYPE i VALUE 7,
+           ms_logon_ftp      TYPE i VALUE 8,
+           ms_logon_smtp     TYPE i VALUE 9,
+           ms_logon_nntp     TYPE i VALUE 10,
+           ms_logon_diag_e   TYPE i VALUE 11,
+           ms_logon_diags_e  TYPE i VALUE 12,
+           ms_logon_rfc_e    TYPE i VALUE 13,
+           ms_logon_rfcs_e   TYPE i VALUE 14,
+           ms_logon_http_e   TYPE i VALUE 15,
+           ms_logon_https_e  TYPE i VALUE 16,
+           ms_logon_ftp_e    TYPE i VALUE 17,
+           ms_logon_smtp_e   TYPE i VALUE 18,
+           ms_logon_nntp_e   TYPE i VALUE 19,
+           ms_logon_j2ee     TYPE i VALUE 20,
+           ms_logon_j2ees    TYPE i VALUE 21,
+           ms_logon_j2ee_e   TYPE i VALUE 22,
+           ms_logon_j2ees_e  TYPE i VALUE 23,
+           ms_logon_p4       TYPE i VALUE 24,
+           ms_logon_p4s      TYPE i VALUE 25,
+           ms_logon_iiop     TYPE i VALUE 26,
+           ms_logon_iiops    TYPE i VALUE 27,
+           ms_logon_sdm      TYPE i VALUE 28,
+           ms_logon_telnet   TYPE i VALUE 29,
+           ms_logon_debug    TYPE i VALUE 30,
+           ms_logon_dproxy   TYPE i VALUE 31,
+           ms_logon_p4http   TYPE i VALUE 32,
+           ms_logon_httpri   TYPE i VALUE 33,
+           ms_logon_httpsri  TYPE i VALUE 34,
+           ms_logon_j2eeri   TYPE i VALUE 35,
+           ms_logon_j2eesri  TYPE i VALUE 36,
+           ms_logon_trxns    TYPE i VALUE 37.
+
+##NEEDED
+CONSTANTS: ms_min_logon_type TYPE i VALUE 0,
+           ms_max_logon_type TYPE i VALUE 37.
+
+*--------------------------------------------------------------------
+* constants for state
+* see msxx.h
+*--------------------------------------------------------------------
+##NEEDED
+CONSTANTS: ms_state_min       TYPE x VALUE 0,
+           ms_state_unknown   TYPE x VALUE 0,
+           ms_state_running   TYPE x VALUE 1,
+           ms_state_hibernate TYPE x VALUE 2,
+           ms_state_shutdown  TYPE x VALUE 3,
+           ms_state_stop      TYPE x VALUE 4,
+           ms_state_starting  TYPE x VALUE 5,
+           ms_state_init      TYPE x VALUE 6,
+           ms_state_max       TYPE x VALUE 6.
+
+*--------------------------------------------------------------------
+* constants for RELOAD TYPE
+* see msxxinfo.h
+*--------------------------------------------------------------------
+##NEEDED
+CONSTANTS: ms_reload_min              TYPE i VALUE 1,
+           ms_reload_client_tab       TYPE i VALUE 1,
+           ms_reload_server_tab       TYPE i VALUE 2,
+           ms_reload_domain_tab       TYPE i VALUE 3,
+           ms_reload_urlmap           TYPE i VALUE 4,
+           ms_reload_urlprefix        TYPE i VALUE 5,
+           ms_reload_acl_info         TYPE i VALUE 6,
+           ms_reload_permission_table TYPE i VALUE 7,
+           ms_reload_stoc             TYPE i VALUE 8,
+           ms_reload_acl_file_ext     TYPE i VALUE 9,
+           ms_reload_acl_file_int     TYPE i VALUE 10,
+           ms_reload_acl_file_admin   TYPE i VALUE 11,
+           ms_reload_acl_file_extbnd  TYPE i VALUE 12,
+           ms_reload_acl_file_http    TYPE i VALUE 13,
+           ms_reload_acl_file_https   TYPE i VALUE 14,
+           ms_reload_cred_file        TYPE i VALUE 15,
+           ms_reload_max              TYPE i VALUE 15.
+
+*--------------------------------------------------------------------
+* parameter constants
+*--------------------------------------------------------------------
+##NEEDED
+##NO_TEXT
+CONSTANTS ms_icf_info_param(20) TYPE c VALUE 'ms/icf_info_server'.
+*
+*--------------------------------------------------------------------*/
+* System-Services : Nummer 0 -31 reserviert                          */
+* werden in der Server-Liste (Version 4) mit zurueckgegeben          */
+*                                                                    */
+* Bei Aenderungen auch MsServiceText() in msxxi.c pflegen !!!!       */
+* Eventuell muessen auch Text-Elemente in SMMS, SM51 und/oder  THFB  */
+* gepflegt werden!                                                   */
+*                                                                    */
+* Aenderungen in den System Services werden automatisch vom          */
+* Message Server versandt (SERVER_MOD Message um die Server-Liste    */
+* aktuell zu halten). Fuer die anderen Services muss die Abfrage     */
+* immer direkt ueber den Message Server erfolgen.                    */
+*                                                                    */
+* Services 32 - 255 sind Applikationsservices, diese werden nicht    */
+* automatisch in der Server-Liste angezeigt. Auch Aenderungen bei    */
+* diesen Services werden nicht automatisch propagiert.               */
+*                                                                    */
+*--------------------------------------------------------------------*/
+##NEEDED
+CONSTANTS: ms_system_service_none      TYPE x VALUE 0,
+           ms_system_service_vmc       TYPE x VALUE 1,
+           ms_system_service_j2ee      TYPE x VALUE 2,
+           ms_system_kernel_update     TYPE x VALUE 3,
+           ms_system_server_suspended  TYPE x VALUE 4,
+           ms_system_reconnect_pending TYPE x VALUE 5,
+           ms_system_dev_trace_active  TYPE x VALUE 6,
+           ms_system_amc_hdr_ver2      TYPE x VALUE 7,
+           ms_system_shutdown_sync_1   TYPE x VALUE 8,
+           ms_system_shutdown_sync_2   TYPE x VALUE 9,
+           "unused -------------
+           ms_system_service_res10 TYPE x VALUE 10,
+           ms_system_service_res11 TYPE x VALUE 11,
+           ms_system_service_res12 TYPE x VALUE 12,
+           ms_system_service_res13 TYPE x VALUE 13,
+           ms_system_service_res14 TYPE x VALUE 14,
+           ms_system_service_res15 TYPE x VALUE 15,
+           ms_system_service_res16 TYPE x VALUE 16,
+           ms_system_service_res17 TYPE x VALUE 17,
+           ms_system_service_res18 TYPE x VALUE 18,
+           ms_system_service_res19 TYPE x VALUE 19,
+           ms_system_service_res20 TYPE x VALUE 20,
+           ms_system_service_res21 TYPE x VALUE 21,
+           ms_system_service_res22 TYPE x VALUE 22,
+           ms_system_service_res23 TYPE x VALUE 23,
+           ms_system_service_res24 TYPE x VALUE 24,
+           ms_system_service_res25 TYPE x VALUE 25,
+           ms_system_service_res26 TYPE x VALUE 26,
+           ms_system_service_res27 TYPE x VALUE 27,
+           ms_system_service_res28 TYPE x VALUE 28,
+           ms_system_service_res29 TYPE x VALUE 29,
+           ms_system_service_res30 TYPE x VALUE 30,
+           ms_system_service_res31 TYPE x VALUE 31,
+*
+           ms_system_service_max   TYPE x VALUE 31,
+*
+           ms_appl_service_res32   TYPE x VALUE 32,
+* 33 - 253 are free
+           ms_appl_service_sver    TYPE x VALUE 254,
+           ms_appl_service_res255  TYPE x VALUE 255.
+
+* port state
+##NEEDED
+CONSTANTS: ms_http_init        TYPE i VALUE 0,
+           ms_http_initialized TYPE i VALUE 1,
+           ms_http_listen      TYPE i VALUE 2,
+           ms_http_closed      TYPE i VALUE 3,
+           ms_http_error       TYPE i VALUE 4,
+           ms_http_pending     TYPE i VALUE 5,
+           ms_http_connecting  TYPE i VALUE 6.
+*
+* shutdown types
+##NEEDED
+CONSTANTS: ms_shutdown_type_hard      TYPE i VALUE 0,
+           ms_shutdown_type_soft      TYPE i VALUE 1,
+           ms_shutdown_type_test_soft TYPE i VALUE 2.
+*
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

@@ -1,0 +1,147 @@
+function ddif_fieldinfo_get .
+*"----------------------------------------------------------------------
+*"*"Lokale Schnittstelle:
+*"  IMPORTING
+*"     VALUE(TABNAME) TYPE  DDOBJNAME
+*"     VALUE(FIELDNAME) TYPE  DFIES-FIELDNAME DEFAULT ' '
+*"     VALUE(LANGU) TYPE  SY-LANGU DEFAULT SY-LANGU
+*"     VALUE(LFIELDNAME) TYPE  DFIES-LFIELDNAME DEFAULT ' '
+*"     VALUE(ALL_TYPES) TYPE  DDBOOL_D DEFAULT ' '
+*"     VALUE(GROUP_NAMES) TYPE  DDBOOL_D DEFAULT ' '
+*"     VALUE(UCLEN) TYPE  UNICODELG OPTIONAL
+*"     VALUE(DO_NOT_WRITE) TYPE  DDBOOL_D DEFAULT ' '
+*"  EXPORTING
+*"     VALUE(X030L_WA) TYPE  X030L
+*"     VALUE(DDOBJTYPE) TYPE  DD02V-TABCLASS
+*"     VALUE(DFIES_WA) TYPE  DFIES
+*"     VALUE(LINES_DESCR) TYPE  DDTYPELIST
+*"  TABLES
+*"      DFIES_TAB STRUCTURE  DFIES OPTIONAL
+*"      FIXED_VALUES TYPE  DDFIXVALUES OPTIONAL
+*"  EXCEPTIONS
+*"      NOT_FOUND
+*"      INTERNAL_ERROR
+*"----------------------------------------------------------------------
+
+  "This is for compatibility reasons only: Though undocumented, some callers rely on the fact that
+  "the supplied output parameters get initialized even if the function returns with an exception
+  "or the parameter is not relevant at all (see internal incídent 1880634332/2018).
+  clear: dfies_tab[], fixed_values[].
+
+  translate tabname to upper case.
+  translate fieldname to upper case.
+
+  if fieldname is not initial.
+    clear group_names.
+  endif.
+
+  "For retrieval of text attributes we create a text provider object and assign it to the runtime
+  "object created below.
+  data(lo_text_provider) = new cl_dd_text_provider(
+                                 iv_langu        = langu
+                                 iv_update_ddftx = xsdbool( do_not_write is initial ) ).
+
+  "Read nametab
+  try.
+      data(lo_rto) = cl_dd_dfies_provider=>read_nametab(
+                       iv_objname       = tabname
+                       iv_group_names   = group_names
+                       iv_charsize      = uclen
+                       io_text_provider = lo_text_provider ).
+    catch cx_dd_static_check into data(lx).
+      message lx type 'X' raising not_found.
+  endtry.
+
+  "Determine the object type
+  ddobjtype = lo_rto->get_ddobjtype( ).
+
+  "Check correctness of input parameters:
+  "1) If the object concerned is a data element or table type, then ALL_TYPES must be set and both
+  "   FIELDNAME and LFIELDNAME must be initial.
+  "2) Only flat structures are allowed if ALL_TYPES is not set
+  if ( ( ddobjtype = if_dd_constants=>dtel or ddobjtype = if_dd_constants=>ttyp )
+       and ( all_types is initial or fieldname is not initial or lfieldname is not initial ) )
+     or ( all_types is initial and cast cl_dd_dfies_provider_stru( lo_rto )->is_deep( ) ).
+    raise not_found.
+  endif.
+
+  if x030l_wa is supplied ##IS_SUPP_OK.
+    x030l_wa = lo_rto->get_header( ).
+  endif.
+
+  try.
+      case ddobjtype.
+        when if_dd_constants=>dtel.
+          "Data element
+          if dfies_wa is supplied or fixed_values is supplied ##IS_SUPP_OK.
+            read table lo_rto->get_dfies( ) index 1 into dfies_wa.
+            "Fixed values requested?
+            if fixed_values is supplied and dfies_wa-valexi is not initial ##IS_SUPP_OK.
+              fixed_values[] = lo_text_provider->get_fixed_values( dfies_wa-domname ).
+            endif.
+          endif.
+
+        when if_dd_constants=>ttyp.
+          "Table type
+          if dfies_wa is supplied or lines_descr is supplied ##IS_SUPP_OK.
+            read table lo_rto->get_dfies( ) index 1 into dfies_wa.
+            if lines_descr is supplied ##IS_SUPP_OK.
+              lines_descr[] = lo_rto->get_lines_descr( it_dfies = value #( ( dfies_wa ) ) ).
+            endif.
+          endif.
+
+        when others.
+          "Structured type
+          data(lo_stru) = cast cl_dd_dfies_provider_stru( lo_rto ).
+
+          "Special case: empty append. In this case, the field descriptor table contains only one
+          "line with a dummy field descriptor. This line gets removed and we are ready.
+          if lo_stru->is_empty_append( ).
+            x030l_wa = lo_rto->get_header( ).
+            clear: x030l_wa-fldcnt, x030l_wa-tablen, dfies_tab[], lines_descr.
+            return.
+          endif.
+
+          if dfies_tab is supplied or lines_descr is supplied
+             or lfieldname is not initial or fieldname is not initial ##IS_SUPP_OK.
+            "Derive the DFIES field descriptors from the structure's runtime object. If LANGU is
+            "not initial, this call also retrieves and fills the language dependent DFIES
+            "attributes.
+            dfies_tab[] = lo_stru->get_dfies( iv_lfieldname = lfieldname
+                                              iv_fieldname  = fieldname ).
+            if lines( dfies_tab ) = 0.
+              "Should only happen if LFIELDNAME or FIELDNAME is not initial and the specified field
+              "was not found.
+              raise not_found.
+            endif.
+            if lines_descr is supplied ##IS_SUPP_OK.
+              "Extract type descriptors (DDTYPEDESC) of used structures and table types from the
+              "DFIES table. If LFIELDNAME has not been specified, then substructures shall only
+              "added to the output table LINES_DESCR if the GROUP_NAMES flag is set.
+              lines_descr = lo_stru->get_lines_descr(
+                              it_dfies            = dfies_tab[]
+                              iv_eval_group_names = xsdbool( lfieldname is initial ) ).
+            endif.
+            if lfieldname is not initial.
+              "In this case DFIES_TAB contains only one field descriptor which has to be returned
+              "in output parameter DFIES_WA.
+              dfies_wa = dfies_tab[ 1 ].
+              "Fixed values requested?
+              if fixed_values is supplied and dfies_wa-valexi is not initial ##IS_SUPP_OK.
+                fixed_values[] = lo_text_provider->get_fixed_values( dfies_wa-domname ).
+              endif.
+              clear dfies_tab[].
+            endif.
+          endif.
+      endcase.
+    catch cx_dd_static_check into lx.
+      "We can end up here if the call of GET_DFIES() failed. This can happen if text attributes
+      "could not be retrieved due to some inconsistencies in the DDIC sources (e.g. if a
+      "referenced data element does not exist anymore).
+      message lx type 'X' raising internal_error.
+  endtry.
+
+endfunction.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

@@ -1,0 +1,191 @@
+FUNCTION-POOL SHLC MESSAGE-ID FK.         "TODO change Message-ID
+*----------------------------------------------------------------------
+* Zu tun:
+* (1) Message-ID ändern (von 61 auf z.B. FK)
+*     Zu kopieren sind die Messages:
+*     61/881-885
+*     Pb: FK hat Original im BIN, 61 im K11
+* (2) Bei Ausgabe des Fabrikkal. und Auswahl des Monat per F4
+*     werden zwar die Screen-Felder gefuellt, es scheint aber keine
+*     Möglichkeit zu geben, die Anzeigeattribute (Feiertage hell!)
+*     dynamisch zu setzen -> Fehler.
+*----------------------------------------------------------------------
+
+
+*----------------------------------------------------------------------
+* data declaractions for F4_DATE
+*----------------------------------------------------------------------
+
+************************************************************************
+*     ATAB tables                                                      *
+************************************************************************
+TABLES: T246,                          "Texts for days of the week
+        T247,                          "Texts for months
+
+* neu Christina Heyden 21.11.94
+        TFACD,                         "Fabrikkalender
+        THOCI.                         "Feiertagskalender
+
+************************************************************************
+*     Work structures                                                  *
+************************************************************************
+TABLES: DATEFLDS,                  "aux. structure
+        SCAL,                   "Structure for functions in group SCAL
+        WORKFLDS,                  "Structure for F4_DATE, global
+        IOWORKFLDS.                  "I/O fields for F4_DATE
+
+************************************************************************
+*     Internal tables (buffers)                                        *
+************************************************************************
+
+DATA: BEGIN OF T246X OCCURS 8.         "Texts for days
+        INCLUDE STRUCTURE T246.
+DATA: END OF T246X.
+
+DATA: BEGIN OF T247X OCCURS 13.        "Texts for months
+        INCLUDE STRUCTURE T247.
+DATA: END OF T247X.
+
+*----------------------------------------------------------------------*
+*  Internal table for  'HELP_VALUES_GET_WITH_TABL'
+*----------------------------------------------------------------------*
+DATA: BEGIN OF FIELD_TAB OCCURS 0.
+        INCLUDE STRUCTURE HELP_VALUE.
+DATA: END OF FIELD_TAB.
+
+DATA: BEGIN OF VALUE_TAB OCCURS 0,
+         TEXT(100),
+      END OF VALUE_TAB.
+
+*----------------------------------------------------------------------*
+*  Internal table for 'DYNP_VALUES_READ'
+*----------------------------------------------------------------------*
+DATA BEGIN OF DYNPFIELDS OCCURS 0.
+  INCLUDE STRUCTURE DYNPREAD.
+DATA END OF DYNPFIELDS.
+
+*----------------------------------------------------------------------*
+*  Internal table for 'HOLIDAY_CHECK_AND_GET_INFO'        (dummy)
+*----------------------------------------------------------------------*
+DATA BEGIN OF HATTR OCCURS 0.
+  INCLUDE STRUCTURE THOL.
+DATA END OF HATTR.
+
+************************************************************************
+*     Arbeitsfelder                                                    *
+************************************************************************
+
+DATA: BEGIN OF DATXX,                "auxiliary structure
+        DATJJ(4) TYPE N,
+        DATMM(2) TYPE N,
+        DATTT(2) TYPE N,
+      END   OF DATXX.
+
+* Neu zu 46A
+DATA: BEGIN OF G_SEL_WEEK,
+         WEEK  LIKE DATEFLDS-PRPER,
+         BEGIN LIKE SY-DATUM,
+         END   LIKE SY-DATUM,
+      END   OF G_SEL_WEEK.
+
+DATA: BEGIN OF G_SEL_MONTH,
+         MONTH LIKE DATEFLDS-PRPER,
+         BEGIN LIKE SY-DATUM,
+         END   LIKE SY-DATUM,
+      END   OF G_SEL_MONTH.
+* Neu zu 46A
+
+*----------------------------------------------------------------------
+* global variables
+*----------------------------------------------------------------------
+DATA:
+  CALID       LIKE WORKFLDS-CALID,      "global: factory calendar id
+  HIDENT      LIKE WORKFLDS-HIDENT,     "global: holiday calendar id
+  GREGO_FLAG,                           "global: gregorian calendar flag
+  OK_CODE     LIKE SY-TCODE,
+  RESULT      LIKE SY-SUBRC,            "FORM return value
+  GKDAY       LIKE WORKFLDS-GKDAY.      "aux. variable
+
+*--> constants
+DATA:
+  XFLAG VALUE 'X',
+  DEF_LANGU LIKE SY-LANGU  VALUE 'E',         "alternative language
+  XCODE_NEXT LIKE SY-TCODE VALUE 'M+  ',  "function codes
+  XCODE_PREV LIKE SY-TCODE VALUE 'M-  ',  "
+  XCODE_PLUS LIKE SY-TCODE VALUE 'Y+  ',  "next year
+  XCODE_MINU LIKE SY-TCODE VALUE 'Y-  ',  "previous year
+  XCODE_PICK LIKE SY-TCODE VALUE 'PICK',  "
+  XCODE_ENTER LIKE SY-TCODE VALUE 'ENTER',  "
+  XCODE_EXIT LIKE SY-TCODE VALUE 'EXIT',  "
+  ON  VALUE '1',                             "Attribute switch
+  OFF VALUE '0',                             "
+  WRK_DAY VALUE  ' ',                        "working day
+  FRE_DAY VALUE  '-',                        "no working day
+  SELECTED  VALUE '0',                       "status values
+  ABORTED   VALUE '1',                       "
+  NEW_MONTH VALUE '2',                       "
+  OLD_MONTH VALUE '3',                       "
+  INIT      VALUE '4'.                       "
+
+*--> working structure
+DATA: BEGIN OF WEEK OCCURS 6,
+        WEEKN LIKE IOWORKFLDS-WEEKN,           "no of week in year
+        DAY01 LIKE IOWORKFLDS-DAY01,
+        DAY02 LIKE IOWORKFLDS-DAY02,
+        DAY03 LIKE IOWORKFLDS-DAY03,
+        DAY04 LIKE IOWORKFLDS-DAY04,
+        DAY05 LIKE IOWORKFLDS-DAY05,
+        DAY06 LIKE IOWORKFLDS-DAY06,
+        DAY07 LIKE IOWORKFLDS-DAY07,
+        WKD01,                                "working day flag
+        WKD02,                                "
+        WKD03,                                "
+        WKD04,                                "
+        WKD05,                                "
+        WKD06,                                "
+        WKD07,                                "
+      END OF WEEK.
+
+DATA: BEGIN OF YEARWEEK,
+        YEARN LIKE SCAL-YEAR,
+        WEEKN LIKE IOWORKFLDS-WEEKN,
+      END OF YEARWEEK.
+
+* Hilfsfelder (neu 21.11.94 Christina Heyden)
+
+DATA: H_FAC_VJAHR  LIKE TFACD-VJAHR,
+      H_FAC_BJAHR  LIKE TFACD-BJAHR,
+      H_HOC_VJAHR  LIKE THOCI-VJAHR,
+      H_HOC_BJAHR  LIKE THOCI-BJAHR,
+      H_HOC_ID     LIKE THOCI-IDENT,
+      H_FAC_ID     LIKE TFACD-IDENT,
+      H_CAL_ART    TYPE C.            " H = Holiday-, F = Factorycalend.
+
+* Neu ab 45B
+* Typgruppen
+TYPE-POOLS: VRM.
+
+* Globale Variable für F4-Hilfe in COMBO-Box
+  DATA: IT_F4_DROP TYPE VRM_VALUES,
+        ID         TYPE VRM_ID.
+
+  DATA: BEGIN OF YEAR_TAB OCCURS 30,
+          YEAR LIKE TFACD-VJAHR.
+  DATA: END   OF YEAR_TAB.
+
+  DATA: G_NUMBER_OF_YEAR  LIKE SY-TABIX,
+        G_YEAR            LIKE TFACD-VJAHR,
+        G_MONTH           LIKE T247-MNR.
+
+* types for f4_date-settings to call control or old version
+  TYPES: BEGIN OF PERS_SHLP_ALL,
+           MAXRECORDS TYPE DDSHMAXREC ,
+           PVALUES TYPE DDSHSHOWPW,
+           TLPOPUP_X TYPE ddshmaxwth,
+           TLPOPUP_Y TYPE I,
+           SHORTCUT TYPE DDSHSHORTC,
+           DIALOGTYPE TYPE C,
+         END OF PERS_SHLP_ALL.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

@@ -1,0 +1,832 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=EUC-KR" />
+<title>Dictionary object- TBTCSTEP</title>
+<style type="text/css">
+  th{text-align:left}
+  .cell{
+     font-family:"Courier New", Courier, monospace;
+     color:#000;
+     font-size:12px;
+     background-color:#F2F4F7;
+  }
+  .cell td { border: thin solid #ccc; }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Table: TBTCSTEP</h2>
+  <h3>Description: Description of step values (BI-API)</h3></td>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Row</th>
+  <th>Field name</th>
+  <th>Position</th>
+  <th>Key</th>
+  <th>Data element</th>
+  <th>Domain</th>
+  <th>Datatype</th>
+  <th>Length</th>
+  <th>Lowercase</th>
+  <th>Domain text</th>
+</tr>
+<tr class="cell">
+  <td> 1</td>
+  <td>PROGRAM</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>BTCPROGRAM</td>
+  <td>TEXT128</td>
+  <td>CHAR</td>
+  <td>128</td>
+  <td>X</td>
+  <td>Program name in internal step list</td>
+</tr>
+<tr class="cell">
+  <td> 2</td>
+  <td>TYP</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>BTCSTEPTYP</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Identification of step as ABAP, ext. command or program</td>
+</tr>
+<tr class="cell">
+  <td> 3</td>
+  <td>PARAMETER</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>BTCXPGPAR</td>
+  <td>TEXT255</td>
+  <td>CHAR</td>
+  <td>255</td>
+  <td>X</td>
+  <td>Parameters of external program (string)</td>
+</tr>
+<tr class="cell">
+  <td> 4</td>
+  <td>OPSYSTEM</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>SYOPSYS</td>
+  <td>SYOPSYS</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>X</td>
+  <td>Operating System of Application Server</td>
+</tr>
+<tr class="cell">
+  <td> 5</td>
+  <td>AUTHCKNAM</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>BTCAUTHNAM</td>
+  <td>CHAR12</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Background User Name for Authorization Check</td>
+</tr>
+<tr class="cell">
+  <td> 6</td>
+  <td>LISTIDENT</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>BTCLISTID</td>
+  <td>SYSPONO</td>
+  <td>NUMC</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>ID of batch job output list in the spool</td>
+</tr>
+<tr class="cell">
+  <td> 7</td>
+  <td>XPGPID</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>BTCXPGPID</td>
+  <td>CHAR10</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>ID of external program</td>
+</tr>
+<tr class="cell">
+  <td> 8</td>
+  <td>XPGTGTSYS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>BTCTGTSYS</td>
+  <td>TEXT32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>X</td>
+  <td>Target System to Run Background Job</td>
+</tr>
+<tr class="cell">
+  <td> 9</td>
+  <td>XPGRFCDEST</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>RFCDEST</td>
+  <td>RFCDEST</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>X</td>
+  <td>Logical destination (specified in function call)</td>
+</tr>
+<tr class="cell">
+  <td>10</td>
+  <td>LANGUAGE</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>SPRAS</td>
+  <td>SPRAS</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Language Key</td>
+</tr>
+<tr class="cell">
+  <td>11</td>
+  <td>STATUS</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>BTCPSTATUS</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Status of step in background processing</td>
+</tr>
+<tr class="cell">
+  <td>12</td>
+  <td>CONNCNTL</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>BTCXPGCNTL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Control flag for external program (e.g. trace level)</td>
+</tr>
+<tr class="cell">
+  <td>13</td>
+  <td>STDINCNTL</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>BTCXPGCNTL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Control flag for external program (e.g. trace level)</td>
+</tr>
+<tr class="cell">
+  <td>14</td>
+  <td>STDOUTCNTL</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>BTCXPGCNTL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Control flag for external program (e.g. trace level)</td>
+</tr>
+<tr class="cell">
+  <td>15</td>
+  <td>STDERRCNTL</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>BTCXPGCNTL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Control flag for external program (e.g. trace level)</td>
+</tr>
+<tr class="cell">
+  <td>16</td>
+  <td>TRACECNTL</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>BTCXPGCNTL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Control flag for external program (e.g. trace level)</td>
+</tr>
+<tr class="cell">
+  <td>17</td>
+  <td>TERMCNTL</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>BTCXPGCNTL</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Control flag for external program (e.g. trace level)</td>
+</tr>
+<tr class="cell">
+  <td>18</td>
+  <td>.INCLUDE</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>PRI_PARAMS</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>Structure for Passing Spool Parameters</td>
+</tr>
+<tr class="cell">
+  <td>19</td>
+  <td>PDEST</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PDEST</td>
+  <td>RSPOPNAME</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>X</td>
+  <td>Spool Parameter: Name of Device</td>
+</tr>
+<tr class="cell">
+  <td>20</td>
+  <td>PRCOP</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PRCOP</td>
+  <td>SYNUM03</td>
+  <td>NUMC</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: Number of Copies</td>
+</tr>
+<tr class="cell">
+  <td>21</td>
+  <td>PLIST</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PLIST</td>
+  <td>SYCHAR12</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: Name of Spool Request</td>
+</tr>
+<tr class="cell">
+  <td>22</td>
+  <td>PRTXT</td>
+  <td>22</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PRTXT</td>
+  <td>SYCHAR68K</td>
+  <td>CHAR</td>
+  <td>68</td>
+  <td>X</td>
+  <td>Spool Parameter: Description Text</td>
+</tr>
+<tr class="cell">
+  <td>23</td>
+  <td>PRIMM</td>
+  <td>23</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PRIMM</td>
+  <td>SYCHAR01</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: Print Now</td>
+</tr>
+<tr class="cell">
+  <td>24</td>
+  <td>PRREL</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PRREL</td>
+  <td>SYCHAR01</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: Delete Spool Request Immediately</td>
+</tr>
+<tr class="cell">
+  <td>25</td>
+  <td>PRNEW</td>
+  <td>25</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PRNEW</td>
+  <td>SYCHAR01</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: New Print Request</td>
+</tr>
+<tr class="cell">
+  <td>26</td>
+  <td>PEXPI</td>
+  <td>26</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PEXPI</td>
+  <td>SYNUM01</td>
+  <td>NUMC</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Spool-Parameter: Retention</td>
+</tr>
+<tr class="cell">
+  <td>27</td>
+  <td>LINCT</td>
+  <td>27</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_LINCT</td>
+  <td>SYST_SHORT</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: Page Length</td>
+</tr>
+<tr class="cell">
+  <td>28</td>
+  <td>LINSZ</td>
+  <td>28</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_LINSZ</td>
+  <td>SYST_SHORT</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: List Width</td>
+</tr>
+<tr class="cell">
+  <td>29</td>
+  <td>PAART</td>
+  <td>29</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PAART</td>
+  <td>RSPOPAPER</td>
+  <td>CHAR</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: Page Format</td>
+</tr>
+<tr class="cell">
+  <td>30</td>
+  <td>PRBIG</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PRBIG</td>
+  <td>SYCHAR01</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter:  Cover Page</td>
+</tr>
+<tr class="cell">
+  <td>31</td>
+  <td>PRSAP</td>
+  <td>31</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PRSAP</td>
+  <td>SYPRSAP</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: Standard Cover Page</td>
+</tr>
+<tr class="cell">
+  <td>32</td>
+  <td>PRREC</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PRREC</td>
+  <td>SYCHAR12</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: Recipient Name</td>
+</tr>
+<tr class="cell">
+  <td>33</td>
+  <td>PRABT</td>
+  <td>33</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PRABT</td>
+  <td>SYCHAR12K</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>X</td>
+  <td>Spool Parameter: Department Name</td>
+</tr>
+<tr class="cell">
+  <td>34</td>
+  <td>PRBER</td>
+  <td>34</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PRBER</td>
+  <td>SYCHAR12</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: Authorization Value</td>
+</tr>
+<tr class="cell">
+  <td>35</td>
+  <td>PRDSN</td>
+  <td>35</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PRDSN</td>
+  <td>SYCHAR06</td>
+  <td>CHAR</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: Name of Spool File</td>
+</tr>
+<tr class="cell">
+  <td>36</td>
+  <td>PTYPE</td>
+  <td>36</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PTYPE</td>
+  <td>SYCHAR12</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: Type of Spool Request</td>
+</tr>
+<tr class="cell">
+  <td>37</td>
+  <td>ARMOD</td>
+  <td>37</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_ARMOD</td>
+  <td>SYARMOD</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: Storage Mode</td>
+</tr>
+<tr class="cell">
+  <td>38</td>
+  <td>FOOTL</td>
+  <td>38</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_FOOTL</td>
+  <td>SYCHAR01</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: Footer</td>
+</tr>
+<tr class="cell">
+  <td>39</td>
+  <td>PRIOT</td>
+  <td>39</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PRIOR</td>
+  <td>SYNUM01</td>
+  <td>NUMC</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: Priority</td>
+</tr>
+<tr class="cell">
+  <td>40</td>
+  <td>PRUNX</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PRUNX</td>
+  <td>SYPRSAP</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: Operating System Cover Page</td>
+</tr>
+<tr class="cell">
+  <td>41</td>
+  <td>PRKEYEXT</td>
+  <td>41</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_PRKEY</td>
+  <td>SYPRKEY</td>
+  <td>CHAR</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: Keys</td>
+</tr>
+<tr class="cell">
+  <td>42</td>
+  <td>PRCHK</td>
+  <td>42</td>
+  <td>&nbsp;</td>
+  <td>SYPRI_CHECK</td>
+  <td>SYST_SHORT</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Spool Parameter: Dheck Total</td>
+</tr>
+<tr class="cell">
+  <td>43</td>
+  <td>.INCLUDE</td>
+  <td>43</td>
+  <td>&nbsp;</td>
+  <td>ARC_PARAMS</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>0</td>
+  <td>&nbsp;</td>
+  <td>Structure of Transfer from Archiving Parameters</td>
+</tr>
+<tr class="cell">
+  <td>44</td>
+  <td>SAP_OBJECT</td>
+  <td>44</td>
+  <td>&nbsp;</td>
+  <td>SYARC_SAP_OBJECT</td>
+  <td>OJ_NAME</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Archiving Parameter: Object Type of SAP Object</td>
+</tr>
+<tr class="cell">
+  <td>45</td>
+  <td>AR_OBJECT</td>
+  <td>45</td>
+  <td>&nbsp;</td>
+  <td>SYARC_AR_OBJECT</td>
+  <td>SADC10_DV</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Archiving Parameter: Document Type</td>
+</tr>
+<tr class="cell">
+  <td>46</td>
+  <td>ARCHIV_ID</td>
+  <td>46</td>
+  <td>&nbsp;</td>
+  <td>SYARC_ARCHIV_ID</td>
+  <td>SADC2</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Archiving Parameter: Target Storage System</td>
+</tr>
+<tr class="cell">
+  <td>47</td>
+  <td>DOC_TYPE</td>
+  <td>47</td>
+  <td>&nbsp;</td>
+  <td>SYARC_DOC_TYPE</td>
+  <td>SADC20_DD</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Archiving Parameter: Document Type</td>
+</tr>
+<tr class="cell">
+  <td>48</td>
+  <td>RPC_HOST</td>
+  <td>48</td>
+  <td>&nbsp;</td>
+  <td>SYARC_RPC_HOST</td>
+  <td>SADC32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>X</td>
+  <td>Archiving Parameter: RPC Host</td>
+</tr>
+<tr class="cell">
+  <td>49</td>
+  <td>RPC_SERVIC</td>
+  <td>49</td>
+  <td>&nbsp;</td>
+  <td>SYARC_RPC_SERVIC</td>
+  <td>SADC32</td>
+  <td>CHAR</td>
+  <td>32</td>
+  <td>X</td>
+  <td>Archiving Parameter: RPC Service/RFC Destination</td>
+</tr>
+<tr class="cell">
+  <td>50</td>
+  <td>INTERFACE</td>
+  <td>50</td>
+  <td>&nbsp;</td>
+  <td>SYARC_INTERFACE</td>
+  <td>SADC14</td>
+  <td>CHAR</td>
+  <td>14</td>
+  <td>X</td>
+  <td>Archiving Parameter: Communication Connection Component</td>
+</tr>
+<tr class="cell">
+  <td>51</td>
+  <td>MANDANT</td>
+  <td>51</td>
+  <td>&nbsp;</td>
+  <td>SYARC_MANDANT</td>
+  <td>MANDT</td>
+  <td>CLNT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Archiving Parameter: Client</td>
+</tr>
+<tr class="cell">
+  <td>52</td>
+  <td>REPORT</td>
+  <td>52</td>
+  <td>&nbsp;</td>
+  <td>SYARC_REPORT</td>
+  <td>PROGRAMM</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>&nbsp;</td>
+  <td>Archiving Parameter: Program Name</td>
+</tr>
+<tr class="cell">
+  <td>53</td>
+  <td>INFO</td>
+  <td>53</td>
+  <td>&nbsp;</td>
+  <td>SYARC_INFO</td>
+  <td>SADC3</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>X</td>
+  <td>Archiving Parameter: Info Field</td>
+</tr>
+<tr class="cell">
+  <td>54</td>
+  <td>ARCTEXT</td>
+  <td>54</td>
+  <td>&nbsp;</td>
+  <td>SYARC_ARCTEXT</td>
+  <td>SADC40</td>
+  <td>CHAR</td>
+  <td>40</td>
+  <td>X</td>
+  <td>Archiving Parameter: Text Information Field</td>
+</tr>
+<tr class="cell">
+  <td>55</td>
+  <td>DATUM</td>
+  <td>55</td>
+  <td>&nbsp;</td>
+  <td>SYARC_DATUM</td>
+  <td>SADC8</td>
+  <td>CHAR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Archiving Parameter: Archiving Date</td>
+</tr>
+<tr class="cell">
+  <td>56</td>
+  <td>ARCUSER</td>
+  <td>56</td>
+  <td>&nbsp;</td>
+  <td>SYARC_ARCUSER</td>
+  <td>SADC12</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Archiving Parameter: User</td>
+</tr>
+<tr class="cell">
+  <td>57</td>
+  <td>PRINTER</td>
+  <td>57</td>
+  <td>&nbsp;</td>
+  <td>SYARC_PRINTER</td>
+  <td>RSPOPNAME</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>X</td>
+  <td>Archiving Parameter: Target Output Device</td>
+</tr>
+<tr class="cell">
+  <td>58</td>
+  <td>FORMULAR</td>
+  <td>58</td>
+  <td>&nbsp;</td>
+  <td>SYARC_FORMULAR</td>
+  <td>SADC16</td>
+  <td>CHAR</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>Archiving Parameter: Output Format</td>
+</tr>
+<tr class="cell">
+  <td>59</td>
+  <td>ARCHIVPATH</td>
+  <td>59</td>
+  <td>&nbsp;</td>
+  <td>SYARC_ARCHIVPATH</td>
+  <td>SADCK70</td>
+  <td>CHAR</td>
+  <td>70</td>
+  <td>X</td>
+  <td>Archiving Parameter: Standard Path</td>
+</tr>
+<tr class="cell">
+  <td>60</td>
+  <td>PROTOKOLL</td>
+  <td>60</td>
+  <td>&nbsp;</td>
+  <td>SYARC_PROTOKOLL</td>
+  <td>SADC8_PROT</td>
+  <td>CHAR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Archiving Parameter: Log</td>
+</tr>
+<tr class="cell">
+  <td>61</td>
+  <td>VERSION</td>
+  <td>61</td>
+  <td>&nbsp;</td>
+  <td>SYARC_VERSION</td>
+  <td>SADVERSION</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Archiving Parameter: Version Number</td>
+</tr>
+<tr class="cell">
+  <td>62</td>
+  <td>ACHECK</td>
+  <td>62</td>
+  <td>&nbsp;</td>
+  <td>SYARC_CHECK</td>
+  <td>SYST_SHORT</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Archiving Parameter: Check Total</td>
+</tr>
+<tr class="cell">
+  <td>63</td>
+  <td>CONVID</td>
+  <td>63</td>
+  <td>&nbsp;</td>
+  <td>GWY_CONVID</td>
+  <td>CHAR8</td>
+  <td>CHAR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Conversation ID</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754</td>
+   </tr>
+</table>
+</body>
+</html>

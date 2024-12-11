@@ -32,5 +32,12 @@ INCLUDE sapmzc302fi0004f01                      .  " FORM-Routines
 * T03 차변의 합 :
 * T04 대변의 합 :
 
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: K5
+*001   & & & &
+
 ----------------------------------------------------------------------------------
 Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

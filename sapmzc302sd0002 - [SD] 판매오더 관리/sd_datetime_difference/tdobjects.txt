@@ -1,0 +1,9 @@
+*----------------------------------------------------------------------*
+*   INCLUDE TDOBJECTS                                                  *
+*----------------------------------------------------------------------*
+* Konstanten für Textobjekte
+constants: tdobject_vbbk like thead-tdobject value 'VBBK',
+           tdobject_vbbp like thead-tdobject value 'VBBP'.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

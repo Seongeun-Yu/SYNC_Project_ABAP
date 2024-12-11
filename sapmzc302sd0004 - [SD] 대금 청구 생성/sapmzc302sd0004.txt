@@ -20,5 +20,13 @@ INCLUDE sapmzc302sd0004f01                      .  " FORM-Routines
 * I01   대금청구
 * I02 저장
 
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: K5
+*001   & & & &
+*101   Action was cancelled
+
 ----------------------------------------------------------------------------------
 Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

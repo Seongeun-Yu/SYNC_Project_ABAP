@@ -1,0 +1,123 @@
+function s_display_alv_cal.
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  IMPORTING
+*"     VALUE(DATE_FOR_FIRST_MONTH) TYPE  WORKFLDS-GKDAY DEFAULT
+*"       SY-DATUM
+*"     VALUE(DISPLAY) TYPE  WORKFLDS-DISPL DEFAULT SPACE
+*"     VALUE(FACTORY_CALENDAR_ID) TYPE  WORKFLDS-CALID DEFAULT SPACE
+*"     VALUE(GREGORIAN_CALENDAR_FLAG) DEFAULT SPACE
+*"     VALUE(HOLIDAY_CALENDAR_ID) TYPE  WORKFLDS-HIDENT DEFAULT SPACE
+*"     VALUE(HOLIDAY_STYLE) TYPE  I DEFAULT '6'
+*"     VALUE(PROGNAME_FOR_FIRST_MONTH) TYPE  SY-REPID DEFAULT SPACE
+*"     VALUE(WEEK_BEGIN_DAY) TYPE  T246-WOTNR DEFAULT 1
+*"     VALUE(SELECT_OPTION_WEEK) TYPE  WORKFLDS-DISPL DEFAULT SPACE
+*"     VALUE(SELECT_OPTION_MONTH) TYPE  WORKFLDS-DISPL DEFAULT SPACE
+*"     VALUE(IM_DATFM) TYPE  XUDATFM DEFAULT SPACE
+*"  EXPORTING
+*"     REFERENCE(SELECT_DATE) TYPE  WORKFLDS-GKDAY
+*"     REFERENCE(SELECT_WEEK) TYPE  SCAL-WEEK
+*"     REFERENCE(SELECT_WEEK_BEGIN) TYPE  SY-DATUM
+*"     REFERENCE(SELECT_WEEK_END) TYPE  SY-DATUM
+*"     REFERENCE(SELECT_MONTH) TYPE  SCAL-WEEK
+*"  EXCEPTIONS
+*"      CALENDAR_BUFFER_NOT_LOADABLE
+*"      DATE_AFTER_RANGE
+*"      DATE_BEFORE_RANGE
+*"      DATE_INVALID
+*"      FACTORY_CALENDAR_NOT_FOUND
+*"      HOLIDAY_CALENDAR_NOT_FOUND
+*"      PARAMETER_CONFLICT
+*"----------------------------------------------------------------------
+  if not factory_calendar_id is initial and
+     not holiday_calendar_id is initial.
+    message e705(fk) raising parameter_conflict.
+* Internal Error: parameter conflict, check calling code
+  endif.
+
+* initialize unused exporting reference variables
+  clear: select_week, select_week_begin, select_week_end,
+         select_month.
+
+  data: l_datfm          type xudatfm,
+        l_week_begin_day type i.
+
+  ##DATE_FORMAT if im_datfm is supplied.
+    l_datfm = im_datfm.
+  else.
+    l_datfm = cl_abap_datfm=>get_datfm( ).
+  endif.
+
+  g_dateval = date_for_first_month.
+
+*  if week_begin_day is supplied.
+*    l_week_begin_day = week_begin_day.
+*  endif.
+
+  perform init_globals using l_datfm l_week_begin_day.
+
+  if g_test ne abap_true.
+    call screen 200 starting at 20 5.
+  endif.
+
+  select_date = g_dateval.
+
+endfunction.
+
+
+form init_globals using iv_datfm_org type xudatfm
+                        iv_week_begin_day type i.
+  data: lv_datfm_alt type xudatfm.
+
+  lv_datfm_alt = cl_i18n_system_settings=>get_alternate_datfm( iv_datfm_org ).
+
+* Derive the default week start day from the original date format.
+  if iv_week_begin_day is initial.
+    ##DATE_FORMAT
+    case iv_datfm_org.
+      when 'A' or 'B' or 'C'.
+        iv_week_begin_day = 6.
+      when others.
+        iv_week_begin_day = 1.
+    endcase.
+  endif.
+
+* Create current and alternate picker data objects.
+  create object g_data_org
+    exporting
+      iv_datfm          = iv_datfm_org
+      iv_week_begin_day = iv_week_begin_day.
+
+  create object g_data_alt_org
+    exporting
+      iv_datfm          = lv_datfm_alt
+      iv_week_begin_day = iv_week_begin_day.
+
+* Start configuration: g_data uses the current date format.
+  g_data = g_data_org.
+  g_data_alt = g_data_alt_org.
+
+* Create io_handler object.
+  create object g_io_handler
+    exporting
+      iv_week_begin_day = iv_week_begin_day.
+
+* Some preparation for the ALV grid.
+  g_io_handler->prepare_field_catalog( ).
+  g_io_handler->prepare_layout( ).
+
+* Prepare date input field on the popup.
+  g_dateval_disp   = g_data->m_cal->int_to_ext( g_dateval ).
+  g_dateval_disp_s = g_dateval_disp.
+
+endform. "init_globals
+
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: FK
+*705   Internal error: Parameter confict, check call
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

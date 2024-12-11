@@ -1,0 +1,65 @@
+FUNCTION-POOL SGFW.                         "MESSAGE-ID ..
+
+*OO syntax error workaround:
+*TYPE-POOLS gfw.
+INTERFACE IF_DC_SUBSCRIPTION LOAD.
+
+* data container
+INCLUDE GFW_DC_PRES_T.
+CLASS CL_GUI_CFW DEFINITION LOAD.
+* graphic proxy
+INCLUDE <CTLDEF>.  "// constants like dynpro_0
+CLASS CL_GFW_MUX DEFINITION LOAD.
+
+TYPES: BEGIN OF TP_DC_MANAGE,
+         REF TYPE REF TO IF_DC_MANAGEMENT,
+         MY_ID_AT_DC TYPE I,
+       END OF TP_DC_MANAGE,
+       BEGIN OF TP_GRAPHIC_PROXY,
+         REF TYPE REF TO IF_GRAPHIC_PROXY,
+         AUTO_CONTAINER TYPE REF TO CL_GUI_CUSTOM_CONTAINER,
+       END OF TP_GRAPHIC_PROXY.
+
+DATA: DC_MANAGE      TYPE TP_DC_MANAGE,
+      MY_ID_AT_DC    TYPE I,
+      LOCAL_RETVAL   TYPE SYMSGNO,
+      NEXT_OBJID     TYPE I VALUE 1,
+      GRAPHIC_PROXY  TYPE TP_GRAPHIC_PROXY,
+      GRAPHICS_SHOWN TYPE GFW_BOOLEAN VALUE GFW_FALSE,
+      DC_MANAGE_TAB  TYPE TABLE OF TP_DC_MANAGE,
+      GP_TAB         TYPE TABLE OF TP_GRAPHIC_PROXY,
+      GRPID_LIST     TYPE SORTED TABLE OF GFWGRPID WITH UNIQUE
+                          KEY TABLE LINE WITH HEADER LINE,
+      XVAL_LIST      TYPE SORTED TABLE OF GFWXVAL WITH UNIQUE
+                          KEY TABLE LINE WITH HEADER LINE,
+*     GFW_PRES_SHOW(_MULT)
+      DC_INST_PRES   TYPE REF TO LCL_DC_PREST,
+      GP_INST_PRES   TYPE REF TO CL_GUI_GP_PRES,
+*     container
+      CUSTOM_CONTAINER TYPE REF TO CL_GUI_CUSTOM_CONTAINER,
+
+
+      parent_container type ref to cl_gui_container.
+
+FIELD-SYMBOLS: <F>.
+
+* **************************************
+* variables for example function modules
+include GFW_PROG_TEXT.
+
+data: EX_CUSTOM_CONTAINER TYPE REF TO CL_GUI_CUSTOM_CONTAINER,
+      EX_DC_INST          TYPE REF TO CL_GFW_DC_PRES, "LCL_DC_PRES,
+      EX_DC_MANAGE        TYPE REF TO IF_DC_MANAGEMENT,
+      EX_MY_ID_AT_DC      TYPE I,
+      EX_LOCAL_RETVAL     TYPE SYMSGNO,
+      EX_GP_INST          TYPE REF TO CL_GUI_GP_PRES,
+
+      VALUES              TYPE TABLE OF GPRVAL WITH HEADER LINE,
+      COLUMN_TEXTS        TYPE TABLE OF GPRTXT WITH HEADER LINE.
+
+DATA: tmp_content_type   type string,
+      tmp_content_length type i,
+      tmp_content        type gfw_exp_data.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

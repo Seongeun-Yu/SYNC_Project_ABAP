@@ -1,0 +1,36 @@
+*   Data definitions for Gantt diagram                                 *
+DATA: BEGIN OF ITEM OCCURS 1.
+        INCLUDE STRUCTURE GGAIT.
+DATA: END OF ITEM.
+* Definition of elements table, legend table
+DATA: BEGIN OF ELEM OCCURS 1.
+        INCLUDE STRUCTURE GGAEL.
+DATA: END OF ELEM.
+DATA: BEGIN OF LGEL OCCURS 1.
+        INCLUDE STRUCTURE GGAEL.
+DATA: END OF LGEL.
+DATA: BEGIN OF DFEL OCCURS 1.
+        INCLUDE STRUCTURE GGAEL.
+DATA: END OF DFEL.
+* Definition of milestone table
+DATA: BEGIN OF MIST OCCURS 1.
+        INCLUDE STRUCTURE GGAMI.
+DATA: END OF MIST.
+DATA: BEGIN OF LGMS OCCURS 1.
+        INCLUDE STRUCTURE GGAMI.
+DATA: END OF LGMS.
+DATA: BEGIN OF DFMS OCCURS 1.
+        INCLUDE STRUCTURE GGAMI.
+DATA: END OF DFMS.
+* Definition of response table
+DATA: BEGIN OF BACK OCCURS 1.
+        INCLUDE STRUCTURE GGABA.
+DATA: END OF BACK.
+
+* More declarations...
+DATA: DATE_NULL TYPE D VALUE '18991230'.         "// GL 30.8.1993
+DATA: GANTT_STAT.
+DATA: G_TYP(1).  "// Dialog-Rueckmeldung
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

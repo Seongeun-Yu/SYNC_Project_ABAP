@@ -26,5 +26,12 @@ INCLUDE sapmzc302mm0003f01                      .  " FORM-Routines
 * S02 출고했습니다.
 * S03 수량을 입력해주세요.
 
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: K5
+*001   & & & &
+
 ----------------------------------------------------------------------------------
 Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

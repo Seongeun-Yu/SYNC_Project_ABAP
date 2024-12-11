@@ -1,0 +1,43 @@
+*----------------------------------------------------------------------*
+*   INCLUDE LSCACIMP                                                   *
+*----------------------------------------------------------------------*
+
+class lcl_event_handler implementation.
+  method  on_date_selected.             " 3 and 3(7)
+    g_rb_date_selected = 'X'.
+    clear g_rb_busy_info_request.
+    g_ed_date_begin = date_begin.
+    g_ed_date_end   = date_end.
+    if g_mode is initial.
+      set screen 0. leave screen.
+    endif.
+  endmethod.
+
+  method  on_f2.                        " 7
+    if g_mode is initial.
+      g_ed_date_begin = date.
+      g_ed_date_end   = date.
+    else.
+      g_ok_code = 'BACK'.
+    endif.
+    set screen 0. leave screen.
+  endmethod.
+
+  method  on_f12.
+    g_ok_code = 'BACK'.
+    set screen 0. leave screen.
+  endmethod.
+
+  method  on_info_request.
+    clear g_rb_date_selected.
+    g_rb_busy_info_request = 'X'.
+    g_ed_date_begin = date_begin.
+    g_ed_date_end   = date_end.
+    perform set_itab_day_info
+      using date_begin date_end.
+  endmethod.
+
+endclass.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

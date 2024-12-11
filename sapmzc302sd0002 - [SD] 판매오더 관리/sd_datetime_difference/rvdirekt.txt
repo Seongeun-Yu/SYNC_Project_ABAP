@@ -1,0 +1,946 @@
+*---------------------------------------------------------------------*
+*     Direktwerte fuer RV                                           *
+*---------------------------------------------------------------------*
+
+*---------------------------------------------------------------------*
+*     A-B-C-...                                                       *
+*---------------------------------------------------------------------*
+data:   begin of common part rvdirekt.
+constants:
+  char_     type c value ' ',
+  chara     type c value 'A',
+  charb     type c value 'B',
+  charc     type c value 'C',
+  chard     type c value 'D',
+  chare     type c value 'E',
+  charf     type c value 'F',
+  charg     type c value 'G',
+  charh     type c value 'H',
+  chari     type c value 'I',
+  charj     type c value 'J',
+  chark     type c value 'K',
+  charl     type c value 'L',
+  charm     type c value 'M',
+  charn     type c value 'N',
+  charo     type c value 'O',
+  charp     type c value 'P',
+  charq     type c value 'Q',
+  charr     type c value 'R',
+  chars     type c value 'S',
+  chart     type c value 'T',
+  charu     type c value 'U',
+  charv     type c value 'V',
+  charw     type c value 'W',
+  charx     type c value 'X',
+  chary     type c value 'Y',
+  charz     type c value 'Z',
+  char0     type c value '0',
+  char1     type c value '1',
+  char2     type c value '2',
+  char3     type c value '3',
+  char4     type c value '4',
+  char5     type c value '5',
+  char6     type c value '6',
+  char7     type c value '7',
+  char8     type c value '8',
+  char9     type c value '9',
+  char20(2) type c value '20',
+  char*     type c value '*',
+  char$     type c value '$',
+  char%     type c value '%',
+*     CHAR+ TYPE C VALUE '+',  <-- Umstellung der Variable auf char_plus
+  char-     type c value '-',
+  char_plus type c value '+',                          "note 304108
+  char00(2) type c value '00'.                         "note 304108
+
+*eject
+
+*---------------------------------------------------------------------*
+*     logische Direktwerte                                            *
+*---------------------------------------------------------------------*
+constants:
+  ja                             type c value 'J',
+  nein                           type c value 'N',
+  screen_on                      type c value '1',
+  screen_off                     type c value '0',
+*eject
+
+*---------------------------------------------------------------------*
+*     Direktwerte zum Update-Kennzeichen                              *
+*---------------------------------------------------------------------*
+  updkz_old(1)                   value ' ',     "Keine Veraenderung
+  updkz_new(1)                   value 'I',     "Neue Position
+  updkz_update(1)                value 'U',     "Geaenderte Position
+  updkz_mark_del(1)              value 'd',     "SPE marked for deletion
+  updkz_delete(1)                value 'D',     "Löschen
+
+*eject
+
+*---------------------------------------------------------------------*
+*     Direktwerte zum Selektionskennzeichen                           *
+*---------------------------------------------------------------------*
+  selektiert(1)                  value 'X',     "Selektiert
+  abgearbeitet(1)                value ' ',     "abgearbeitet, früher '*'
+
+*eject
+
+*----------------------------------------------------------------------*
+*     Direktwerte für Zeitpunkte                                       *
+*----------------------------------------------------------------------*
+  time_hhmmss_low(6)             value '000000',
+
+*eject
+
+*----------------------------------------------------------------------*
+*     Direktwerte für Positionsnummern                                 *
+*----------------------------------------------------------------------*
+  posnr_low                      like vbap-posnr  value '000000',
+  posnr_first                    like vbap-posnr  value '000001',
+  posnr_high                     like vbap-posnr  value '999999',
+  pvsrt_high                     like vbapd-pvsrt value '999999',
+
+  etenr_low                      like vbep-etenr value '0000',
+
+* Nummer des aktuellen Abrufs in Lieferplänen mit Abrufen
+  abrli_low                      like vblb-abrli value '0000',
+* ABLLI, wenn es nur einen Abruf gibt
+  ablli_high                     like vblb-ablli value '9999',
+
+*eject
+
+*----------------------------------------------------------------------*
+*     Direktwerte für Materialtypen                                    *
+*----------------------------------------------------------------------*
+  sam_typ                        like mara-attyp value '01',
+  var_typ                        like mara-attyp value '02',
+  set_typ                        like mara-attyp value '10',
+  lot_typ                        like mara-attyp value '11',
+  dis_typ                        like mara-attyp value '12',
+
+*eject
+
+*---------------------------------------------------------------------*
+*     Direktwert für logistische Mengeneinheiten                      *
+*---------------------------------------------------------------------*
+  appview_sd(2)                  value '02',
+
+*eject
+
+*---------------------------------------------------------------------*
+*     Hilfswerte                                                      *
+*---------------------------------------------------------------------*
+  help-mandt(3)                  value '000',
+*eject
+
+*---------------------------------------------------------------------*
+*     Funktionscodes                                                  *
+*---------------------------------------------------------------------*
+  fcode_abbrechen                like t185f-fcode value 'ABBR',
+  fcode_abbrechen1               like t185f-fcode value 'ABBA',
+  fcode_abbrechen2               like t185f-fcode value 'ABBC',
+  fcode_abbrechen3               like t185f-fcode value 'ABBB',
+  fcode_abrufkopf                like t185f-fcode value 'DSHD',
+  fcode_abruf_generieren         like t185f-fcode value 'PABG',
+  fcode_abruf_mit_vor            like t185f-fcode value 'PABV',
+  fcode_abruf_ohne_vor           like t185f-fcode value 'PABN',
+  fcode_abruf_ohne_vor_at_exit   like t185f-fcode value '/EPABN',
+  fcode_aendern                  like t185f-fcode value 'AEND',
+  fcode_aenderung                like t185f-fcode value 'PAEN',
+  fcode_aenderung_dat            like t185f-fcode value 'PAED',
+  fcode_aenderung_fz             like t185f-fcode value 'PAEF',
+  fcode_anlegen                  like t185f-fcode value 'ANLE',
+  fcode_anforderung              like t185f-fcode value 'ENT2',
+  fcode_ausgeben                 like t185f-fcode value 'LIST',
+  fcode_auftraggeber_anlegen     like t185f-fcode value 'IAAN',
+  fcode_auftraggeber_anzeigen    like t185f-fcode value 'IAUF',
+  fcode_beleg_absagen            like t185f-fcode value 'BABS',
+  fcode_beleg_verfuegbarkeit     like t185f-fcode value 'BVFP',
+  fcode_beleg_verfuegbarkeit_sw  like t185f-fcode value 'BVFS',
+  fcode_gruppen_verfuegbarkeit   like t185f-fcode value 'GVFP',
+  fcode_beleg_loeschen           like t185f-fcode value 'LOES',
+  fcode_beleg_suchen             like t185f-fcode value 'SUCH',
+  fcode_beleg_suchen_lp          like t185f-fcode value 'SULP',
+  fcode_bestellanforderung       like t185f-fcode value 'EIBA',
+  fcode_buchhaltung_kopf         like t185f-fcode value 'KBUC',
+  fcode_crlt                     like t185f-fcode value 'CRLT',
+  fcode_cross_selling            like t185f-fcode value 'CRSL',
+  fcode_cursor_selection         like t185f-fcode value '/CS',
+  fcode_default_uebersicht       like t185f-fcode value 'DEF0',
+  fcode_default_uebersicht_1     like t185f-fcode value 'DEF1',
+  fcode_detail1_einteilung       like t185f-fcode value 'EID1',
+  fcode_drucken                  like t185f-fcode value 'DRCK',
+  fcode_eingang_lab              like t185f-fcode value 'PLEG',
+  fcode_eingang_fab              like t185f-fcode value 'PFEG',
+  fcode_einteilung               like t185f-fcode value 'PEIN',
+  fcode_einteilung_detail        like t185f-fcode value 'SHLI',
+  fcode_fplan_pos                like t185f-fcode value 'PFPL',
+  fcode_fplan_kopf               like t185f-fcode value 'KFPL',
+  fcode_freigabe_lab             like t185f-fcode value 'PLFG',
+  fcode_freigabe_fab             like t185f-fcode value 'PfFG',
+  fcode_rplan                    like t185f-fcode value 'KRPL',
+  fcode_wkv                      like t185f-fcode value 'ZUKV',
+  fcode_ende                     like t185f-fcode value 'BABA',
+  fcode_ende2                    like t185f-fcode value 'BAB2',
+  fcode_ende_neu                 like t185f-fcode value 'BEEN',
+  fcode_ende_ohne_pruefung       like t185f-fcode value 'BAC1',
+  fcode_erste_position           like t185f-fcode value 'POS1',
+  fcode_erste_seite              like t185f-fcode value 'P-- ',
+  fcode_fehlerprotokoll          like t185f-fcode value 'FEAZ',
+  fcode_feinabruf                like t185f-fcode value 'PFEI',
+  fcode_feinabruf_einteilung     like t185f-fcode value 'PFEI_SCHED',
+  fcode_folgef_auf1              like t185f-fcode value 'FAU1',
+  fcode_folgef_fak1              like t185f-fcode value 'FFA1',
+  fcode_folgef_lief1             like t185f-fcode value 'FLI1',
+  fcode_gleiche_seite            like t185f-fcode value 'ENT1',
+  fcode_idoc_abruf               like t185f-fcode value 'IDOC',
+  fcode_kaufmann_kopf            like t185f-fcode value 'KKAU',
+  fcode_kaufmann_pos             like t185f-fcode value 'PKAU',
+  fcode_komm_lief_menge_sich     like t185f-fcode value 'MOD2',
+  fcode_komm_menge_sich          like t185f-fcode value 'MOD1',
+  fcode_komm_menge_uebernehmen   like t185f-fcode value 'KOMU',
+  fcode_kondition_anlegen        like t185f-fcode value 'KOAN',
+  fcode_kondition_anlegen_neu    like t185f-fcode value 'V69A_KOAN',
+  fcode_kondition_position       like t185f-fcode value 'PKON',
+  fcode_kondition_position_subsc like t185f-fcode value 'PKO1',
+  fcode_kondition_kopf           like t185f-fcode value 'KKON',
+  fcode_kondition_kopf_subsc     like t185f-fcode value 'KKO1',
+  fcode_konfiguration            like t185f-fcode value 'POCO',
+  fcode_konfiguration1           like t185f-fcode value 'POKO',
+  fcode_kontierung_detail        like t185f-fcode value 'COBL_PICK',
+  fcode_kopieren                 like t185f-fcode value 'COPY',
+  fcode_kopieren_anfrage         like t185f-fcode value 'RANF',
+  fcode_kopieren_angebot         like t185f-fcode value 'RANG',
+  fcode_kopieren_auftrag         like t185f-fcode value 'RAUF',
+  fcode_kopieren_faktura         like t185f-fcode value 'RFAK',
+  fcode_kopieren_kontrakt        like t185f-fcode value 'RKON',
+  fcode_abruf_kontraktliste      like t185f-fcode value 'LIKO',
+  fcode_abruf_partnerliste       like t185f-fcode value 'LIPA',
+  fcode_kopieren_lieferplan      like t185f-fcode value 'RLIP',
+  fcode_kpar                     like t185f-fcode value 'KPAR',
+  fcode_kpar_sub                 like t185f-fcode value 'KPAR_SUB',
+  fcode_kundenstammblatt         like t185f-fcode value 'KUST',
+  fcode_kundenstammblatt_trans   like t185f-fcode value 'VC/2',
+  fcode_kurzanzeige              like t185f-fcode value 'SUMM',
+  fcode_langtext                 like t185f-fcode value 'TEDE',
+  fcode_letzte_position          like t185f-fcode value 'POSL',
+  fcode_letzte_seite             like t185f-fcode value 'P++ ',
+  fcode_lieferabruf              like t185f-fcode value 'PLEI',
+  fcode_lieferabruf_einteilung   like t185f-fcode value 'PLEI_SCHED',
+  fcode_lieferart_vorgeben       like t185f-fcode value 'LIAR',
+  fcode_liefergruppe_bilden      like t185f-fcode value 'LGKO',
+  fcode_liefersit_pos            like t185f-fcode value 'ILIF',
+  fcode_liste_anfrage            like t185f-fcode value 'VA15',
+  fcode_liste_angebot            like t185f-fcode value 'VA25',
+  fcode_liste_auftrag            like t185f-fcode value 'VA05',
+  fcode_liste_kontrakt           like t185f-fcode value 'VA45',
+  fcode_liste_lieferplan         like t185f-fcode value 'VA35',
+  fcode_liste_posvorschlag       like t185f-fcode value 'VA55',
+  fcode_markieren                like t185f-fcode value 'MARK',
+  fcode_markieren_alle           like t185f-fcode value 'MKAL',
+  fcode_mat_eingeben             like t185f-fcode value 'EING',
+  fcode_naechstes_bild           like t185f-fcode value 'POAL',
+  fcode_naechste_position        like t185f-fcode value 'POS+',
+  fcode_naechste_seite           like t185f-fcode value 'P+  ',
+  fcode_objektstatus_position    like t185f-fcode value 'PSTC',
+  fcode_objektstatus_kopf        like t185f-fcode value 'KSTC',
+  fcode_positionieren            like t185f-fcode value 'POSI',
+  fcode_positionieren_popo       like t185f-fcode value 'POPO',
+  fcode_positionsauswahl         like t185f-fcode value 'RUE1',
+  fcode_ppar                     like t185f-fcode value 'PPAR',
+  fcode_ppar_sub                 like t185f-fcode value 'PPAR_SUB',
+  fcode_planabruf                like t185f-fcode value 'PPEI',
+  fcode_planabruf_einteilung     like t185f-fcode value 'PPEI_SCHED',
+  fcode_prkl                     like t185f-fcode value 'PRKL',
+  fcode_protokoll                like t185f-fcode value 'PROT',
+  fcode_pruefen                  like t185f-fcode value 'PRUF',
+  fcode_schnellaend_fak_sperre   like t185f-fcode value 'SFSP',
+  fcode_sichern                  like t185f-fcode value 'SICH',
+  fcode_referenz                 like t185f-fcode value 'PREF',
+  fcode_sort_aufloesen           like t185f-fcode value 'AUFL',
+  fcode_splitt_menge             like t185f-fcode value 'SPLM',
+  fcode_template_abwicklung      like t185f-fcode value 'DGMD',
+  fcode_text_control_detail      like t185f-fcode value 'TCDE',
+  fcode_text_control_loeschen    like t185f-fcode value 'TCLO',
+  fcode_text_control_entsperren  like t185f-fcode value 'TCEN',
+  fcode_tracking                 like t185f-fcode value 'TRAC',
+  fcode_transportinfo_netz       like t185f-fcode value 'LOKN',
+  fcode_transportinfo_weg        like t185f-fcode value 'LOKW',
+  fcode_transportinfo_netz_liste like t185f-fcode value 'TILN',
+  fcode_transportinfo_weg_liste  like t185f-fcode value 'TILW',
+  fcode_uebernehmen              like t185f-fcode value 'UEBR',
+  fcode_uebernehmen_menge_pv     like t185f-fcode value 'PVMV',
+  fcode_uebernehmen_referenz     like t185f-fcode value 'RUEB',
+  fcode_uebersicht_einzeilig     like t185f-fcode value 'UER1',
+  fcode_uebersicht_mit_tec       like t185f-fcode value 'UERT',
+  fcode_uebersicht_zweizeilig    like t185f-fcode value 'UER2',
+  fcode_uebersicht_besteller     like t185f-fcode value 'UBST',
+  fcode_uebersicht_konfiguration like t185f-fcode value 'UECO',
+  fcode_umfang_bestellungen      like t185f-fcode value 'KBES',
+  fcode_umfang_einteilung        like t185f-fcode value 'UMFA',
+  fcode_umfang_hauptpositionen   like t185f-fcode value 'UHAU',
+  fcode_umfang_markierte         like t185f-fcode value 'UMAR',
+  fcode_umfang_positionen        like t185f-fcode value 'UALL',
+  fcode_umfang_produktvorschlag  like t185f-fcode value 'PVSW',
+  fcode_umfang_struktur          like t185f-fcode value 'POST',
+  fcode_umfang_vbkd_position     like t185f-fcode value 'UKDP',
+  fcode_unvollst_ausl_auft       like t185f-fcode value 'WUMA',
+  fcode_verkaufshilfsmittel      like t185f-fcode value 'PADD',
+  fcode_verpacken                like t185f-fcode value 'VERP',
+  fcode_versand_kopf             like t185f-fcode value 'KDE2',
+  fcode_vorige_position          like t185f-fcode value 'POS-',
+  fcode_vorige_seite             like t185f-fcode value 'P-  ',
+  fcode_vorschlag_efz            like t185f-fcode value 'PEFZ',
+  fcode_weiter                   like t185f-fcode value 'ENT1',
+  fcode_withdraw_approval        like t185f-fcode value 'WDRW',
+  fcode_xvbap_anlegen            like t185f-fcode value 'POAN',
+  fcode_xvbap_loeschen           like t185f-fcode value 'POLO',
+  fcode_xvbap_loeschen_einzeln   like t185f-fcode value 'POLE',
+  fcode_xvbep_anlegen            like t185f-fcode value 'EIAN',
+  fcode_xvbep_loeschen           like t185f-fcode value 'EILO',
+  fcode_xvbep_loeschen_einzeln   like t185f-fcode value 'EILE',
+  fcode_xvbsn_anlegen            like t185f-fcode value 'AEAN',
+  fcode_xvbsn_loeschen           like t185f-fcode value 'AELO',
+  fcode_xvbsn_loeschen_einzeln   like t185f-fcode value 'AELE',
+  fcode_xlips_anlegen            like t185f-fcode value 'POAN',
+  fcode_xlips_loeschen           like t185f-fcode value 'POLO',
+  fcode_xlips_loeschen_einzeln   like t185f-fcode value 'POLE',
+  fcode_zuordnen_kontrakt_pos    like t185f-fcode value 'APPL',
+  fcode_zuordnen_kontrakt_kopf   like t185f-fcode value 'APHC',
+  fcode_zurueck                  like t185f-fcode value 'BACK',
+  fcode_zurueck1                 like t185f-fcode value 'BAC1',
+  fcode_zurueck2                 like t185f-fcode value 'BAC2',
+  fcode_zurueck3                 like t185f-fcode value 'BAC3',
+  fcode_zurueck9                 like t185f-fcode value 'BAC9',
+  fcode_zusaetze_lab             like t185f-fcode value 'PLZU',
+  fcode_zusaetze_fab             like t185f-fcode value 'PFZU',
+  fcode_reparatur                like t185f-fcode value 'PREP',
+  fcode_gefahrgut                like t185f-fcode value 'KGGP',
+  fcode_gefahrgut_zusatzdaten    like t185f-fcode value 'EID4',
+  fcode_stoffberichte            like t185f-fcode value 'IEHS',
+  fcode_kopf_texte               like t185f-fcode value 'KTEX',
+  fcode_kopf_texte_neu           like t185f-fcode value 'KTEX_SUB',
+  fcode_position_texte_neu       like t185f-fcode value 'PTEX_SUB',
+  fcode_cust_header              like t185f-fcode value 'K_CUST_H',
+  fcode_cust_item                like t185f-fcode value 'P_CUST_I',
+  fcode_cust_over                like t185f-fcode value 'K_CUST_O',
+  fcode_msr_item_overview        like t185f-fcode value 'UMSR',
+  fcode_msr_item_detail          like t185f-fcode value 'PMSR',
+  fcode_tm_status_overview       like t185f-fcode value 'TMUB',
+  fcode_msr_next_plants          like t185f-fcode value 'MSR_NEXTP',
+  fcode_msr_vendor_adrs          like t185f-fcode value 'MSR_VADR',
+  fcode_msr_add_fields_insp      like t185f-fcode value 'MSR_ADFI',   "BOM
+  fcode_msr_insp_text            like t185f-fcode value 'MSR_INSTX',
+  fcode_msr_cust_insp_comm       like t185f-fcode value 'MSR_CUST_COMM',
+  fcode_msr_atp_overview         like t185f-fcode value 'MSR_ATP_OVERVIEW',
+  fcode_msr_atp_check            like t185f-fcode value 'MSR_ATP_CHECK',
+  fcode_msr_fastchg_item         like t185f-fcode value 'SMSR_ITEM',
+  fcode_msr_fastchg_approv       like t185f-fcode value 'SMSR_APPR',
+  fcode_msr_tracking_item        like t185f-fcode value 'MSR_TRCI',
+  fcode_msr_tracking_all         like t185f-fcode value 'MSR_TRCH',
+  fcode_msr_next_vbeln           like t185f-fcode value 'MSR_NEXTD',
+  fcode_msr_item_default         like t185f-fcode value 'MSR_DEF',
+  fcode_msr_customer_rma         like t185f-fcode value 'MSR_CRMA',
+  fcode_new_item                 like t185f-fcode value 'ITNE',
+  fcode_risk_distribution_plan   like t185f-fcode value 'PRDP',
+  fcode_free_characteristics     like t185f-fcode value 'PCMC',
+
+*eject
+
+* Partnerverwendungen
+  parvw_ag(2)                    type c value 'AG',     "Auftraggeber
+  parvw_re(2)                    type c value 'RE',     "Rechnungsempfänger
+  parvw_rg(2)                    type c value 'RG',     "Regulierer
+  parvw_we(2)                    type c value 'WE',     "Warenempfänger
+  parvw_sp(2)                    type c value 'SP',     "Spediteur
+  parvw_lf(2)                    type c value 'LF',     "Lieferant
+  parvw_rs(2)                    type c value 'RS',     "Rechnungssteller
+  parvw_tu(2)                    type c value 'TU',     "Umschlagsdienstleiter
+  parvw_tz(2)                    type c value 'TZ',     "Zollagent
+  parvw_pe(2)                    type c value 'PE',     "Personal
+  parvw_a(2)                     type c value 'A',      "Arbeitsplatz
+  parvw_o(2)                     type c value 'O',      "Organisationseinheit
+  parvw_s(2)                     type c value 'S',      "Stelle
+  parvw_us(2)                    type c value 'US',     "User
+  parvw_ed(2)                    type c value 'ED',     "EDI-Workitemempfänger
+
+* Partner-Call-Back
+  part_call_back_prog_sales      type progname value 'SAPMV45A',
+  part_call_back_form_sales      type sdperform value 'PARTNER_CALL_BACK',
+  part_call_back_event_new       type sd_partner_call_back_event
+  value 'NEW',
+  part_call_back_event_change    type sd_partner_call_back_event
+  value 'CHANGE',
+  part_call_back_event_delete    type sd_partner_call_back_event
+  value 'DELETE',
+  part_call_back_roletype_ag     type sd_partner_roletype value '0001',
+  part_call_back_roletype_we     type sd_partner_roletype value '0002',
+  part_call_back_roletype_rg     type sd_partner_roletype value '0003',
+  part_call_back_roletype_re     type sd_partner_roletype value '0004',
+  part_call_back_roletype_sb     type sd_partner_roletype value '0013',
+
+* GUI-Status für die Partner-Unvollständigkeitspflege auf dem Subscreen
+  status_fs_kpar_sub             like t185v-status value 'FS_KP_S',
+  status_fs_ppar_sub             like t185v-status value 'FS_PP_S',
+
+* Dynprogruppe
+  dyngr_anforderung(4)           type c value 'ANFO', "Einstiegsbilder
+  dyngr_uebersicht(4)            type c value 'LIST', "Erfassungsbilder
+  dyngr_kopf(4)                  type c value 'KOPF', "Kopfdetail
+  dyngr_position(4)              type c value 'POSI', "Positionsdetail
+
+* Dynpros
+  dynp_partner_kopf(4)           type c value '4701', "Partnersubscreen Kopf
+
+*---------------------------------------------------------------------*
+*     Aktivitäten für Berechtigungsprüfungen                          *
+*---------------------------------------------------------------------*
+  actvt_01(2)                    type c value '01',     "Anlegen
+  actvt_02(2)                    type c value '02',     "Ändern
+  actvt_03(2)                    type c value '03',     "Anzeigen
+  actvt_04(2)                    type c value '04',     "Drucken
+  actvt_06(2)                    type c value '06',     "Löschen
+  actvt_31(2)                    type c value '31',     "Rückmelden
+  actvt_49(2)                    type c value '49',     "Anzeigen aus Archiv
+  actvt_c1(2)                    type c value 'C1',     "Pflegen Zahlungskarten
+  actvt_c2(2)                    type c value 'C2'.     "Anzeigen Zahlungskarten
+
+* Verbrauchskennzeichen
+constants:
+  kzvbr_e                          type c value 'E',        " Einzelfertigung
+  kzvbr_p                          type c value 'P',        " Einzelfertigung / Projekt
+
+* Konfiguration
+  config_tvap(2)                   type c value 'CD',
+  config_no_bom(1)                 type c value 'C',
+  config_bom(1)                    type c value 'D',
+  config_t459k(2)                  type c value '+*',
+  config_muss(1)                   type c value '+',
+  config_kann(1)                   type c value '*',
+*     config_vbps(10)          type c value 'VBPS      ',         " P30
+  config_match_hinweis(2)          type c value '13',   " Hinweis auf MV
+  config_match_ersetzen(2)         type c value '24',   " KMAT ersetzen
+  config_match_aendern(2)          type c value '34',   " auch im Ändern
+  config_vbps                      like tclt-obtab value 'VBPS',
+  config_hinzufuegen               like tvvfz-zeitp value '101',
+  config_aendern                   like tvvfz-zeitp value '102',
+  config_fix(2)                    type c value 'BC',
+  appl_sd(2)                       type c value 'SD',
+  appl_vertrieb(2)                 type c value 'V ',
+  aut_manuell                      like vcsd_update-ataut01 value 'M',
+  aut_soft(2)                      value 'U8',
+  config_nodis                     type c value '1',
+
+* Montageabwicklung
+  atodyn(2)                        type c value '34',    " dynamische Montage (1:n)
+  atosta(2)                        type c value '12',    " statische Montage  (1:1)
+  eigdyn                           type c value 'D',     " Eigenfertigung FAUF/PAUF dyn.
+  eigen                            type c value 'E',     " Eigenfertigung FAUF/PAUF
+  fremd                            type c value 'F',     " Fremdfertigung BANF
+  mopauf                           type c value '1',     " Montage mit Planauftrag
+  mofauf                           type c value '2',     " Montage mit FAUF oder Netzplan
+  mofaud                           type c value '3',     " Montage mit FAUF dynamisch
+  mopaud                           type c value '4',     " Montage mit Planauftrag dynam.
+  fauf(2)                          type c value '10',    " Auftragstyp Fertigung
+  netz(2)                          type c value '20',    " Auftragstyp Netzplan
+  service(2)                       type c value '30',    " Auftragstyp Service
+  prozess(2)                       type c value '40',    " Auftragstyp Prozess
+
+*Verkaufsbeleg - Kennzeichnung.
+  vbklt_fakt_anf                   like tvak-vbklt value 'A', "Fakturaanforderung
+  vbklt_ausl_auft                  like tvak-vbklt value 'B', "Auslieferungsauftr.
+  vbklt_lp_ausl_auft               like tvak-vbklt value 'C', "Liefpl.m.Ausl.Auf.
+  vbklt_rech_korr                  like tvak-vbklt value 'D', "Rechnungskorrektur
+  vbklt_ausl_auft_korr             like tvak-vbklt value 'E', "Auslief.auftr.Korr.
+  vbklt_repa_auft                  like tvak-vbklt value 'F', "Reparaturauftrag.
+  vbklt_wart_auft                  like tvak-vbklt value 'G', "Wartungsauftrag.
+  vbklt_lp_edl                     like tvak-vbklt value 'H', "Lieferpl. mit EDL
+  vbklt_edl_entn                   like tvak-vbklt value 'I', "EDL-Entnahme
+  vbklt_edl_entn_korr              like tvak-vbklt value 'K', "EDL-Korrektur
+  vbklt_project_based_services     like tvak-vbklt value 'P', "PBS
+  vbklt_down_payment_on_contract   like tvak-vbklt value 'Q', "Sales Contract with Down Payment Process
+  vbklt_reparatur(2)               value 'FG', "Reparatur
+
+* Objekttyp für Status
+  objekttyp_vbp(3)                 value 'VBP',
+  objekttyp_vbk(3)                 value 'VBK',
+
+* Vorgänge
+  vrgng_sdef                       like tj01-vrgng value 'SDEF',
+  vrgng_babs                       like tj01-vrgng value 'BABS',
+  vrgng_anfr                       like tj01-vrgng value 'SDRQ',
+  vrgng_ange                       like tj01-vrgng value 'SDQU',
+  vrgng_auft                       like tj01-vrgng value 'SDOR',
+  vrgng_conf                       like tj01-vrgng value 'CONF',   " Ändern Konfiguration
+  vrgng_pglt                       like tj01-vrgng value 'PGLT',   " Ändern Parametergült
+  vrgng_koao                       like tj01-vrgng value 'KOAO',
+  vrgng_koaq                       like tj01-vrgng value 'KOAQ',
+  vrgng_rku1                       like tj01-vrgng value 'RKU1',
+  vrgng_rku2                       like tj01-vrgng value 'RKU2',
+  vrgng_rku3                       like tj01-vrgng value 'RKU3',
+  vrgng_rkl                        like tj01-vrgng value 'RKL ',
+  vrgng_rks                        like tj01-vrgng value 'RKS ',
+  vrgng_lief                       like tj01-vrgng value 'SDDN',
+  vrgng_sdgi                       like tj01-vrgng value 'SDGI',
+  vrgng_fakt                       like tj01-vrgng value 'SDIN',
+  vrgng_rfbu                       like tj01-vrgng value 'RFBU',
+  vrgng_rfst                       like tj01-vrgng value 'RFST',     " Anzahlung
+  vrgng_rmwa                       like tj01-vrgng value 'RMWA',
+  vrgng_rmwe                       like tj01-vrgng value 'RMWE',
+  vrgng_rmwl                       like tj01-vrgng value 'RMWL',
+  vrgng_rmba                       like tj01-vrgng value 'RMBA',
+  vrgng_rmbe                       like tj01-vrgng value 'RMBE',
+  vrgng_psco                       like tj01-vrgng value 'PSCO',
+  vrgng_ppma                       like tj01-vrgng value 'PPMA',     " Montageauftrag
+  vrgng_kabk                       like tj01-vrgng value 'KABK',
+  vrgng_sddn                       like tj01-vrgng value 'SDDN',
+  vrgng_pms2                       like tj01-vrgng value 'PMS2',
+  vrgng_pms4                       like tj01-vrgng value 'PMS4',
+  vrgng_pmsb                       like tj01-vrgng value 'PMSB',
+  vrgng_bdcu                       like tj01-vrgng value 'BDCU',     " Bedarfe unvollst.K
+  vrgng_sdrr                       like tj01-vrgng value 'SDRR',     " RepRückmeldung
+  vrgng_sd00                       like tj01-vrgng value 'SD00',     " Faktura
+  vrgng_rmrp                       like tj01-vrgng value 'RMRP',     " Rechnungsprüfung
+  vrgng_kamv                       like tj01-vrgng value 'KAMV',     " Aufteilungsregel
+  vrgng_coin                       like tj01-vrgng value 'COIN',
+
+* Vorgänge im Bereich Serialnummernpflege
+  vrgng_sdc1                       like tj01-vrgng value 'SDC1',   " Auftrag -> Lieferung
+  vrgng_sdc2                       like tj01-vrgng value 'SDC2',   " Kontrakt -> Kontr.
+  vrgng_sdc4                       like tj01-vrgng value 'SDC4',   " Auftrag -> Auftrag
+  vrgng_sdc5                       like tj01-vrgng value 'SDC5',   " Auftrag -> Kontrakt
+  vrgng_sdau                       like tj01-vrgng value 'SDAU',   " Pflege im Auftrag
+  vrgng_sdw1                       like tj01-vrgng value 'SDW1',   " Pflege im Kontrakt
+  vrgng_sdd2                       like tj01-vrgng value 'SDD2',   " Löschen kontr.-artig
+  vrgng_sdd3                       like tj01-vrgng value 'SDD3',   " Löschen auftr.-artig
+  vrgng_sdr2                       like tj01-vrgng value 'SDR2',   " Nummer kontr.-artig
+  vrgng_sdr3                       like tj01-vrgng value 'SDR3',   " Nummer auftr.-artig
+  vrgng_sdwp                       like tj01-vrgng value 'SDWP',   " Verbucher kontr.artig
+  vrgng_sdap                       like tj01-vrgng value 'SDAP',   " Verbucher auftr.artig
+
+* processes for service contracts
+  vrgng_anak                       like tj01-vrgng value 'ANAK',   " accept quotation
+
+* STATUS
+  status_enfa                      like jest-stat value 'I0097',
+  status_abgs                      like jest-stat value 'I0046',       "Abgeschlossen
+  status_zkal                      like jest-stat value 'I0164',       "zu kalkulieren
+  status_kalk                      like jest-stat value 'I0165',       "kalkuliert
+  status_neft                      like jest-stat value 'I0235',
+  status_eftg                      like jest-stat value 'I0234',
+  status_ao01                      like jest-stat value 'I0337',       "Fehler ATP Mont
+  status_ao02                      like jest-stat value 'I0338',       "Prüfe ATP
+  status_ao03                      like jest-stat value 'I0339',       "Liefergruppen
+  status_konu                      like jest-stat value 'I0038',       "unvollst. Konf.
+  status_konx                      like jest-stat value 'I0444',       "Konf. fixiert
+  status_ve                        like jest-stat value 'I0218',       "VerwEntscheid
+  status_mabg                      like jest-stat value 'I0072',       "Meldung abgeschl
+  status_pakt                      like jest-stat value 'I0281',       "Prüflos aktiv
+  status_irep                      like jest-stat value 'I0384',       "in Reparatur
+  status_trep                      like jest-stat value 'I0385',       "Teil repariert
+  status_repa                      like jest-stat value 'I0386',       "Repariert
+  status_kzen                      like jest-stat value 'I0387',       "Kaufm. zu ents.
+  status_kent                      like jest-stat value 'I0388',       "Kaufm. entschie.
+  status_anan                      like jest-stat value 'I0395',       "Angebot angelegt
+  status_anak                      like jest-stat value 'I0396',       "Angebot angenomm.
+  status_tfak                      like jest-stat value 'I0398',       "Teilfakturiert
+  status_lovm                      like jest-stat value 'I0076',       "Löschvormerkung
+
+* Abrufarten
+  abart_lab                        like vbep-abart value '1',
+  abart_fab                        like vbep-abart value '2',
+  abart_entnahme                   like vbep-abart value '3',
+  abart_pab                        like vbep-abart value '5',
+  abart_mais(2)                    value '67',
+  abart_abruf(3)                   value '125',
+
+* Sonderregeln Automobilzulieferer
+  automo_audi                      like t665a-automo value '01',
+  automo_bmw                       like t665a-automo value '02',
+  automo_ford                      like t665a-automo value '03',
+  automo_mb                        like t665a-automo value '04',
+  automo_opel                      like t665a-automo value '05',
+  automo_vw                        like t665a-automo value '06',
+  automo_saab                      like t665a-automo value '07',
+  automo_volvo                     like t665a-automo value '08',
+  automo_psa                       like t665a-automo value '09',
+  automo_renault                   like t665a-automo value '10',
+  automo_defined_z1                like t665a-automo value 'Z1',
+  automo_defined_z2                like t665a-automo value 'Z2',
+  automo_defined_z3                like t665a-automo value 'Z3',
+  automo_defined_z4                like t665a-automo value 'Z4',
+  automo_defined_z5                like t665a-automo value 'Z5',
+  automo_defined_z6                like t665a-automo value 'Z6',
+  automo_defined_z7                like t665a-automo value 'Z7',
+  automo_defined_z8                like t665a-automo value 'Z8',
+  automo_defined_z9                like t665a-automo value 'Z9',
+  automo_defined_z0                like t665a-automo value 'Z0',
+
+* Folgefunktionen
+  fofun_beda_verfuegbar            like tvfo-fofun value '01',
+  fofun_banf                       like tvfo-fofun value '02',
+  fofun_beda_beschaffung           like tvfo-fofun value '03',
+  fofun_vepvg                      like tvfo-fofun value '04',
+  fofun_fauf_pauf                  like tvfo-fofun value '05',
+  fofun_montagesperre              like tvfo-fofun value '06',
+  fofun_kommi                      like tvfo-fofun value '11',
+  fofun_packen                     like tvfo-fofun value '12',
+  fofun_wa                         like tvfo-fofun value '13',
+  fofun_distrb                     like tvfo-fofun value '14',
+
+* Fakturarelevanz
+*     ACHTUNG: FKREL im RMCSSU08 mitpflegen !!!!
+* introduce billing relevance value 'W' with note 2108682v
+  con_fkrel_liefer(13)             value 'AHJKMOPQRTUVW',
+  con_fkrel_liefermenge(14)        value 'AGHJKMOPQRTUVW',
+  con_fkrel_strecke(2)             value 'BF',
+  con_fkrel_re_menge(1)            value 'F',
+  con_fkrel_auftrag(5)             value 'BCFGI',
+  con_fkrel_fplan                  like vbap-fkrel  value 'I',
+  con_fkrel_fp_dmr(1)              value 'X',
+  con_fkrel_proforma(3)            value 'DLN',
+  con_fkrel_max_proforma(5)        value ' DJLN',
+  con_fkrel_liefer_crm(6)          value 'QRTUVW',
+  con_fkrel_no(1)                  value ' ',
+
+* Fakturierformen
+  faktf_pauschal                   like vbkd-faktf value '01',
+  faktf_aufwand                    like vbkd-faktf value '02',
+
+* Fakturierungsregel aus Fakturierungsplantermin
+  con_fareg_teilfak(5)             value '12345',
+  con_fareg_anzahlungen(2)         value '45',
+  con_fareg_teilfaktura(5)         value '12345',
+  con_fareg_schluss(1)             value '3',
+  con_fareg_periodisch(1)          value '6',
+  con_fareg_proz(2)                value '14',
+  con_fareg_wert(2)                value '25',
+  con_fareg_summieren(3)           value '123',
+* Verteilung von wertmäßigen Kopffakturierungsplanterminen
+  con_differenz_ermitteln(1)       value 'A',
+  con_differenz_verteilen(1)       value 'B',
+
+* Workflow-Ereignisse
+  c_event_alecreated               like swetypecou-event
+                                        value 'ALECREATED',
+  c_event_alechanged               like swetypecou-event
+                                        value 'ALECHANGED',
+  c_wf_param_item_changes          like swcont-element
+                                        value 'LINEITEMCHANGES',
+  c_wf_param_po_requisition        like swcont-element
+                                        value 'PURCHASEREQUISITION',
+  c_wf_param_po_req_item           like swcont-element
+                                        value 'PURCHREQUISITIONITEM',
+  c_obj_type_salesorder            like swotobjid-objtype
+                                        value 'BUS2032',
+
+* Aktivitäten bei CALL_FUNCTION
+  activity_atp_simulate(4)         value 'SIMU',
+  activity_atp_area(4)             value 'V03R',
+  activity_purchase(4)             value 'ME21',
+  activity_invoice_receipt(4)      value 'MR01',
+  activity_invoice_request(4)      value 'VA90',
+  activity_service_request(4)      value 'IW51',
+  activity_good_movement(4)        value 'MB11',
+*     Montage, Fertigungsaufträge, Planaufträge, Netzpläne:
+  activity_assembly(4)             value 'CO01',
+  activity_assembly_co40(4)        value 'CO40',            "n_667847
+  activity_assembly_co08(4)        value 'CO08',            "n_667847
+  activity_assembly_co02(4)        value 'CO02',            "n_810497
+  activity_assembly_co07(4)        value 'CO07',            "n_810497
+  activity_assembly_co10(4)        value 'CO10',            "n_810497
+  activity_assembly_cm10(4)        value 'CM10',            "N_1872757
+  activity_assembly_co05(4)        value 'CO05',            "N_1084189
+  activity_assembly_co41(4)        value 'CO41',            "N_1084189
+  activity_assembly_cohv(4)        value 'COHV',            "N_1084189
+  activity_assembly_pk12(4)        value 'PK12',            "n_1255510
+  activity_assembly_pk13(4)        value 'PK13',            "n_1255510
+  activity_assembly_pk21(4)        value 'PK21',            "n_1255510
+  activity_assembly_pk22(4)        value 'PK22',            "n_1255510
+  activity_assembly_pkrf(4)        value 'PKRF',            "n_1255510
+  activity_service_order(4)        value 'IW31',
+  activity_service_order_s4crm(4)  value 'SERV',
+  activity_mto_va01(4)             value 'VA01',            "n_2033861
+  activity_reverse_pgi(4)          value 'VL09',
+*     Lieferavis / Shipping notification
+  activity_inbound_delivery(4)     value 'VL31',            "n_2142769
+*     Kreditaktivitäten beginnen alle mit CR
+  activity_credit(2)               value 'CR',
+*     Kreditaktivitäten im einzelnen
+  activity_credit_recheck(4)       value 'CRCH',
+  activity_credit_authori(4)       value 'CRAU', "komplette Prüfung
+  activity_credit_authpre(4)       value 'CRAP', "interne Prüfung
+  activity_credit_release(4)       value 'CRRL',
+  activity_credit_reject(4)        value 'CRRJ',
+  activity_credit_forward(4)       value 'CRFW',
+*     Kreditneuaufbau RFDKLI20 ohne Änderungsbelege
+  activity_credit_recreate(4)      value 'CRRE',
+*     Unterkontrakte im PUSH-Modus aus Gruppenkontrakt aktualisieren
+  activity_gruko_pushdata(4)       value 'GKPU',
+  activity_rar_simulate(4)         value 'RARS',
+*     Reparaturabwicklung
+  act_rueck_inspection(4)          value 'RINS',
+  act_rueck_notification(4)        value 'RNOT',
+  act_rueck_service_order(4)       value 'RSOR',
+  act_rueck_start_of_repair(4)     value 'RSST',
+  act_dialog_pull_inspection(4)    value 'DPIL',
+  act_dialog_pull_service_order(4) value 'DPSO',
+  act_dialog(4)                    value 'DIAL',
+  act_nodialog(4)                  value 'NDIA',
+*     Abrechnung der Bonusabsprachen
+  activity_rebate_set(4)           value 'VBO1',
+*     Kopier BAPI
+  activity_bapi_copy(4)            value 'BACO',
+*     Global Trade
+  activity_global_trade(4)         value 'GTM1',
+*     Local ATP processing from CRM
+  gc_activity_latp(4)              value 'LATP',
+*     Lean Order processing (LORD)
+  gc_activity_lord(4)              value 'LORD',
+
+* Zu sichernde Kalkulationsart
+  costing_method_product           value '1',
+  costing_method_unit              value '2',
+  costing_method_both              value 'A',
+
+* Kalkulation
+  kalku_erlaubt(4)                 value ' AX',
+  kalku_erforderlich               value 'X',
+  kalku_erlaubt_mit_sts            value ' ',
+  kalku_erlaubt_ohne_sts           value 'A',
+  kalku_nicht_erlaubt              value 'B',
+
+* automatische Kalkulation
+  aucost_kalkulieren(2)            value 'AB',
+  aucost_kalkulieren_ohne_vorm     value 'A',
+  aucost_kalkulieren_mit_vorm      value 'B',
+
+* Vertragsaktivitäten
+  veda_vaktsch_vertrag(4)          value '0001',
+  veda_vaktsch_mail(4)             value '0002',
+  veda_vaktsch_angebot(4)          value '0003',
+  veda_vaktsch_kontakt(4)          value '0004',
+
+
+* Produktselektion (UEPVW)
+  produktselektion                 value 'A',
+
+* Naturalrabatt (UEPVW)
+  natrab_drein                     value 'B',
+  natrab_drauf                     value 'C',
+  natrab_drein_no_upos             value '3',
+
+* Naturalrabatt (VBAPD-NATRAB)
+  natrab_min_qty                   value 'D',
+  naturalrabatt(2)                 value 'BC',
+  natrab_possible(3)               value 'BCD',
+
+* Cross Selling (UEPVW)
+  cross_selling                    value 'F',
+
+* Anteilsmengeneinheiten / variable Mengeneinheiten
+  kzfme_ws(2)                      value 'AB',        "Wirkstoff/Stahl
+
+* Positionsarten
+  posar_wert                       value 'A',
+  posar_text                       value 'B',
+
+* Erledigungsregel
+  con_erlre_wertkontrakt(1)        value 'E',
+
+* Abrufsteuerung zum Wertkontrakt
+  rktio_sperren(3)                 value 'ABC',
+  rktio_nicht_sperren(2)           value ' D',
+
+* Positionstypenverwendung
+  con_vwpos_wertkontrakt(4)        value 'VCTR',
+  con_vwpos_fakt_rel(4)            value 'SEIN',
+  con_vwpos_not_fakt_rel(4)        value 'SENI',
+
+* Reparaturabwicklung
+*     Zeitpunkte
+  reparaturannahme                 like tvrmavt-bezei value '101',
+  reparaturstart                   like tvrmavt-bezei value '102',
+  rueckmeldung                     like tvrmavt-bezei value '103',
+*     Positionstypenklassifizierung
+  vkgru_rma                        like vbap-vkgru value '1',
+  vkgru_rep_reparaturanfo          like vbap-vkgru value 'I01',
+  vkgru_dyn_posten                 like vbap-vkgru value 'I02',
+  vkgru_dyn_posten_ag              like vbap-vkgru value 'I03',
+  vkgru_rep_retoure                like vbap-vkgru value '101',
+  vkgru_rep_reparatur              like vbap-vkgru value '102',
+  vkgru_rep_auslieferung           like vbap-vkgru value '103',
+  vkgru_rep_leihgeraetbes          like vbap-vkgru value '104',
+  vkgru_rep_leihgeraetabh          like vbap-vkgru value '105',
+  vkgru_rep_austauschteil          like vbap-vkgru value '106',
+  vkgru_rep_verschrottung          like vbap-vkgru value '107',
+  vkgru_rep_gutschrift             like vbap-vkgru value '108',
+  vkgru_rep_lastschrift            like vbap-vkgru value '109',
+* Reparaturabwicklung Ende
+
+* Sperrobjekt für Batch/Dialogverarbeitung
+  con_enqueue_batch                type vbeln value '$%&sdbatch', "#EC NOTEXT
+
+* Businessobjekttypen und Ereignisse
+  bus_2015(7)                      value 'BUS2015',
+  bus_2030(7)                      value 'BUS2030',
+  bus_2031(7)                      value 'BUS2031',
+  bus_2032(7)                      value 'BUS2032',
+  bus_2033(7)                      value 'BUS2033',
+  bus_2034(7)                      value 'BUS2034',
+  bus_2035(7)                      value 'BUS2035',
+  bus_2051(7)                      value 'BUS2051',
+  bus_2090(7)                      value 'BUS2090',
+  bus_2094(7)                      value 'BUS2094',
+  bus_2095(7)                      value 'BUS2095',
+  bus_2096(7)                      value 'BUS2096',
+  bus_2102(7)                      value 'BUS2102',
+  bus_2103(7)                      value 'BUS2103',
+  bus_likp(7)                      value 'LIKP',
+  bus_lips(7)                      value 'LIPS',
+  bus_vbap(7)                      value 'VBAP',
+  bus_vbrk(7)                      value 'VBRK',
+  bus_vbrp(7)                      value 'VBRP',
+  bus_vbrl(10)                     value 'BUS2037001',
+  event_created(7)                 value 'CREATED',
+  event_changed(7)                 value 'CHANGED',
+  event_deleted(7)                 value 'DELETED',
+* Anwendungsgetriggerte Statistik
+* Prozesse
+  process_salesorder(10)           value 'A020022353',
+* Funktionen
+  function_configuration(10)       value 'A020020262',
+  function_assembly(10)            value 'A020022749',
+* Container-ID im Memory für SD_SALES_DOCU_MAINTAIN
+  container_sales_doc(12)          value '2032_dialog',
+  begin of co_mem_id,
+    bapi_text         type char_60 value 'SDBAPITEXTIT',
+    config_idoc       type char_60 value 'CUXC_IDOC',
+    config_input_mode type char_60 value 'CUXC_INPUT_MODE',
+    sales_doc         type char_60 value '2032_dialog',
+    save_in_process   type char_60 value 'SD_SAVE_IN_PROCESS',
+  end of co_mem_id,
+
+*---------------------------------------------------------------------*
+* Typ der Unterposition (UEPVW)
+  uepvw_prodsel            value 'A',
+  uepvw_natrab_drein       value 'B',
+  uepvw_natrab_drauf       value 'C',
+  uepvw_repair             value 'D',
+
+* Technischer Vorgang (APO-ATP)
+  tproc_dialog(2)          type c value 'AA',
+  tproc_batch_input(2)     type c value 'BB',
+  tproc_bapi(2)            type c value 'CC',
+  tproc_edi(2)             type c value 'DD',
+  tproc_neuterminierung(2) type c value 'EE',
+
+* Aktivität (APO-ATP)
+  actyp_new                value 'A',
+  actyp_change             value 'B',
+  actyp_copy               value 'C',
+
+* SourcingPosition (Ergebnis der regelbasierten ATP im APO)
+  srcps_mainitem           value 'A',
+  srcps_subitem            value 'B',
+
+* Internal reason for rejection '00'
+  abgru_00                 like vbap-abgru  value '00',
+
+* Date format islamic
+  datfm_islm               type c length 3 value 'ABC',
+
+*---------------------------------------------------------------------*
+* Obergrenzen für Feldüberlauf, Floatingpointkonstanten               *
+*---------------------------------------------------------------------*
+  max_quan15               type f value '9.999999999990000E+14',
+  max_quan10               type p value '9999999999999',
+  quan_1                   like vbep-wmeng value '1.000',    "Menge     1,000
+  quan_0                   like vbap-kmpmg value '0.000',    "Menge     0,000
+  e-3                      type f value '1E-03',
+  e-4                      type f value '1E-04',
+  -e-4                     type f value '-1E-04',
+  e-6                      type f value '1E-06',
+  dec1_100                 type p decimals 1 value '100.0'.  "Prozent 100,0
+
+*-----------------------------------------------------------------------
+*            T185-Kopfgruppen
+*-----------------------------------------------------------------------
+constants: kopgr_mais(4)           type c value 'AM ',
+           kopgr_ausl_auft_korr(4) type c value 'AMK ',
+           kopgr_retoure(4)        type c value 'RE  ',
+           kopgr_lieferplan(4)     type c value 'LL  ',
+           kopgr_mit_zmeng(16)     type c value 'GA  KM  LP  VT  '.
+
+*-----------------------------------------------------------------------
+*            EDI-Nachrichtentypen
+*-----------------------------------------------------------------------
+constants: mestyp_delivery_schedule like edidc-mestyp value 'DELINS',
+           mestyp_edl_delivery      like edidc-mestyp value 'EDLNOT',
+           mestyp_self_billing      like edidc-mestyp value 'GSVERF',
+           mestyp_order             like edidc-mestyp value 'ORDERS',
+           mestyp_ordchg            like edidc-mestyp value 'ORDCHG',
+           mestyp_delord            like edidc-mestyp value 'DELORD'.
+
+data:      idoc_mestyp         like edidc-mestyp.
+
+*-----------------------------------------------------------------------
+* Special Payment Methods
+*-----------------------------------------------------------------------
+constants :
+  cv_sppaym01 type sppaym value '01'. " Payment Service Provider
+
+*{Begin IS-EC-BOS} Bill of Service
+* IBU A&D/E&C, project bill of service IS-3.0a (4.5a), sd_srv
+constants:
+* function codes (full screen)
+  fcode_pbos_position      like t185f-fcode value 'PBOS', " full screen
+* Type of bill of service
+  leistungsverzeichnis(02) value '01',     " Outline layout
+  aufmass(2)               value '02'.     " Service lists
+*
+* IBU A&D/E&C, project bill of service IS-4.6, payment
+constants: con_fkrel_dp     value  'S',    " Clearing without bill.pl.
+           con_far_dpr      value '1',     " Anzahlung
+           con_far_dmr      value '2',     " Fakturierung
+           con_far_clearing value '3'.    " Anzahlungsverrechnung
+*{End IS-EC-BOS} Bill of Service
+
+enhancement-point rvdirekt_02 spots es_rvdirekt static include bound.
+
+enhancement-point rvdirekt_01 spots es_rvdirekt static include bound.
+data: end of common part.
+
+* SD-protocoltypes
+include lv01apro.
+
+* Text Objects
+include tdobjects.
+
+* Message Handler
+include rvmessage.
+
+*-----------------------------------------------------------------------
+* Konstanten für Verbuchung der Bedarfe im R/3 und Verbuchung im APO
+*-----------------------------------------------------------------------
+
+include bddirekt.
+
+
+*-----------------------------------------------------------------------
+*       Objekttypen
+*-----------------------------------------------------------------------
+
+constants :   objtype_vbrk like nast-objtype value 'VBRK'.
+constants :   objtype_vbrl like nast-objtype value 'BUS2037001'.
+
+*-----------------------------------------------------------------------
+*       ON COMMIT LEVELs                                      v_n_946479
+*-----------------------------------------------------------------------
+constants: level_msg_post type i value 10,
+           level_msg_init type i value 20. "post before init  ^_n_946479
+
+* buffer size for mass pre-buffering on sales document-related tables
+constants: constant_buffer_xvbbe_size type i value 10000.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

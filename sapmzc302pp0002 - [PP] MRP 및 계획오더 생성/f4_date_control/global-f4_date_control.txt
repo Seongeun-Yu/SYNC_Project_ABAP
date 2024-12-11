@@ -1,0 +1,40 @@
+FUNCTION-POOL SCAC MESSAGE-ID FK.
+
+*tables: scal.
+
+** tables
+data: g_tab_day_attr like casdayattr occurs 0 with header line,
+      g_year_tab     like tfacd-vjahr occurs 0 with header line.
+
+** structures
+data: begin of g_datxx,                  "auxiliary structure
+        datjj(4) type n,
+        datmm(2) type n,
+        dattt(2) type n,
+      end   of g_datxx.
+
+** data
+data: g_mode            type c,
+      g_fac_vjahr       like tfacd-vjahr,
+      g_fac_bjahr       like tfacd-bjahr,
+      g_hoc_vjahr       like thoci-vjahr,
+      g_hoc_bjahr       like thoci-bjahr,
+      g_vjahr           like tfacd-vjahr,
+      g_bjahr           like tfacd-bjahr,
+      g_hoc_id          like thoci-ident,
+      g_fac_id          like tfacd-ident,
+      g_cal_id          like tfacd-ident,
+      g_cal_art         type c,
+      g_date            like sy-datum,
+      g_select_option   type i,
+      g_holiday_style   type i,
+      g_week_day        like T246-WOTNR,
+      g_number_of_year  like sy-tabix,
+      g_year            like tfacd-vjahr,
+      g_month           like t247-mnr.
+
+include lscacdef.                      "Klassendefinition
+include lscacimp.                      "Klassenimplementierung
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

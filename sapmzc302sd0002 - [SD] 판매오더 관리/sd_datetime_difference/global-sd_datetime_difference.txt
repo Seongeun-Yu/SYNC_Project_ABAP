@@ -1,0 +1,34 @@
+FUNCTION-POOL V56G
+              MESSAGE-ID VW.
+
+* Includes for network and barchart graphics
+INCLUDE RVGTISGC.                      "graphlib data declarations
+
+* Includes for network graphics
+INCLUDE LCNETCON.                      "graphlib constants
+
+* Includes for barchart graphics
+INCLUDE SGRCCNST.                      "graphics constants
+INCLUDE LBARCCON.                      "barchart constants
+
+* Includes for constant data
+INCLUDE RVDIREKT.                      "Shipping data definitions
+INCLUDE RV56DOVA.                      "Domain values in shipment
+INCLUDE RVGTISCO.                      "GTIS constant data
+
+* Includes for global variables
+INCLUDE RVGTISVA.                      "Global variables
+
+* Includes for database tables
+INCLUDE RVGTISDB.                      "GTIS database tables
+
+* Includes for internal tables
+INCLUDE RVGTISNT.                      "GTIS internal net data tables
+INCLUDE RVGTISIT.                      "GTIS common internal tables
+INCLUDE RVGTISGA.                      "GTIS Gantt data declaration
+
+* Include for CAM (Central Address Management)
+INCLUDE SDZAVDAT.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

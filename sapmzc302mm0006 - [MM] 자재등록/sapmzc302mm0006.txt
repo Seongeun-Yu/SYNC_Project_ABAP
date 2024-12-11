@@ -20,5 +20,13 @@ INCLUDE SAPMZC302MM0006TOP                      .    " Global Data
 * E02 저장할 데이터가 없습니다.
 * I01 데이터 저장을 성공하였습니다.
 
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: K5
+*001   & & & &
+*102   Data has been saved
+
 ----------------------------------------------------------------------------------
 Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

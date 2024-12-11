@@ -46,5 +46,13 @@ INCLUDE sapmzc302pp0002f01 .  " FORM-Routines
 * G01 저장이 완료되었습니다.
 * G02 자재구매를 성공적으로 요청하였습니다.
 
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: K5
+*001   & & & &
+*006   Enter an allowed object class.
+
 ----------------------------------------------------------------------------------
 Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

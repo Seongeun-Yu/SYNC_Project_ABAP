@@ -1,0 +1,496 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=EUC-KR" />
+<title>Dictionary object- DD01T</title>
+<style type="text/css">
+  th{text-align:left}
+  .cell{
+     font-family:"Courier New", Courier, monospace;
+     color:#000;
+     font-size:12px;
+     background-color:#F2F4F7;
+  }
+  .cell td { border: thin solid #ccc; }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Table: DD01T</h2>
+  <h3>Description: R/3 DD: domain texts</h3></td>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Row</th>
+  <th>Field name</th>
+  <th>Position</th>
+  <th>Key</th>
+  <th>Data element</th>
+  <th>Domain</th>
+  <th>Datatype</th>
+  <th>Length</th>
+  <th>Lowercase</th>
+  <th>Domain text</th>
+</tr>
+<tr class="cell">
+  <td> 1</td>
+  <td>DOMNAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>DOMNAME</td>
+  <td>DOMNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Domain name</td>
+</tr>
+<tr class="cell">
+  <td> 2</td>
+  <td>AS4LOCAL</td>
+  <td>2</td>
+  <td>X</td>
+  <td>AS4LOCAL</td>
+  <td>AS4LOCAL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation State of Repository Object</td>
+</tr>
+<tr class="cell">
+  <td> 3</td>
+  <td>AS4VERS</td>
+  <td>3</td>
+  <td>X</td>
+  <td>AS4VERS</td>
+  <td>AS4VERS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Version of the entry (not used)</td>
+</tr>
+<tr class="cell">
+  <td> 4</td>
+  <td>DATATYPE</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>DATATYPE_D</td>
+  <td>DATATYPE</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Data Type in ABAP Dictionary</td>
+</tr>
+<tr class="cell">
+  <td> 5</td>
+  <td>LENG</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>DDLENG</td>
+  <td>DDLENG</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Length (No. of Characters)</td>
+</tr>
+<tr class="cell">
+  <td> 6</td>
+  <td>OUTPUTLEN</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>OUTPUTLEN</td>
+  <td>DDLENG</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Output Length</td>
+</tr>
+<tr class="cell">
+  <td> 7</td>
+  <td>DECIMALS</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>DECIMALS</td>
+  <td>DDLENG</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Number of Decimal Places</td>
+</tr>
+<tr class="cell">
+  <td> 8</td>
+  <td>LOWERCASE</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>LOWERCASE</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Lowercase letters allowed/not allowed</td>
+</tr>
+<tr class="cell">
+  <td> 9</td>
+  <td>SIGNFLAG</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>SIGNFLAG</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag for sign in numerical fields</td>
+</tr>
+<tr class="cell">
+  <td>10</td>
+  <td>LANGFLAG</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>LANGFLAG</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag for language-dependent values(not used)</td>
+</tr>
+<tr class="cell">
+  <td>11</td>
+  <td>VALEXI</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>VALEXI</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Existence of fixed values</td>
+</tr>
+<tr class="cell">
+  <td>12</td>
+  <td>ENTITYTAB</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>ENTITYTAB</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Value table</td>
+</tr>
+<tr class="cell">
+  <td>13</td>
+  <td>CONVEXIT</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>CONVEXIT</td>
+  <td>CONVEXIT</td>
+  <td>CHAR</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Conversion Routine</td>
+</tr>
+<tr class="cell">
+  <td>14</td>
+  <td>MASK</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>AS4MASK</td>
+  <td>AS4MASK</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Template (not used)</td>
+</tr>
+<tr class="cell">
+  <td>15</td>
+  <td>MASKLEN</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>MASKLEN</td>
+  <td>MASKLEN</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Template length (not used)</td>
+</tr>
+<tr class="cell">
+  <td>16</td>
+  <td>ACTFLAG</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>ACTFLAG</td>
+  <td>ACTFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation flag</td>
+</tr>
+<tr class="cell">
+  <td>17</td>
+  <td>APPLCLASS</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>APPLCLASS</td>
+  <td>APPLCLASS</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Application class for DD objects (not used)</td>
+</tr>
+<tr class="cell">
+  <td>18</td>
+  <td>AUTHCLASS</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>AUTHCLASS_</td>
+  <td>AUTHCLASS</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Activation type</td>
+</tr>
+<tr class="cell">
+  <td>19</td>
+  <td>AS4USER</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>AS4USER</td>
+  <td>AS4USER</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Last Changed By</td>
+</tr>
+<tr class="cell">
+  <td>20</td>
+  <td>AS4DATE</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>AS4DATE</td>
+  <td>AS4DATE</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Last Changed On</td>
+</tr>
+<tr class="cell">
+  <td>21</td>
+  <td>AS4TIME</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>AS4TIME</td>
+  <td>AS4TIME</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Last changed at</td>
+</tr>
+<tr class="cell">
+  <td>22</td>
+  <td>DOMMASTER</td>
+  <td>22</td>
+  <td>&nbsp;</td>
+  <td>MASTERLANG</td>
+  <td>SPRAS</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Original Language in Repository objects</td>
+</tr>
+<tr class="cell">
+  <td>23</td>
+  <td>RESERVEDOM</td>
+  <td>23</td>
+  <td>&nbsp;</td>
+  <td>RESERVEDOM</td>
+  <td>CHAR4</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Reserve for domains (not used)</td>
+</tr>
+<tr class="cell">
+  <td>24</td>
+  <td>DOMGLOBAL</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>GLOBALFLAG</td>
+  <td>GLOBALFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag for private DD objects (not used)</td>
+</tr>
+<tr class="cell">
+  <td>25</td>
+  <td>APPENDNAME</td>
+  <td>25</td>
+  <td>&nbsp;</td>
+  <td>DOMNAME</td>
+  <td>DOMNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Domain name</td>
+</tr>
+<tr class="cell">
+  <td>26</td>
+  <td>APPEXIST</td>
+  <td>26</td>
+  <td>&nbsp;</td>
+  <td>DDAPPEXI</td>
+  <td>DDAPPEXI</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Indicator that at least one domain append exists</td>
+</tr>
+<tr class="cell">
+  <td>27</td>
+  <td>PROXYTYPE</td>
+  <td>27</td>
+  <td>&nbsp;</td>
+  <td>DDPROXYTY</td>
+  <td>DDPROXYTY</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Is a generated proxy object</td>
+</tr>
+<tr class="cell">
+  <td>28</td>
+  <td>OUTPUTSTYLE</td>
+  <td>28</td>
+  <td>&nbsp;</td>
+  <td>OUTPUTSTYLE</td>
+  <td>OUTPUTSTYLE</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>DD: Output Style (Output Style) for Decfloat Types</td>
+</tr>
+<tr class="cell">
+  <td>29</td>
+  <td>AMPMFORMAT</td>
+  <td>29</td>
+  <td>&nbsp;</td>
+  <td>DDAMPMFORMAT</td>
+  <td>DDAMPMFORMAT</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Indicator whether an AM/PM time format is desired</td>
+</tr>
+<tr class="cell">
+  <td>30</td>
+  <td>ABAP_LANGUAGE_VERSION</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>ABAP_LANGUAGE_VERSION</td>
+  <td>ABAP_LANGUAGE_VERSION</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>ABAP Language Version</td>
+</tr>
+<tr class="cell">
+  <td>31</td>
+  <td>DOMNAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>DOMNAME</td>
+  <td>DOMNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Domain name</td>
+</tr>
+<tr class="cell">
+  <td>32</td>
+  <td>DDLANGUAGE</td>
+  <td>2</td>
+  <td>X</td>
+  <td>DDLANGUAGE</td>
+  <td>SPRAS</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Language Key</td>
+</tr>
+<tr class="cell">
+  <td>33</td>
+  <td>AS4LOCAL</td>
+  <td>3</td>
+  <td>X</td>
+  <td>AS4LOCAL</td>
+  <td>AS4LOCAL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Activation State of Repository Object</td>
+</tr>
+<tr class="cell">
+  <td>34</td>
+  <td>AS4VERS</td>
+  <td>4</td>
+  <td>X</td>
+  <td>AS4VERS</td>
+  <td>AS4VERS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Version of the entry (not used)</td>
+</tr>
+<tr class="cell">
+  <td>35</td>
+  <td>DDTEXT</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>AS4TEXT</td>
+  <td>AS4TEXT</td>
+  <td>CHAR</td>
+  <td>60</td>
+  <td>X</td>
+  <td>Short Description of Repository Objects</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754</td>
+   </tr>
+</table>
+</body>
+</html>

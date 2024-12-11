@@ -1,0 +1,414 @@
+*----------------------------------------------------------------------*
+*   INCLUDE GFW_PROG_TEXT                                              *
+*                                                                      *
+* The Graphical Framework is a programming interface for developing    *
+* applications with graphics. It's a tool for developers.              *
+*                                                                      *
+* Therefore all documentation is in English.                           *
+* This Include defines the texts for example programs. They are        *
+* in English and will not be translated into other languages.          *
+*----------------------------------------------------------------------*
+
+TYPES:
+   GFW_TEXT TYPE TEXT40.
+
+CONSTANTS:
+   CO_GFW_PROG_MENUE_DEl_NODES TYPE  GFW_TEXT VALUE
+                        'delete nodes',               "#EC NOTEXT
+   co_gfw_prog_menue_ins_node  type  gfw_text VALUE
+                        'insert node',                "#EC NOTEXT
+   co_gfw_prog_menue_sibling1  type  gfw_text VALUE
+                        'as twin (same parent node)', "#EC NOTEXT
+   co_gfw_prog_menue_sibling2  type  gfw_text VALUE
+                        'as twin (of predecessor)',   "#EC NOTEXT
+   co_gfw_prog_header_title1 type  gfw_text VALUE
+                        '@08@head/hier. part',        "#EC NOTEXT
+   co_gfw_prog_header_title2 type  gfw_text VALUE
+                        '+',                          "#EC NOTEXT
+   co_gfw_prog_header_title3 type  gfw_text VALUE
+                        '++',                         "#EC NOTEXT
+   co_gfw_prog_help_hier  type  gfw_text VALUE
+                        'help for the hierarchy part',"#EC NOTEXT
+   co_gfw_prog_help_col1  type  gfw_text VALUE
+                        'help for the 1st column',    "#EC NOTEXT
+   co_gfw_prog_help_col2  type  gfw_text VALUE
+                        'help for the 2nd column',    "#EC NOTEXT
+   CO_GFW_PROG_OBJID_1    type  gfw_text value
+                        '1',                          "#EC NOTEXT
+   CO_GFW_PROG_OBJID_2    type  gfw_text value
+                        '2',                          "#EC NOTEXT
+   CO_GFW_PROG_OBJID_3    type  gfw_text value
+                        '3',                          "#EC NOTEXT
+   co_gfw_prog_objid_4    type  gfw_text value
+                        '4',                          "#EC NOTEXT
+   co_gfw_prog_objid_5    type  gfw_text value
+                        '5',                          "#EC NOTEXT
+   co_gfw_prog_objid_6    type  gfw_text value
+                        '6',                          "#EC NOTEXT
+   co_gfw_prog_objid_7    type  gfw_text value
+                        '7',                          "#EC NOTEXT
+   co_gfw_prog_objid_8    type  gfw_text value
+                        '8',                          "#EC NOTEXT
+   co_gfw_prog_objtext_10 type  gfw_text value
+                        'Top',                        "#EC NOTEXT
+   co_gfw_prog_objtext_11 type  gfw_text value
+                        '@0A@Caution!',               "#EC NOTEXT
+   co_gfw_prog_objtext_12 type  gfw_text value
+                        '4711',                       "#EC NOTEXT
+   co_gfw_prog_objtext_20 type  gfw_text value
+                        'Left',                       "#EC NOTEXT
+   co_gfw_prog_objtext_21 type  gfw_text value
+                        'LLLL',                       "#EC NOTEXT
+   co_gfw_prog_objtext_30 type  gfw_text value
+                        'Right1',                     "#EC NOTEXT
+   co_gfw_prog_objtext_31 type  gfw_text value
+                        'Right2',                     "#EC NOTEXT
+   co_gfw_prog_objtext_40 type  gfw_text value
+                        'Center',                     "#EC NOTEXT
+   co_gfw_prog_objtext_41 type  gfw_text value
+                        'MMMM',                       "#EC NOTEXT
+
+   co_gfw_prog_series1  type  gfw_text value
+                        'Company 1',              "#EC NOTEXT
+   co_gfw_prog_series2  type  gfw_text value
+                        'Company 2',              "#EC NOTEXT
+   co_gfw_prog_series3  type  gfw_text value
+                        'Company 3',              "#EC NOTEXT
+   co_gfw_prog_series4  type  gfw_text value
+                        'Company 4',              "#EC NOTEXT
+   co_gfw_prog_series5  type  gfw_text value
+                        'Company 5',              "#EC NOTEXT
+   co_gfw_prog_category1  type  gfw_text value
+                        'January',              "#EC NOTEXT
+   co_gfw_prog_category2  type  gfw_text value
+                        'February',              "#EC NOTEXT
+   co_gfw_prog_category3  type  gfw_text value
+                        'March',              "#EC NOTEXT
+   co_gfw_prog_category4  type  gfw_text value
+                        'April',              "#EC NOTEXT
+   co_gfw_prog_category5  type  gfw_text value
+                        'May',              "#EC NOTEXT
+   co_gfw_prog_long_category1  type  gfw_text value
+                        '1st quarter 1998',              "#EC NOTEXT
+   co_gfw_prog_long_category2  type  gfw_text value
+                        '2nd quarter 1998',              "#EC NOTEXT
+   co_gfw_prog_long_category3  type  gfw_text value
+                        '3rd quarter 1998',              "#EC NOTEXT
+   co_gfw_prog_long_category4  type  gfw_text value
+                        '4th quarter 1998',              "#EC NOTEXT
+   co_gfw_prog_long_category5  type  gfw_text value
+                        '1st quarter 1999',              "#EC NOTEXT
+   co_gfw_prog_long_category6  type  gfw_text value
+                        '2nd quarter 1999',              "#EC NOTEXT
+   co_gfw_prog_title_columns_ta type  gfw_text value
+                       'GFW-demo columns with time axis',  "#EC NOTEXT
+   co_gfw_prog_title_bar type  gfw_text value
+                        'GFW-demo bar chart with scrollbar', "#EC NOTEXT
+   co_gfw_prog_title_histogram type  gfw_text value
+                        'GFW-demo histogram chart',  "#EC NOTEXT
+   co_gfw_prog_title_labels type  gfw_text value
+                        'GFW-demo: Same names, long names', "#EC NOTEXT
+   co_gfw_prog_title_time_axis type gfw_text value
+                   'GFW-demo line chart with time axis', "#EC NOTEXT
+   co_gfw_prog_title_pie type gfw_text value
+                   'GFW-demo pie chart',  "#EC NOTEXT
+   co_gfw_prog_title_customizing type gfw_text value
+                   'GFW-demo: default customizing', "#EC NOTEXT
+   co_gfw_prog_title_gridchart type gfw_text value
+                   'GFW-demo: chart with grid', "#EC NOTEXT
+   co_gfw_prog_title_dc_perf type gfw_text value
+                   'GFW-demo: set data in one step', "#EC NOTEXT
+   co_gfw_prog_title_speedometer type gfw_text value
+                   'GFW-demo speedometer chart', "#EC NOTEXT
+   co_gfw_prog_title_portfolio type gfw_text value
+                   'GFW-demo portfolio chart', "#EC NOTEXT
+   co_gfw_prog_xtitle_portfolio type gfw_text value
+                   'Market share', "#EC NOTEXT
+   co_gfw_prog_ytitle_portfolio type gfw_text value
+                   'Growth', "#EC NOTEXT
+   co_gfw_prog_point    type  gfw_text value
+                        'peak value',               "#EC NOTEXT
+   co_gfw_prog_point_label    type  gfw_text value
+                        'a label',               "#EC NOTEXT
+   co_gfw_prog_label1    type  gfw_text value
+                        'Product A', "#EC NOTEXT
+   co_gfw_prog_label2    type  gfw_text value
+                        'Product B', "#EC NOTEXT
+   co_gfw_prog_label3    type  gfw_text value
+                        'Product C', "#EC NOTEXT
+   co_gfw_prog_label4    type  gfw_text value
+                        'Product D', "#EC NOTEXT
+   co_gfw_prog_axis1    type  gfw_text value
+                        'Primary axis',               "#EC NOTEXT
+   co_gfw_prog_axis2    type  gfw_text value
+                        'Secondary axis',             "#EC NOTEXT
+   co_gfw_prog_distribution    type  gfw_text value
+                        'Density function',             "#EC NOTEXT
+
+   CO_GFW_PROG_TOP      type gfw_text value
+                        'Top',                        "#EC NOTEXT
+   CO_GFW_PROG_LEFT     type gfw_text value
+                        'Left',                       "#EC NOTEXT
+   CO_GFW_PROG_RIGHT    type gfw_text value
+                        'Right',                      "#EC NOTEXT
+   CO_GFW_PROG_CENTER   type gfw_text value
+                        'Center',                     "#EC NOTEXT
+   CO_GFW_PROG_FRAME    type gfw_text value
+                        'Frame',                      "#EC NOTEXT
+
+* GFW_DEMO_PRES constants (breakfast statistics)
+   CO_GFW_PROG_PRODUCT1 type gfw_text value
+                     'SAP graphic as an external program',  "#EC NOTEXT
+   CO_GFW_PROG_PRODUCT2 type gfw_text value
+                        'SAP OCX (BUSG)',                    "#EC NOTEXT
+   CO_GFW_PROG_PRODUCT3 type gfw_text value
+                        'Chart control',            "#EC NOTEXT
+   CO_GFW_PROG_DIALOGB  type gfw_text value
+                        'amodal dialog window',              "#EC NOTEXT
+   CO_GFW_PROG_B_TIT      type gfw_text value
+                        'Breakfast statistics',              "#EC NOTEXT
+   CO_GFW_PROG_B_GRP_1    type gfw_text value
+                        'ham',                               "#EC NOTEXT
+   CO_GFW_PROG_B_GRP_2    type gfw_text value
+                        'cheese',                            "#EC NOTEXT
+   CO_GFW_PROG_B_GRP_3    type gfw_text value
+                        'roast beef',                        "#EC NOTEXT
+   CO_GFW_PROG_B_X_1      type gfw_text value
+                        '1997',                              "#EC NOTEXT
+   CO_GFW_PROG_B_X_2      type gfw_text value
+                        '1998',                              "#EC NOTEXT
+   CO_GFW_PROG_B_X_3      type gfw_text value
+                        '1999',                              "#EC NOTEXT
+   CO_GFW_PROG_B_TR10     type gfw_text value
+                        'Computer System',                   "#EC NOTEXT
+   CO_GFW_PROG_B_TR20     type gfw_text value
+                        'Tower',                             "#EC NOTEXT
+   CO_GFW_PROG_B_TR30     type gfw_text value
+                        'Peripheral devices',                "#EC NOTEXT
+   CO_GFW_PROG_B_TR31     type gfw_text value
+                        'keyboard',                          "#EC NOTEXT
+   CO_GFW_PROG_B_TR32     type gfw_text value
+                        'mouse',                             "#EC NOTEXT
+   CO_GFW_PROG_B_TR33     type gfw_text value
+                        'display',                           "#EC NOTEXT
+
+* GFW_DEMO_HIER2 and GFW_DEMO_HIER3
+   CO_GFW_PROG_DEPT     type gfw_text value
+                        'Dept.',                         "#EC NOTEXT
+   CO_GFW_PROG_PERSON  type gfw_text value
+                         'Person',                           "#EC NOTEXT
+   CO_GFW_PROG_COUNTRY1  type gfw_text value
+                         'Germany',                       "#EC NOTEXT
+  CO_GFW_PROG_COUNTRY2  type gfw_text value
+                          'USA',                            "#EC NOTEXT
+  CO_GFW_PROG_PLACE1  type gfw_text value
+                          'Hamburg',                      "#EC NOTEXT
+ CO_GFW_PROG_PLACE2  type gfw_text value
+                           'Munich',                        "#EC NOTEXT
+ CO_GFW_PROG_PLACE3  type gfw_text value
+                           'Walldorf',                      "#EC NOTEXT
+ CO_GFW_PROG_PLACE4  type gfw_text value
+                           'Boston',                        "#EC NOTEXT
+ CO_GFW_PROG_PLACE5  type gfw_text value
+                           'Palo Alto',                    "#EC NOTEXT
+ CO_GFW_PROG_PLACE6  type gfw_text value
+                           'NY',                           "#EC NOTEXT
+ CO_GFW_PROG_DEPT1  type gfw_text value
+                           'Consult. 1',                     "#EC NOTEXT
+ CO_GFW_PROG_DEPT2  type gfw_text value
+                           'Consult. 2',                     "#EC NOTEXT
+ CO_GFW_PROG_DEPT3  type gfw_text value
+                            'Consult. 3',                  "#EC NOTEXT
+ CO_GFW_PROG_DEPT4  type gfw_text value
+                             'R&D Germany',                 "#EC NOTEXT
+ CO_GFW_PROG_DEPT5  type gfw_text value
+                              'Sales 1',                    "#EC NOTEXT
+ CO_GFW_PROG_DEPT6  type gfw_text value
+                               'Consult. 4',                "#EC NOTEXT
+ CO_GFW_PROG_DEPT7  type gfw_text value
+                                'Sales 2',                  "#EC NOTEXT
+ CO_GFW_PROG_DEPT8  type gfw_text value
+                                 'R&D USA',                  "#EC NOTEXT
+ CO_GFW_PROG_DEPT9  type gfw_text value
+                                  'Consult. 5',             "#EC NOTEXT
+ CO_GFW_PROG_PERSON1  type gfw_text value
+                                  'Peter',                "#EC NOTEXT
+ CO_GFW_PROG_PERSON2  type gfw_text value
+                                  'Kai',                  "#EC NOTEXT
+ CO_GFW_PROG_PERSON3  type gfw_text value
+                                  'Jens',                   "#EC NOTEXT
+ CO_GFW_PROG_PERSON4  type gfw_text value
+                                   'Claudia',               "#EC NOTEXT
+ CO_GFW_PROG_PERSON5  type gfw_text value
+                                    'Georg',         "#EC NOTEXT
+ CO_GFW_PROG_PERSON6  type gfw_text value
+                                    'Markus',              "#EC NOTEXT
+ CO_GFW_PROG_PERSON7  type gfw_text value
+                                    'Maren',            "#EC NOTEXT
+ CO_GFW_PROG_PERSON8  type gfw_text value
+                                    'Michael',        "#EC NOTEXT
+ CO_GFW_PROG_PERSON9  type gfw_text value
+                                    'Uwe',             "#EC NOTEXT
+ CO_GFW_PROG_PERSON10  type gfw_text value
+                                    'Bettina',             "#EC NOTEXT
+ CO_GFW_PROG_PERSON11  type gfw_text value
+                                    'Gisbert',         "#EC NOTEXT
+ CO_GFW_PROG_PERSON12  type gfw_text value
+                                     'John',            "#EC NOTEXT
+ CO_GFW_PROG_PERSON13  type gfw_text value
+                                     'Damian',           "#EC NOTEXT
+* GFW_DEMO_PRES1
+
+ CO_GFW_PROG_FULL type gfw_text value
+                                     'Full to bursting',    "#EC NOTEXT
+ CO_GFW_PROG_HUNGRY type gfw_text value
+                                     'Starving',    "#EC NOTEXT
+ CO_GFW_PROG_SATISFIED type gfw_text value
+                                     'Satisfied',    "#EC NOTEXT
+ CO_GFW_PROG_BREAKFAST type gfw_text value
+                                     'Breakfast graphic',  "#EC NOTEXT
+ CO_GFW_PROG_RECORD type gfw_text value
+                                      'Caffeine record',  "#EC NOTEXT
+ CO_GFW_PROG_POINT1 type gfw_text value
+                                      'Point1',  "#EC NOTEXT
+ CO_GFW_PROG_POINT2 type gfw_text value
+                                      'Point2',  "#EC NOTEXT
+* DEMO_GFW_PRES_SHOW
+ CO_GFW_PROG_SAUSAGE type gfw_text value
+                                      'Sausage',  "#EC NOTEXT
+ CO_GFW_PROG_CHEESE type gfw_text value
+                                      'Cheese',  "#EC NOTEXT
+ CO_GFW_PROG_ITEM3  type gfw_text value
+                                      'Roastbeef',  "#EC NOTEXT
+ CO_GFW_PROG_ITEM4  type gfw_text value
+                                      'Honey',  "#EC NOTEXT
+ CO_GFW_PROG_ROW1  type gfw_text value
+                                       'i',  "#EC NOTEXT
+ CO_GFW_PROG_ROW2  type gfw_text value
+                                       'ii',  "#EC NOTEXT
+ CO_GFW_PROG_ROW3  type gfw_text value
+                                       'iii',  "#EC NOTEXT
+ CO_GFW_PROG_ROW4  type gfw_text value
+                                       'iv',   "#EC NOTEXT
+ CO_GFW_PROG_ROW5  type gfw_text value
+                                       'v',    "#EC NOTEXT
+* GFW_DCWIZARD
+ CO_GFW_PROG_WIZ_MESSAGE1 type gfw_text value
+     'DC created. Load Include into R/3.',  "#EC NOTEXT
+ CO_GFW_PROG_WIZ_MESSAGE2 type gfw_text value
+ 'Error when creating DC. Correct data.',  "#EC NOTEXT
+ CO_GFW_PROG_WIZ_MESSAGE3 type gfw_text value
+ 'Select name for file in file system.',  "#EC NOTEXT
+ CO_GFW_PROG_WIZ_MESSAGE4 type gfw_text value
+     'DC created. Activate global class in R/3',  "#EC NOTEXT
+
+* GFW_MSGPROTOCOL
+ CO_GFW_PROG_MSGPROT_M1 type gfw_text value
+ 'Data could not be read from memory',  "#EC NOTEXT
+ CO_GFW_PROG_MSGPROT_M2 type gfw_text value
+ 'No messages were logged',  "#EC NOTEXT
+ CO_GFW_PROG_MSGPROT_M3 type gfw_text value
+ 'Messages were logged:',  "#EC NOTEXT
+ CO_GFW_PROG_MSGPROT_M4 type gfw_text value
+ 'Transmission ID',  "#EC NOTEXT
+ CO_GFW_PROG_MSGPROT_M5 type gfw_text value
+ 'No message text found',  "#EC NOTEXT
+ CO_GFW_PROG_MSGPROT_M6 type gfw_text value
+ 'One message was logged:',  "#EC NOTEXT
+ CO_GFW_PROG_MSGPROT_M7 type gfw_text value
+ 'Last entry =',  "#EC NOTEXT
+ CO_GFW_PROG_MSGPROT_M8 type gfw_text value
+ 'No message log for current user ID.',  "#EC NOTEXT
+ CO_GFW_PROG_MSGPROT_M9 type gfw_text value
+ 'Is the user parameter GFW_SETTINGS set ?',  "#EC NOTEXT
+
+* GFW_TIMEPROTOCOL
+ CO_GFW_PROG_TIMEPROT_M1 type gfw_text value
+ 'No time protocol for current user ID',  "#EC NOTEXT
+ CO_GFW_PROG_TIMEPROT_M2 type gfw_text value
+ 'Is user parameter GFW_SETTINGS set ?',  "#EC NOTEXT
+ CO_GFW_PROG_TIMEPROT_M3 type gfw_text value
+ 'Transfer ID =',  "#EC NOTEXT
+ CO_GFW_PROG_TIMEPROT_M4 type gfw_text value
+ 'Last entry =',  "#EC NOTEXT
+
+* Workshop constants
+ CO_GFW_PROG_WS_AGE type gfw_text value
+ 'Age',  "#EC NOTEXT
+ CO_GFW_PROG_WS_CO type gfw_text value
+  'Years working for company',  "#EC NOTEXT
+CO_GFW_PROG_WS_TIT_EX4 type gfw_text value
+  'Exercise 4',                           "#EC NOTEXT
+CO_GFW_PROG_WS_TIT_EX5 type gfw_text value
+ 'Exercise 5',                           "#EC NOTEXT
+CO_GFW_PROG_WS_TIT_EX6 type gfw_text value
+  'Exercise 6',                          "#EC NOTEXT
+* GFW_WS_FB_S1
+CO_GFW_PROG_FB_NAME1  type  gfw_text value
+'Smith',                                 "#EC NOTEXT
+CO_GFW_PROG_FB_NAME2  type  gfw_text value
+'Jones',                                   "#EC NOTEXT
+CO_GFW_PROG_FB_NAME3  type  gfw_text value
+'King',                                    "#EC NOTEXT
+CO_GFW_PROG_FB_NAME4  type  gfw_text value
+'Heath',                                     "#EC NOTEXT
+* GFW_DEMO_SYNC
+CO_GFW_PROG_PIECES type  gfw_text value
+'Pieces',                                 "#EC NOTEXT
+* GFW_DEMO_HIER_TABSTRIP
+CO_GFW_PROG_HIERTAB_HELP1  type gfw_text value
+ 'Help for hierarchy section',             "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_HELP2  type gfw_text value
+ 'Help for 1st column',                       "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_HELP3  type gfw_text value
+ 'Help for 2nd column',                         "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_ERROR  type gfw_text value
+ '@0A@Ex-error!',                            "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_NUM  type gfw_text value
+ '4711',                                "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_LETTERLS  type gfw_text value
+ 'LLLL',                                      "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_RIGHT2  type gfw_text value
+ 'Right2',                                 "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_LETTERMS  type gfw_text value
+ 'MMMM',                                 "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_HEADER  type gfw_text value
+ '@08@Hierarchy header',                 "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_PLUS  type gfw_text value
+ '+',                               "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_PLUSPLUS  type gfw_text value
+ '++',                                     "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_DELOBJS  type gfw_text value
+ 'Delete selected objects',                "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_ONE  type gfw_text value
+ '1', "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_TWO  type gfw_text value
+ '2', "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_THREE  type gfw_text value
+ '3', "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_FOUR  type gfw_text value
+ '4', "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_TOP  type gfw_text value
+ 'Top', "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_LEFT  type gfw_text value
+ 'Left', "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_RIGHT  type gfw_text value
+ 'Right', "#EC NOTEXT
+CO_GFW_PROG_HIERTAB_MIDDLE  type gfw_text value
+ 'Middle', "#EC NOTEXT
+
+* gfw_prog_get_cu_bundle
+  CO_GFW_PROG_TITLE1 type gfw_text value
+                                    'Title1',    "#EC NOTEXT
+  CO_GFW_PROG_TITLE2 type gfw_text value
+                                    'Title2',    "#EC NOTEXT
+* gfw_prog_chart_table
+  co_gfw_prog_cell1 type gfw_text value
+   'Use this grid to display some texts',   "#EC NOTEXT
+  co_gfw_prog_cell2 type gfw_text value
+   'Number of lines/columns as you like',   "#EC NOTEXT
+  co_gfw_prog_cell3 type gfw_text value
+   'Legend symbols are optional'.   "#EC NOTEXT
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

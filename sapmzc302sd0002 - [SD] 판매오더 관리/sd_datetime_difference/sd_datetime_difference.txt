@@ -1,0 +1,63 @@
+FUNCTION SD_DATETIME_DIFFERENCE.
+*"----------------------------------------------------------------------
+*"*"Lokale Schnittstelle:
+*"       IMPORTING
+*"             VALUE(DATE1) TYPE  D
+*"             VALUE(TIME1) TYPE  T
+*"             VALUE(DATE2) TYPE  D
+*"             VALUE(TIME2) TYPE  T
+*"       EXPORTING
+*"             VALUE(DATEDIFF) TYPE  P
+*"             VALUE(TIMEDIFF) TYPE  P
+*"             VALUE(EARLIEST) TYPE  C
+*"       EXCEPTIONS
+*"              INVALID_DATETIME
+*"----------------------------------------------------------------------
+
+  IF DATE1 IS INITIAL OR TIME1 IS INITIAL OR DATE2 IS INITIAL
+           OR TIME2 IS INITIAL.
+    RAISE INVALID_DATETIME.
+  ENDIF.
+
+  PERFORM DATETIME_DIFFERENCE
+          USING DATE1 TIME1 DATE2 TIME2
+                DATEDIFF TIMEDIFF EARLIEST.
+ENDFUNCTION.
+
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: VW
+*566   No deliveries exist in shipment &
+*567   No inbound deliveries in shipment &
+*568   Shipment & does not exist (check your entry)
+*569   Shipment & is not an inbound shipment
+*601   No deliveries found for specified order &
+*603   No shipments specified for selection variant
+*604   No corresponding shipments could be determined
+*605   Selection variant & is not allowed
+*607   No delivery selected
+*608   Select exactly one stage of shipment
+*609   Select exactly one point
+*610   Select exactly one shipment stage OR one point
+*611   No stages and no points could be be determined for the shipment
+*612   There are deliveries that are not allocated to a shipment
+*613   There are shipments without stages and points
+*614   There are legs without deliveries
+*615   No shipment stages selected
+*616   Position the cursor on a sort field
+*617   The number of days entered must be in the range of 0-99
+*618   The number of hours entered must be in the range 0-23
+*619   The number of minutes entered must be within the range of 0-59
+*621   Maintain graphic profile & & & in Customizing for this client
+*622   Use the graphics window last opened
+*623   The cursor is not on a field with a document number
+*625   Position cursor on a shipment number for selection
+*627   Position cursor on a delivery for selection
+*628   There are no deadlines for the selected deliveries/shipments
+*630   No corresponding shipments could be determined
+*650   Double-click on the object to display object information
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

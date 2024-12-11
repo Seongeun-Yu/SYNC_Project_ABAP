@@ -1,0 +1,152 @@
+*----------------------------------------------------------------------*
+*   INCLUDE RVGTISGC                                                   *
+*   This file is a superset of following includes
+*      LCNETDAT, BARCDATA
+*   reason for its existance is to avoid double declarations
+*   which exist in case of including the original files
+*----------------------------------------------------------------------*
+
+
+***INCLUDE LCNETDAT .
+
+************************************************************************
+* Allgemeine Datendeklarationen für                                    *
+* Netzplan- / Hierarchiegrafik / Clusterditor                          *
+************************************************************************
+
+*----------------------------------------------------------------------*
+* Tabellen                                                             *
+*----------------------------------------------------------------------*
+
+* Tabelle zur Übergabe von Daten an Grafikfunktionsbausteine
+
+DATA: BEGIN OF CLUSTERS_TAB OCCURS 0.  "Cluster
+        INCLUDE STRUCTURE CNG_CLUSTR.
+DATA: END OF CLUSTERS_TAB.
+
+DATA: BEGIN OF CVALS_TAB OCCURS 0.     "Attribute der Cluster
+        INCLUDE STRUCTURE NET_CVALS.
+DATA: END OF CVALS_TAB.
+
+DATA: BEGIN OF DELETE_TAB OCCURS 0.    "Zu löschende Objekte
+        INCLUDE STRUCTURE NET_DELETE.
+DATA: END OF DELETE_TAB.
+
+DATA: BEGIN OF LEGEND_TAB OCCURS 0.    "Legende
+        INCLUDE STRUCTURE CNG_LEGEND.
+DATA: END OF LEGEND_TAB.
+
+DATA: BEGIN OF LINES_TAB OCCURS 0.     "Kanten
+        INCLUDE STRUCTURE CNG_LINES.
+DATA: END OF LINES_TAB.
+
+DATA: BEGIN OF LVALS_TAB OCCURS 0.     "Attribute der Kanten
+        INCLUDE STRUCTURE NET_LVALS.
+DATA: END OF LVALS_TAB.
+
+DATA: BEGIN OF NET_NODES_TAB OCCURS 0. "Knoten in Netzplangrafik
+        INCLUDE STRUCTURE CNG_NODES.
+DATA: END OF NET_NODES_TAB.
+
+DATA: BEGIN OF NVALS_TAB OCCURS 0.     "Attribute der Knoten
+        INCLUDE STRUCTURE NET_NVALS.
+DATA: END OF NVALS_TAB.
+
+DATA: BEGIN OF POSITIONS_TAB OCCURS 0. "Positionen der Knoten
+        INCLUDE STRUCTURE NET_POS.
+DATA: END OF POSITIONS_TAB.
+
+*----------------------------------------------------------------------*
+* Feldleisten                                                          *
+*----------------------------------------------------------------------*
+
+* Grafikprofil
+DATA: BEGIN OF PROFILE.
+        INCLUDE STRUCTURE NET_PROFIL.
+DATA: END OF PROFILE.
+
+*----------------------------------------------------------------------*
+* Further declarations                                                 *
+*----------------------------------------------------------------------*
+
+DATA: ABAP_CMD         LIKE NET_GRAPH-ABAP_CMD,
+      CONFIRM          LIKE NET_SET-CONFIRM,
+      ERR_NO(2)        TYPE C,
+      GR_MES           LIKE NET_GRAPH-GR_MES,
+      LG_MES           LIKE NET_GRAPH-GR_MES,
+      M_TYP            LIKE NET_GRAPH-M_TYP,
+      MODE             LIKE NET_GRAPH-GR_MODE,
+*     object_type(1)   type c,
+      PWDID            LIKE NET_GRAPH-PWDID,
+      RWNID            LIKE NET_GRAPH-RWNID,
+      SEL_FIELD        LIKE NET_GRAPH-SEL_FIELD,
+      STAT             LIKE NET_GRAPH-STAT,
+      STATUS_TEXT      LIKE NET_GRAPH-STATUSTEXT,
+      SUPER            LIKE NET_GRAPH-SUPER,
+      TITLEBAR         LIKE NET_GRAPH-TITLEBAR,
+      TYPE             LIKE CNG_NODES-TYPE,
+      WINID            LIKE NET_GRAPH-WINID.
+
+
+***INCLUDE BARCDATA.
+*----------------------------------------------------------------------*
+* Common data declarations for barchart                               *
+*----------------------------------------------------------------------*
+
+*----------------------------------------------------------------------*
+* Tables for barchart                                                  *
+*----------------------------------------------------------------------*
+
+* Transfertabellen (Transfer von Daten zu/von der Grafik)
+DATA: BEGIN OF BARC_BOXES OCCURS 0.         "Boxes
+        INCLUDE STRUCTURE BCBOXES.
+DATA: END OF BARC_BOXES.
+
+DATA: BEGIN OF BARC_BOX_VALS OCCURS 0.      "Attributes of boxes
+        INCLUDE STRUCTURE BCVALS.
+DATA: END OF BARC_BOX_VALS.
+
+DATA: BEGIN OF BARC_NODES OCCURS 0.         "Nodes
+        INCLUDE STRUCTURE BCNODES.
+DATA: END OF BARC_NODES.
+
+DATA: BEGIN OF BARC_NODE_VALS OCCURS 0.     "Attributes of nodes
+        INCLUDE STRUCTURE BCNVALS.
+DATA: END OF BARC_NODE_VALS.
+
+DATA: BEGIN OF BARC_POSITIONS OCCURS 0.     "Positions
+        INCLUDE STRUCTURE BCPOSITION.
+DATA: END OF BARC_POSITIONS.
+
+DATA: BEGIN OF BARC_DELETIONS OCCURS 0.     "Deletions
+        INCLUDE STRUCTURE BCDELETE.
+DATA: END OF BARC_DELETIONS.
+
+
+*----------------------------------------------------------------------*
+* Structures                                                           *
+*----------------------------------------------------------------------*
+DATA: BEGIN OF BARC_PROFILE.          "Grafikprofil
+        INCLUDE STRUCTURE BCPROFILE.
+DATA: END OF BARC_PROFILE.
+
+
+*----------------------------------------------------------------------*
+* Common declarations for barchart                                     *
+*----------------------------------------------------------------------*
+DATA:
+*     abap_cmd         like net_graph-abap_cmd,
+      GRAPH_CMD        LIKE NET_GRAPH-GR_MES,
+*     m_typ            like net_graph-m_typ,
+      OBJECT_TYPE      LIKE BCDELETE-OBJ_TYPE.
+*     pwdid            like net_graph-pwdid,
+*     rwnid            like net_graph-rwnid,
+*     stat             like net_graph-stat,
+*     status_text      like net_graph-statustext,
+*     super            like net_graph-super,
+*     title_bar        like net_graph-titlebar,
+*     type             like cng_nodes-type,
+*     winid            like net_graph-winid.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

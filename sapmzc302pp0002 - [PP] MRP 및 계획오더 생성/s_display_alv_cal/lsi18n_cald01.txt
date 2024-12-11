@@ -1,0 +1,123 @@
+*&---------------------------------------------------------------------*
+*&  Include           SI18N_CALD01
+*&---------------------------------------------------------------------*
+
+*---------------------------------------------------------------------*
+*       CLASS LCL_EVENT_RECEIVER DEFINITION
+*---------------------------------------------------------------------*
+*       ........                                                      *
+*---------------------------------------------------------------------*
+class lcl_event_receiver definition final.
+
+  public section.
+
+    methods:
+      handle_hotspot_click
+                    for event hotspot_click of cl_gui_alv_grid
+        importing e_column_id es_row_no,
+
+      handle_context_menu_request
+                    for event context_menu_request of cl_gui_alv_grid
+        importing e_object.
+
+  private section.
+
+endclass. "lcl_event_receiver
+
+*---------------------------------------------------------------------*
+*       CLASS LCL_PICKER_DATA DEFINITION
+*---------------------------------------------------------------------*
+*       ........                                                      *
+*---------------------------------------------------------------------*
+class lcl_picker_data definition final.
+
+  public section.
+
+    data: m_cal_list_itab type standard table of cal_list_struc,
+          m_cal           type ref to cl_i18_calendar,
+          m_title         type string,
+          m_datfm         type xudatfm.
+
+    methods:
+      constructor
+        importing iv_datfm          type xudatfm
+                  iv_week_begin_day type i,
+
+      update_data
+        importing iv_dateval type d,
+
+      get_date_from_cell
+        importing iv_row     type lvc_s_roid
+                  iv_col_id  type lvc_s_col
+        exporting ev_dateval type d.
+
+  private section.
+
+    constants:
+      numofmonthtodisplay type i value 40.
+
+    data:
+      m_dateval        type d,          "selected date
+      m_dateval_ext    type ext_date_t, "sel. date in calendar dependent format
+      m_sydatum_ext    type ext_date_t, "sy-datum in calendar dependent format
+      m_week_begin_day type i.
+
+    methods:
+      color_date
+        importing
+          dayindex    type i
+          monthindex  type i
+        changing
+          wa_color    type lvc_s_scol
+          cal_list_wa type cal_list_struc,
+
+      update_dateval
+        importing iv_dateval type d,
+
+      determine_date_range
+        exporting
+          ev_numofmonth type i
+        changing
+          io_date_start type ref to cl_i18_datec.
+
+endclass.  "lcl_picker_data
+
+*---------------------------------------------------------------------*
+*       CLASS LCL_IO_HANDLER DEFINITION
+*---------------------------------------------------------------------*
+*       ........                                                      *
+*---------------------------------------------------------------------*
+class lcl_io_handler definition final.
+
+  public section.
+
+    data:
+      m_fieldcat  type standard table of lvc_s_fcat. "public only for testing
+
+    methods:
+      constructor
+        importing iv_week_begin_day type i,
+
+      prepare_field_catalog,
+      prepare_layout,
+      prepare_table_for_display,
+      switch_data.
+
+  private section.
+
+    data:
+*      m_fieldcat       type standard table of lvc_s_fcat,
+      m_layout         type lvc_s_layo,
+      m_week_begin_day type i.
+
+    methods:
+      set_scroll_toselecteddate,
+
+      set_day_texts
+        importing colno       type i
+        changing  fieldcat_wa type lvc_s_fcat.
+
+endclass.  "lcl_io_handler
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

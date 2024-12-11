@@ -1,0 +1,263 @@
+***INCLUDE CONTINCL.
+
+* defines...............................................................
+
+DEFINE ADDBITMAP.
+    CALL METHOD OF H_GUI 'AddBitmap' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2
+                           #3 = &3
+                           #4 = &4
+                           #5 = &5
+                           #6 = &6
+                           #7 = &7
+                           #8 = &8
+                           #9 = &9.
+END-OF-DEFINITION.
+
+DEFINE REMOVEBITMAP.
+    CALL METHOD OF H_GUI 'RemoveBitmap' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2.
+END-OF-DEFINITION.
+
+DEFINE REPAINT.
+    CALL METHOD OF H_GUI 'Repaint' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2.
+END-OF-DEFINITION.
+
+DEFINE LINKCONTROL.
+    CALL METHOD OF H_GUI 'LinkControl' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2
+                           #3 = &3.
+END-OF-DEFINITION.
+
+DEFINE REGEVENT.
+    CALL METHOD OF H_GUI 'RegisterEvent' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2
+                           #3 = &3.
+END-OF-DEFINITION.
+
+DEFINE SETMODE.
+    CALL METHOD OF H_GUI 'SetMode' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2.
+END-OF-DEFINITION.
+
+DEFINE ADDSTRING.
+    CALL METHOD OF H_GUI 'AddString' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2.
+END-OF-DEFINITION.
+
+DEFINE PLAY.
+    CALL METHOD OF H_GUI 'Play' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1.
+END-OF-DEFINITION.
+
+DEFINE GETSELITEM.
+    CALL METHOD OF H_GUI 'GetSelItem' = &2
+                 NO FLUSH
+                 EXPORTING #1 = &1.
+END-OF-DEFINITION.
+
+DEFINE GETSELSTRING.
+    CALL METHOD OF H_GUI 'GetSelString' = &2
+                 NO FLUSH
+                 EXPORTING #1 = &1.
+END-OF-DEFINITION.
+
+DEFINE CLEARALL.
+    CALL METHOD OF H_GUI 'Clear' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1.
+END-OF-DEFINITION.
+
+DEFINE CREATEMENU.
+    CALL METHOD OF H_GUI 'CreateMenu' = &1
+                 NO FLUSH.
+END-OF-DEFINITION.
+
+DEFINE CREATEPOPUPMENU.
+    CALL METHOD OF H_GUI 'CreatePopupMenu' = &5
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2
+                           #3 = &3
+                           #4 = &4.
+END-OF-DEFINITION.
+
+DEFINE INSERTITEM.
+    CALL METHOD OF H_GUI 'InsertItem' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2
+                           #3 = &3
+                           #4 = &4
+                           #5 = &5.
+END-OF-DEFINITION.
+
+DEFINE MODIFYITEM.
+    CALL METHOD OF H_GUI 'ModifyItem' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2
+                           #3 = &3.
+END-OF-DEFINITION.
+
+DEFINE DELETEITEM.
+    CALL METHOD OF H_GUI 'DeleteItem' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2.
+END-OF-DEFINITION.
+
+DEFINE SETMENU.
+    CALL METHOD OF H_GUI 'SetMenu' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2
+                           #3 = &3.
+END-OF-DEFINITION.
+
+DEFINE ADDMENUITEM.
+    CALL METHOD OF H_GUI 'AddMenuItem' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2
+                           #3 = &3
+                           #4 = &4
+                           #5 = &5
+                           #6 = &6.
+END-OF-DEFINITION.
+
+DEFINE ADDBUTTON.
+    CALL METHOD OF H_GUI 'AddBitmapButton' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2
+                           #3 = &3
+                           #4 = &4
+                           #5 = &5
+                           #6 = &6
+                           #7 = &7.
+END-OF-DEFINITION.
+
+DEFINE CREATEWINDOW.
+    CALL METHOD OF H_GUI 'CreateWindow' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2
+                           #3 = &3
+                           #4 = &4
+                           #5 = &5
+                           #6 = &6
+                           #7 = &7
+                           #8 = &8
+                           #9 = &9.
+
+    CALL METHOD OF H_GUI 'LinkControl' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = SY-REPID
+                           #3 = SY-DYNNR.
+
+END-OF-DEFINITION.
+
+DEFINE GETWINDOW.
+    CALL METHOD OF H_GUI 'GetWindow' = &3
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2.
+END-OF-DEFINITION.
+
+DEFINE SHOWWINDOW.
+    CALL METHOD OF H_GUI 'ShowWindow' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2.
+END-OF-DEFINITION.
+
+DEFINE SETPROPERTY.
+    CALL METHOD OF H_GUI 'SetProperty' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2
+                           #3 = &3.
+END-OF-DEFINITION.
+
+DEFINE GETPROPERTY.
+    CALL METHOD OF H_GUI 'GetProperty' = &3
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2.
+END-OF-DEFINITION.
+
+DEFINE DESTROYWINDOW.
+    CALL METHOD OF H_GUI 'DestroyWindow' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1.
+END-OF-DEFINITION.
+
+DEFINE CHECKMENUITEM.
+    CALL METHOD OF H_GUI 'CheckMenuItem' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2
+                           #3 = &3
+                           #4 = &4.
+END-OF-DEFINITION.
+
+DEFINE ENABLEMENUITEM.
+    CALL METHOD OF H_GUI 'EnableMenuItem' = RC
+                 NO FLUSH
+                 EXPORTING #1 = &1
+                           #2 = &2
+                           #3 = &3
+                           #4 = &4.
+END-OF-DEFINITION.
+
+DEFINE FLUSH.
+    CALL METHOD OF H_GUI 'Flush' = RC.
+END-OF-DEFINITION.
+
+DEFINE APPENDCONTROL.
+  CONTROL-STATIC-TYPE     = &1.
+  CONTROL-STATIC-XPOS     = &2.
+  CONTROL-STATIC-YPOS     = &3.
+  CONTROL-STATIC-XWID     = &4.
+  CONTROL-STATIC-YWID     = &5.
+  CONTROL-STATIC-STYLE    = &6.
+  CONTROL-NAME            = &7.
+  CONTROL-HANDLE          = &8.
+
+  APPEND CONTROL TO VIEW-CONTROLS.
+
+  LOOP AT STRUCWIND-VIEWS INTO VW00.
+    IF VW00-NAME = VIEW-NAME.
+      MODIFY STRUCWIND-VIEWS FROM VIEW.
+      EXIT.
+    ENDIF.
+  ENDLOOP.
+END-OF-DEFINITION.
+
+DEFINE APPENDTOVIEW.
+  DESIGN_VIEW-ID = &1.
+  DESIGN_VIEW-NAME = &2.
+
+  APPEND DESIGN_VIEW.
+END-OF-DEFINITION.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

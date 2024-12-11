@@ -1,0 +1,16 @@
+***INCLUDE RSUSRCOM .
+*
+* common part for reports rsm04000 and rsm51000
+
+TABLES: UINFO.
+* TABLES: USRINFO
+
+* old (deprecated) UINFO structure
+DATA: BEGIN OF COMMON PART USR.
+  DATA: BEGIN OF USR_TABL OCCURS 10.
+          INCLUDE STRUCTURE USRINFO.
+  DATA: END OF USR_TABL.
+DATA: END OF COMMON PART USR.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

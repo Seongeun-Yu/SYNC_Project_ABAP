@@ -1,0 +1,101 @@
+FUNCTION GFW_PRES_SHOW.
+*"----------------------------------------------------------------------
+*"*"Local interface:
+*"  IMPORTING
+*"     VALUE(CONTAINER) TYPE  C OPTIONAL
+*"     VALUE(TOP) TYPE  I OPTIONAL
+*"     VALUE(LEFT) TYPE  I OPTIONAL
+*"     VALUE(HEIGHT) TYPE  I OPTIONAL
+*"     VALUE(WIDTH) TYPE  I OPTIONAL
+*"     VALUE(PRESENTATION_TYPE) TYPE  I
+*"     VALUE(HEADER) TYPE  C OPTIONAL
+*"     VALUE(ORIENTATION) TYPE  I DEFAULT 1
+*"     REFERENCE(PARENT) TYPE  ANY OPTIONAL
+*"     REFERENCE(X_AXIS_TITLE) TYPE  GFWLABEL OPTIONAL
+*"     REFERENCE(Y_AXIS_TITLE) TYPE  GFWLABEL OPTIONAL
+*"     VALUE(FORMAT) TYPE  I OPTIONAL
+*"  EXPORTING
+*"     VALUE(RETVAL) TYPE  SYMSGNO
+*"     VALUE(CONTENT_TYPE) TYPE  CHAR120
+*"     VALUE(CONTENT_LENGTH) TYPE  I
+*"  TABLES
+*"      VALUES STRUCTURE  GPRVAL
+*"      COLUMN_TEXTS STRUCTURE  GPRTXT
+*"      ROW_LABELS STRUCTURE  GPRTXTLA OPTIONAL
+*"      COLUMN_LABELS STRUCTURE  GPRTXTLA OPTIONAL
+*"      CONTENT STRUCTURE  W3MIME OPTIONAL
+*"  EXCEPTIONS
+*"      ERROR_OCCURRED
+*"----------------------------------------------------------------------
+
+  if content is requested.
+    CALL FUNCTION 'GFW_PRES_SHOW_MULT'
+       EXPORTING
+           PARENT            = PARENT
+           CONTAINER         = CONTAINER
+           TOP               = TOP
+           LEFT              = LEFT
+           WIDTH             = WIDTH
+           HEIGHT            = HEIGHT
+           PRESENTATION_TYPE = PRESENTATION_TYPE
+           HEADER            = HEADER
+           ORIENTATION       = ORIENTATION
+           X_AXIS_TITLE      = X_AXIS_TITLE
+           Y_AXIS_TITLE      = Y_AXIS_TITLE
+           FORMAT            = FORMAT
+           SHOW              = GFW_TRUE
+     IMPORTING
+           RETVAL            = LOCAL_RETVAL
+           CONTENT_TYPE      = CONTENT_TYPE
+           CONTENT_LENGTH    = CONTENT_LENGTH
+     TABLES
+           VALUES            = VALUES
+           COLUMN_TEXTS      = COLUMN_TEXTS
+           ROW_LABELS        = ROW_LABELS
+           COLUMN_LABELS     = COLUMN_LABELS
+           CONTENT           = CONTENT
+     EXCEPTIONS
+           ERROR_OCCURRED    = 1
+           OTHERS            = 2
+    .
+  else.
+    CALL FUNCTION 'GFW_PRES_SHOW_MULT'
+       EXPORTING
+           PARENT            = PARENT
+           CONTAINER         = CONTAINER
+           TOP               = TOP
+           LEFT              = LEFT
+           WIDTH             = WIDTH
+           HEIGHT            = HEIGHT
+           PRESENTATION_TYPE = PRESENTATION_TYPE
+           HEADER            = HEADER
+           ORIENTATION       = ORIENTATION
+           X_AXIS_TITLE      = X_AXIS_TITLE
+           Y_AXIS_TITLE      = Y_AXIS_TITLE
+           SHOW              = GFW_TRUE
+     IMPORTING
+           RETVAL            = LOCAL_RETVAL
+     TABLES
+           VALUES            = VALUES
+           COLUMN_TEXTS      = COLUMN_TEXTS
+           ROW_LABELS        = ROW_LABELS
+           COLUMN_LABELS     = COLUMN_LABELS
+     EXCEPTIONS
+           ERROR_OCCURRED    = 1
+           OTHERS            = 2
+    .
+  endif.
+  IF SY-SUBRC <> 0.
+    IF RETVAL IS REQUESTED.
+      RETVAL = LOCAL_RETVAL.
+    ENDIF.
+    RAISE ERROR_OCCURRED.
+  ELSE.
+    IF RETVAL IS REQUESTED.
+      RETVAL = LOCAL_RETVAL.
+    ENDIF.
+  ENDIF.
+ENDFUNCTION.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

@@ -1,0 +1,203 @@
+function f4_date_control.
+*"----------------------------------------------------------------------
+*"*"Lokale Schnittstelle:
+*"  IMPORTING
+*"     VALUE(DATE_FOR_FIRST_MONTH) LIKE  WORKFLDS-GKDAY DEFAULT
+*"       SY-DATUM
+*"     VALUE(DISPLAY) LIKE  WORKFLDS-DISPL DEFAULT SPACE
+*"     VALUE(FACTORY_CALENDAR_ID) LIKE  WORKFLDS-CALID DEFAULT SPACE
+*"     VALUE(GREGORIAN_CALENDAR_FLAG) DEFAULT SPACE
+*"     VALUE(HOLIDAY_CALENDAR_ID) LIKE  WORKFLDS-HIDENT DEFAULT SPACE
+*"     VALUE(HOLIDAY_STYLE) TYPE  I DEFAULT '6'
+*"     VALUE(PROGNAME_FOR_FIRST_MONTH) LIKE  SY-REPID DEFAULT SPACE
+*"     VALUE(WEEK_BEGIN_DAY) LIKE  T246-WOTNR DEFAULT 1
+*"     VALUE(SELECT_OPTION_WEEK) LIKE  WORKFLDS-DISPL DEFAULT SPACE
+*"     VALUE(SELECT_OPTION_MONTH) LIKE  WORKFLDS-DISPL DEFAULT SPACE
+*"     VALUE(DATE_POSITION) TYPE  CHAR1 DEFAULT SPACE
+*"  EXPORTING
+*"     VALUE(SELECT_DATE) LIKE  WORKFLDS-GKDAY
+*"     VALUE(SELECT_WEEK) LIKE  SCAL-WEEK
+*"     VALUE(SELECT_BEGIN) LIKE  SY-DATUM
+*"     VALUE(SELECT_END) LIKE  SY-DATUM
+*"     VALUE(SELECT_MONTH) LIKE  SCAL-WEEK
+*"  EXCEPTIONS
+*"      CALENDAR_BUFFER_NOT_LOADABLE
+*"      DATE_AFTER_RANGE
+*"      DATE_BEFORE_RANGE
+*"      DATE_INVALID
+*"      FACTORY_CALENDAR_NOT_FOUND
+*"      HOLIDAY_CALENDAR_NOT_FOUND
+*"      PARAMETER_CONFLICT
+*"----------------------------------------------------------------------
+  data: l_rcode like sy-subrc.
+
+*----------------------------------------------------------------------
+* Initialization
+*----------------------------------------------------------------------
+  perform init_global_data.
+
+*----------------------------------------------------------------------
+* Check parameter
+*----------------------------------------------------------------------
+  if  not factory_calendar_id is initial
+  and not holiday_calendar_id is initial.
+    message e705 raising parameter_conflict.
+* Interner Fehler: Parameterkonflikt aufgetreten, Aufrufstelle
+*überprüfen
+  endif.
+
+*----------------------------------------------------------------------
+* set global data
+*----------------------------------------------------------------------
+  g_mode = display.
+
+* get and check focus date
+  if not progname_for_first_month is initial.
+    perform get_date_from_screen using progname_for_first_month
+                                       g_date.
+    if g_date = space or g_date is initial.
+      g_date = sy-datlo.
+    endif.
+  else.
+    if date_for_first_month is initial.
+      g_date = sy-datlo.
+    else.
+      g_date = date_for_first_month.
+    endif.
+  endif.
+
+  perform date_check_plausibility changing g_date.
+
+* get and check calendar
+  if gregorian_calendar_flag = space.
+    if not factory_calendar_id is initial.
+      g_cal_id  = factory_calendar_id.
+      g_cal_art = 'F'.
+
+    elseif not holiday_calendar_id is initial.
+      g_cal_id  = holiday_calendar_id.
+      g_cal_art = 'H'.
+    else.
+      g_cal_art = ' '.
+    endif.
+  endif.
+
+  perform get_calendar_info using    g_cal_art
+                                     g_cal_id
+                            changing g_vjahr
+                                     g_bjahr.
+
+* is date in calendar interval
+  if not g_cal_art is initial.
+    perform date_check_calendar using     g_date
+                                          g_cal_art
+                                          g_cal_id
+                                 changing l_rcode.
+    if l_rcode ne 0.
+      perform set_exception using l_rcode
+                                  g_cal_art
+                                  g_cal_id.
+      exit.
+    endif.
+  endif.
+
+* set style
+  if select_option_week <> space and
+     select_option_month <> space.
+    g_select_option = cnca_sel_day + cnca_sel_week + cnca_sel_month.
+  elseif select_option_month <> space.
+    g_select_option = cnca_sel_day + cnca_sel_month.
+  elseif select_option_week <> space.
+    g_select_option = cnca_sel_day + cnca_sel_week.
+  else.
+    g_select_option = cnca_sel_day.
+  endif.
+* set date position - note 2015759
+  if date_position = 'T'.
+    g_select_option = g_select_option + cnca_sel_date_at_begin.
+  elseif date_position = 'B'.
+    g_select_option = g_select_option + cnca_sel_date_at_end.
+  endif.
+
+* set holiday style
+  if holiday_style is initial.
+    g_holiday_style = cnca_color_6.
+  elseif holiday_style = cnca_color_weekend or
+         ( holiday_style between cnca_color_1 and cnca_color_8 ).
+    g_holiday_style = holiday_style.
+  else.
+    g_holiday_style = cnca_color_6.
+  endif.
+
+* set week begin day
+  g_week_day = week_begin_day.
+
+*----------------------------------------------------------------------
+* display calendar control
+*----------------------------------------------------------------------
+  call screen 100 starting at 20 05.
+
+*----------------------------------------------------------------------
+* set output parameter
+*----------------------------------------------------------------------
+  case g_ok_code.
+
+*   cancel
+    when 'BACK'.
+
+    when 'PICK'.
+      g_ed_date_begin = g_my_focus_date.
+      g_ed_date_end   = g_my_focus_date.
+      select_date = g_ed_date_begin.
+
+*   date selected
+    when others.
+      select_date = g_ed_date_begin.
+
+      if g_ed_date_begin <> g_ed_date_end.
+
+        select_begin = g_ed_date_begin.
+        select_end   = g_ed_date_end.
+
+        perform get_select_week using    select_begin
+                                changing select_week.
+
+        perform get_select_month using    select_begin
+                                 changing select_month.
+      endif.
+  endcase.
+* clear okcode
+  clear g_ok_code.
+
+* free control
+  clear g_b_init.
+  if not g_my_navigator is initial.
+    call method g_my_navigator->free
+        exceptions
+             others    = 1.
+    free g_my_navigator.
+
+    if not g_container is initial.
+      call method g_container->free
+           exceptions
+                others    = 1.
+      free g_container.
+    endif.
+  endif.
+  call method cl_gui_cfw=>flush.
+
+endfunction.
+
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: FK
+*705   Internal error: Parameter confict, check call
+*883   Factory calendar read error
+*884   Date is outside the factory calendar range
+*885   Specify a valid date
+*886   The factory calendar & not found
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

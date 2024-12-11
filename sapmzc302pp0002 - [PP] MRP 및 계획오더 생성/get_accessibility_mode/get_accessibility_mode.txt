@@ -1,0 +1,77 @@
+FUNCTION GET_ACCESSIBILITY_MODE.
+*"----------------------------------------------------------------------
+*"*"Lokale Schnittstelle:
+*"  EXPORTING
+*"     VALUE(ACCESSIBILITY) TYPE  ABAP_BOOL
+*"  EXCEPTIONS
+*"      ITS_NOT_AVAILABLE
+*"----------------------------------------------------------------------
+
+  DATA: SUPPORT_BIT TYPE I, SAVE_FLAG TYPE C.
+
+  ACCESSIBILITY = ABAP_FALSE.
+  GET PARAMETER ID 'ACCESSIBILITY_MODE' FIELD SAVE_FLAG.
+  IF SY-SUBRC <> 0.
+
+*   Ask for Supportbit
+    CALL 'C_GUI_SUPPORT'
+         ID 'FEATURE' FIELD 'ACCESSIBILITY'
+         ID 'VALUE' FIELD SUPPORT_BIT.
+
+    IF SUPPORT_BIT = 1.
+       ACCESSIBILITY = ABAP_TRUE.
+    ENDIF.
+
+    SET PARAMETER ID 'ACCESSIBILITY_MODE' FIELD ACCESSIBILITY.
+
+  ELSE.
+    ACCESSIBILITY = SAVE_FLAG.
+  ENDIF.
+
+ENDFUNCTION.
+
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: DS
+*605   Incorrect entry
+*
+* Message class: FES
+*000   The file does not exist
+*001   Error reading file
+*002   Cannot perform frontend function in batch input mode
+*003   Wrong frontend or error at frontend
+*004   Wrong value of the parameter FILETYPE
+*005   No authorization
+*006   Unknown error
+*007   Cannot interpret data in file
+*008   Header not allowed
+*009   Separator not allowed
+*010   The header information must be no more than 1023 bytes
+*011   Error calling Data Provider
+*012   Access to file denied
+*013   Not enough memory for Data Provider
+*014   No space on the storage medium
+*015   Data Provider timed out
+*016   Error writing file
+*017   The file size entered is not valid
+*018   Cannot create the Data Provider
+*019   Error sending data in the Data Provider
+*020   Error writing data in the Data Provider
+*021   General exception in the Data Provider
+*022   Error in Control Framework
+*023   Incorrect parameter when initializing codepage converter
+*024   General error when initializing code page converter
+*025   Could not ascertain code page
+*026   Error in code page conversion
+*027   File &1 already exists
+*029   Code page passed does not match byte order mark
+*030   Byte order mark is missing
+*031   Could not determine code page
+*
+* Message class: PC
+*013   You have no authorization to export the object
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

@@ -1,0 +1,964 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=EUC-KR" />
+<title>Dictionary object- THOCI</title>
+<style type="text/css">
+  th{text-align:left}
+  .cell{
+     font-family:"Courier New", Courier, monospace;
+     color:#000;
+     font-size:12px;
+     background-color:#F2F4F7;
+  }
+  .cell td { border: thin solid #ccc; }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Table: THOCI</h2>
+  <h3>Description: Public holiday calendar index</h3></td>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Row</th>
+  <th>Field name</th>
+  <th>Position</th>
+  <th>Key</th>
+  <th>Data element</th>
+  <th>Domain</th>
+  <th>Datatype</th>
+  <th>Length</th>
+  <th>Lowercase</th>
+  <th>Domain text</th>
+</tr>
+<tr class="cell">
+  <td> 1</td>
+  <td>GKDAY</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>GKDAY</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Gregorian Calendar Day</td>
+</tr>
+<tr class="cell">
+  <td> 2</td>
+  <td>FKDAY</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>CAL_FKDAY</td>
+  <td>CAL_FKDAY</td>
+  <td>DEC</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Factory calendar day</td>
+</tr>
+<tr class="cell">
+  <td> 3</td>
+  <td>FWEEK</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>CAL_FWEEK</td>
+  <td>CAL_FWEEK</td>
+  <td>ACCP</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Week work field</td>
+</tr>
+<tr class="cell">
+  <td> 4</td>
+  <td>WOTAG</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>WOTAG</td>
+  <td>HFCAL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Factory calendar: Day</td>
+</tr>
+<tr class="cell">
+  <td> 5</td>
+  <td>WORKI</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>CAL_WORKI</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Working day flag</td>
+</tr>
+<tr class="cell">
+  <td> 6</td>
+  <td>PRPER</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>CAL_PRPER</td>
+  <td>CAL_PRPER</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Forecast period</td>
+</tr>
+<tr class="cell">
+  <td> 7</td>
+  <td>PRANF</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>GKDAY</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Gregorian Calendar Day</td>
+</tr>
+<tr class="cell">
+  <td> 8</td>
+  <td>PREND</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>GKDAY</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Gregorian Calendar Day</td>
+</tr>
+<tr class="cell">
+  <td> 9</td>
+  <td>ANZFD</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>CAL_ANZFD</td>
+  <td>CAL_FKDAY</td>
+  <td>DEC</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Number of working days per period</td>
+</tr>
+<tr class="cell">
+  <td>10</td>
+  <td>DAY01</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>CHAR2</td>
+  <td>CHAR2</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Component of the Version Number</td>
+</tr>
+<tr class="cell">
+  <td>11</td>
+  <td>DAY02</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>CHAR2</td>
+  <td>CHAR2</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Component of the Version Number</td>
+</tr>
+<tr class="cell">
+  <td>12</td>
+  <td>DAY03</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>CHAR2</td>
+  <td>CHAR2</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Component of the Version Number</td>
+</tr>
+<tr class="cell">
+  <td>13</td>
+  <td>DAY04</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>CHAR2</td>
+  <td>CHAR2</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Component of the Version Number</td>
+</tr>
+<tr class="cell">
+  <td>14</td>
+  <td>DAY05</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>CHAR2</td>
+  <td>CHAR2</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Component of the Version Number</td>
+</tr>
+<tr class="cell">
+  <td>15</td>
+  <td>DAY06</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>CHAR2</td>
+  <td>CHAR2</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Component of the Version Number</td>
+</tr>
+<tr class="cell">
+  <td>16</td>
+  <td>DAY07</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>CHAR2</td>
+  <td>CHAR2</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Component of the Version Number</td>
+</tr>
+<tr class="cell">
+  <td>17</td>
+  <td>WEEKN</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>CHAR2</td>
+  <td>CHAR2</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Component of the Version Number</td>
+</tr>
+<tr class="cell">
+  <td>18</td>
+  <td>MONTH</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>NUM2</td>
+  <td>NUM2</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Numeric, 2-digit value</td>
+</tr>
+<tr class="cell">
+  <td>19</td>
+  <td>YEARN</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>CYEAR</td>
+  <td>GJAHR</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Holiday and factory calendar function module year</td>
+</tr>
+<tr class="cell">
+  <td>20</td>
+  <td>MOTXT</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>FCLTX</td>
+  <td>TEXT10</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>X</td>
+  <td>Month long text</td>
+</tr>
+<tr class="cell">
+  <td>21</td>
+  <td>XCODE</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>FCODE</td>
+  <td>FCODE</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>Function code</td>
+</tr>
+<tr class="cell">
+  <td>22</td>
+  <td>DTXT1</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>KURZT</td>
+  <td>TEXT2</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>X</td>
+  <td>Calendar: Day Short Text</td>
+</tr>
+<tr class="cell">
+  <td>23</td>
+  <td>DTXT2</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>KURZT</td>
+  <td>TEXT2</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>X</td>
+  <td>Calendar: Day Short Text</td>
+</tr>
+<tr class="cell">
+  <td>24</td>
+  <td>DTXT3</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>KURZT</td>
+  <td>TEXT2</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>X</td>
+  <td>Calendar: Day Short Text</td>
+</tr>
+<tr class="cell">
+  <td>25</td>
+  <td>DTXT4</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>KURZT</td>
+  <td>TEXT2</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>X</td>
+  <td>Calendar: Day Short Text</td>
+</tr>
+<tr class="cell">
+  <td>26</td>
+  <td>DTXT5</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>KURZT</td>
+  <td>TEXT2</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>X</td>
+  <td>Calendar: Day Short Text</td>
+</tr>
+<tr class="cell">
+  <td>27</td>
+  <td>DTXT6</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>KURZT</td>
+  <td>TEXT2</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>X</td>
+  <td>Calendar: Day Short Text</td>
+</tr>
+<tr class="cell">
+  <td>28</td>
+  <td>DTXT7</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>KURZT</td>
+  <td>TEXT2</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>X</td>
+  <td>Calendar: Day Short Text</td>
+</tr>
+<tr class="cell">
+  <td>29</td>
+  <td>FCALID</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>WFCID</td>
+  <td>WFCID</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Factory Calendar</td>
+</tr>
+<tr class="cell">
+  <td>30</td>
+  <td>HCALID</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>HIDENT</td>
+  <td>HIDENT</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Public Holiday Calendar</td>
+</tr>
+<tr class="cell">
+  <td>31</td>
+  <td>YEAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>CYEAR</td>
+  <td>GJAHR</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Holiday and factory calendar function module year</td>
+</tr>
+<tr class="cell">
+  <td>32</td>
+  <td>DATE</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>SCDATUM</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Date for public holiday and factory calendars</td>
+</tr>
+<tr class="cell">
+  <td>33</td>
+  <td>JULDATE</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>CJULDATE</td>
+  <td>CHAR6</td>
+  <td>CHAR</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Julian date for holiday and factory calendar FM</td>
+</tr>
+<tr class="cell">
+  <td>34</td>
+  <td>WEEK</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>KWEEK</td>
+  <td>KWEEK</td>
+  <td>ACCP</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Factory calendar: Week</td>
+</tr>
+<tr class="cell">
+  <td>35</td>
+  <td>FACDATE</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>FACDATE</td>
+  <td>HFDATE</td>
+  <td>DEC</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Factory calendar: Factory date</td>
+</tr>
+<tr class="cell">
+  <td>36</td>
+  <td>FACIDATE</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>FACIDATE</td>
+  <td>&nbsp;</td>
+  <td>INT4</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Integer Field for Passing Factory Calendar Date to FM</td>
+</tr>
+<tr class="cell">
+  <td>37</td>
+  <td>INDICATOR</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>CIND</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Fatory calendar flag</td>
+</tr>
+<tr class="cell">
+  <td>38</td>
+  <td>SPRSL</td>
+  <td>1</td>
+  <td>X</td>
+  <td>SPRAS</td>
+  <td>SPRAS</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Language Key</td>
+</tr>
+<tr class="cell">
+  <td>39</td>
+  <td>WOTNR</td>
+  <td>2</td>
+  <td>X</td>
+  <td>WOTNR</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Calendar: Number of day</td>
+</tr>
+<tr class="cell">
+  <td>40</td>
+  <td>KURZT</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>KURZT</td>
+  <td>TEXT2</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>X</td>
+  <td>Calendar: Day Short Text</td>
+</tr>
+<tr class="cell">
+  <td>41</td>
+  <td>LANGT</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>LANGT</td>
+  <td>TEXT20</td>
+  <td>CHAR</td>
+  <td>20</td>
+  <td>X</td>
+  <td>Day</td>
+</tr>
+<tr class="cell">
+  <td>42</td>
+  <td>SPRAS</td>
+  <td>1</td>
+  <td>X</td>
+  <td>SPRAS</td>
+  <td>SPRAS</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Language Key</td>
+</tr>
+<tr class="cell">
+  <td>43</td>
+  <td>MNR</td>
+  <td>2</td>
+  <td>X</td>
+  <td>FCMNR</td>
+  <td>NUM2</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Month number</td>
+</tr>
+<tr class="cell">
+  <td>44</td>
+  <td>KTX</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>FCKTX</td>
+  <td>CHAR3</td>
+  <td>CHAR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>Month short text</td>
+</tr>
+<tr class="cell">
+  <td>45</td>
+  <td>LTX</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>FCLTX</td>
+  <td>TEXT10</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>X</td>
+  <td>Month long text</td>
+</tr>
+<tr class="cell">
+  <td>46</td>
+  <td>IDENT</td>
+  <td>1</td>
+  <td>X</td>
+  <td>WFCID</td>
+  <td>WFCID</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Factory Calendar</td>
+</tr>
+<tr class="cell">
+  <td>47</td>
+  <td>VJAHR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>VJAHR</td>
+  <td>GJAHR</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Year from which data is stored</td>
+</tr>
+<tr class="cell">
+  <td>48</td>
+  <td>BJAHR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>BJAHR</td>
+  <td>GJAHR</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Year until which data is saved</td>
+</tr>
+<tr class="cell">
+  <td>49</td>
+  <td>MOTAG</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>KBIT</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Bit for workday</td>
+</tr>
+<tr class="cell">
+  <td>50</td>
+  <td>DITAG</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>KBIT</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Bit for workday</td>
+</tr>
+<tr class="cell">
+  <td>51</td>
+  <td>MIWCH</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>KBIT</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Bit for workday</td>
+</tr>
+<tr class="cell">
+  <td>52</td>
+  <td>DOTAG</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>KBIT</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Bit for workday</td>
+</tr>
+<tr class="cell">
+  <td>53</td>
+  <td>FRTAG</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>KBIT</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Bit for workday</td>
+</tr>
+<tr class="cell">
+  <td>54</td>
+  <td>SATAG</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>KBIT</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Bit for workday</td>
+</tr>
+<tr class="cell">
+  <td>55</td>
+  <td>SOTAG</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>KBIT</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Bit for workday</td>
+</tr>
+<tr class="cell">
+  <td>56</td>
+  <td>FETAG</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>KBIT</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Bit for workday</td>
+</tr>
+<tr class="cell">
+  <td>57</td>
+  <td>HOCID</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>HIDENT</td>
+  <td>HIDENT</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Public Holiday Calendar</td>
+</tr>
+<tr class="cell">
+  <td>58</td>
+  <td>BASIS</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>KFTAG</td>
+  <td>NUM05</td>
+  <td>NUMC</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>Start of factory calendar day numbering</td>
+</tr>
+<tr class="cell">
+  <td>59</td>
+  <td>ABBR</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>KABBR</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Calendar: Termination flag</td>
+</tr>
+<tr class="cell">
+  <td>60</td>
+  <td>CRUSR</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>KUSER</td>
+  <td>USERNAME</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Calendar: Calendar creator/changer</td>
+</tr>
+<tr class="cell">
+  <td>61</td>
+  <td>CRDAT</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>FABDAT</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Date</td>
+</tr>
+<tr class="cell">
+  <td>62</td>
+  <td>CRTIME</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>CRTIME</td>
+  <td>UZEIT</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Calendar: Creation or change time</td>
+</tr>
+<tr class="cell">
+  <td>63</td>
+  <td>INTERV</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>KABBR</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Calendar: Termination flag</td>
+</tr>
+<tr class="cell">
+  <td>64</td>
+  <td>AKTVJAHR</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>AKTVJAHR</td>
+  <td>GJAHR</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Year, from which calendar is in buffer</td>
+</tr>
+<tr class="cell">
+  <td>65</td>
+  <td>AKTBJAHR</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>AKTBJAHR</td>
+  <td>GJAHR</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Year, until which calendar is in buffer</td>
+</tr>
+<tr class="cell">
+  <td>66</td>
+  <td>IDENT</td>
+  <td>1</td>
+  <td>X</td>
+  <td>HIDENT</td>
+  <td>HIDENT</td>
+  <td>CHAR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>Public Holiday Calendar</td>
+</tr>
+<tr class="cell">
+  <td>67</td>
+  <td>VJAHR</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>VJAHR</td>
+  <td>GJAHR</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Year from which data is stored</td>
+</tr>
+<tr class="cell">
+  <td>68</td>
+  <td>BJAHR</td>
+  <td>3</td>
+  <td>&nbsp;</td>
+  <td>BJAHR</td>
+  <td>GJAHR</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Year until which data is saved</td>
+</tr>
+<tr class="cell">
+  <td>69</td>
+  <td>ABBR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>KABBR</td>
+  <td>CHAR1</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Calendar: Termination flag</td>
+</tr>
+<tr class="cell">
+  <td>70</td>
+  <td>CRUSR</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>KUSER</td>
+  <td>USERNAME</td>
+  <td>CHAR</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>Calendar: Calendar creator/changer</td>
+</tr>
+<tr class="cell">
+  <td>71</td>
+  <td>CRDAT</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>FABDAT</td>
+  <td>DATUM</td>
+  <td>DATS</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>Date</td>
+</tr>
+<tr class="cell">
+  <td>72</td>
+  <td>CRTIME</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>CRTIME</td>
+  <td>UZEIT</td>
+  <td>TIMS</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Calendar: Creation or change time</td>
+</tr>
+<tr class="cell">
+  <td>73</td>
+  <td>AKTVJAHR</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>AKTVJAHR</td>
+  <td>GJAHR</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Year, from which calendar is in buffer</td>
+</tr>
+<tr class="cell">
+  <td>74</td>
+  <td>AKTBJAHR</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>AKTBJAHR</td>
+  <td>GJAHR</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Year, until which calendar is in buffer</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754</td>
+   </tr>
+</table>
+</body>
+</html>

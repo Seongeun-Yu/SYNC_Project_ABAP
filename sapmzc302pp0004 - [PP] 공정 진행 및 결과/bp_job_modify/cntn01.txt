@@ -1,0 +1,601 @@
+************************************************************************
+* BITTE NEUE INCLUDES <CNTN02>, <CNTL03> benutzen!!!
+************************************************************************
+* Dieses Include führt bei der Nutzung innerhalb eines CLASS-POOLS zu
+* einer Vielzahl von Warnungen. Um dieses zu vermeiden, bitte das oben
+* genannte Include in den lokalen Implementierungsteil einer gloabeln
+* Klasse inkludieren.
+************************************************************************
+
+*************************** Macros *************************************
+* Types
+TYPES:
+  swc_object LIKE obj_record.
+
+* DATA Container
+DEFINE swc_container.
+  DATA BEGIN OF &1 OCCURS 0.
+  INCLUDE STRUCTURE swcont.
+  DATA END OF &1.
+END-OF-DEFINITION.
+
+*************************** Data Declaration ***************************
+DATA BEGIN OF swo_%return.
+INCLUDE STRUCTURE swotreturn.
+DATA END OF swo_%return.
+DATA swo_%objid LIKE swotobjid.
+DATA swo_%verb LIKE swotlv-verb.
+DATA swo_%key_version TYPE as4vers.
+DATA swo_%objkey TYPE swo_typeid.
+DATA swo_%runtime_exception TYPE REF TO cx_swo_runtime_error.
+swc_container swo_%container.
+
+************************* Error Handling   *****************************
+* set system error codes from structure SWOTRETURN
+* P1    Returncode of structure SWOTRETURN
+DEFINE swc_%sys_error_set.
+  IF &1-code NE 0.
+    sy-msgid = &1-workarea.
+    sy-msgno = &1-message.
+    sy-msgty = 'E'.
+    sy-msgv1 = &1-variable1.
+    sy-msgv2 = &1-variable2.
+    sy-msgv3 = &1-variable3.
+    sy-msgv4 = &1-variable4.
+  ENDIF.
+  sy-subrc = &1-code.
+END-OF-DEFINITION.
+
+************************* Container Macros *****************************
+*** for documentation see Online Documentation: Workflow Container
+* Create Container
+DEFINE swc_create_container.
+  CLEAR &1.
+  REFRESH &1.
+END-OF-DEFINITION.
+
+* Release Container
+DEFINE swc_release_container.
+  CLEAR &1.
+  REFRESH &1.
+END-OF-DEFINITION.
+
+* Clear Container
+DEFINE swc_clear_container.
+  REFRESH &1.
+  CLEAR &1.
+END-OF-DEFINITION.
+
+* Container Create Element
+DEFINE swc_create_element.
+  CALL FUNCTION 'SWC_ELEMENT_CREATE'  ##FM_SUBRC_OK
+       EXPORTING
+            element   = &2
+       TABLES
+            container = &1
+       EXCEPTIONS already_exists = 4
+                  OTHERS = 1.
+END-OF-DEFINITION.
+
+* Container Set Element
+DEFINE swc_set_element.
+  CALL FUNCTION 'SWC_ELEMENT_SET' ##FM_SUBRC_OK
+       EXPORTING
+            element       = &2
+            field         = &3
+       TABLES
+            container     = &1
+       EXCEPTIONS OTHERS = 1.
+END-OF-DEFINITION.
+
+* Container Set Table
+DEFINE swc_set_table.
+  CALL FUNCTION 'SWC_TABLE_SET' ##FM_SUBRC_OK
+       EXPORTING
+            element       = &2
+       TABLES
+            container     = &1
+            table         = &3
+       EXCEPTIONS OTHERS = 1.
+END-OF-DEFINITION.
+
+* Container Get Element
+DEFINE swc_get_element.
+  CALL FUNCTION 'SWC_ELEMENT_GET'  ##FM_SUBRC_OK
+       EXPORTING
+            element       = &2
+       IMPORTING
+            field         = &3
+       TABLES
+            container     = &1
+       EXCEPTIONS not_found = 8
+                  is_null   = 4
+                  OTHERS = 1.
+END-OF-DEFINITION.
+
+* Container Get Table
+DEFINE swc_get_table.
+  CALL FUNCTION 'SWC_TABLE_GET'  ##FM_SUBRC_OK
+       EXPORTING
+            element       = &2
+       TABLES
+            container     = &1
+            table         = &3
+       EXCEPTIONS not_found = 8
+                  is_null   = 4
+                  OTHERS = 1.
+END-OF-DEFINITION.
+
+* Container Löschen Element
+DEFINE swc_delete_element.
+  CALL FUNCTION 'SWC_ELEMENT_DELETE'  ##FM_SUBRC_OK
+       EXPORTING
+            element   = &2
+       TABLES
+            container = &1
+       EXCEPTIONS OTHERS = 1.
+END-OF-DEFINITION.
+
+* Kopieren Container1/Element1 -> Container2/Element2
+* Parameters:  P1  Quellcontainer
+*              P2  Quellelement
+*              P3  Zielcontainer
+*              P4  Zielelement
+DEFINE swc_copy_element.
+  CALL FUNCTION 'SWC_ELEMENT_COPY'  ##FM_SUBRC_OK
+       EXPORTING
+            source_element   = &2
+            target_element   = &4
+       TABLES
+            source_container = &1
+            target_container = &3
+       EXCEPTIONS
+            not_found        = 1
+            is_null          = 2
+            OTHERS           = 3.
+END-OF-DEFINITION.
+
+
+*************** Container Object Macros ********************************
+
+* Create Object Reference, the key has the current version
+* Parameters: P1   Object Reference to be created,  Output
+*             P2   Type of the Object, Input
+*             P3   Key of the Object, Input
+*             P4   Object Location (logical system), Input
+DEFINE swc_create_remote_object.
+  swo_%objid-objtype = &2.
+  swo_%objid-objkey  = &3.
+  swo_%objid-logsys  = &4.
+  &1-header = 'OBJH'.
+  &1-type   = 'SWO '.
+  CALL FUNCTION 'SWO_CREATE'
+       EXPORTING
+            objtype = swo_%objid-objtype
+            objkey  = swo_%objid-objkey
+            logical_system = swo_%objid-logsys
+       IMPORTING
+            object  = &1-handle
+            return  = swo_%return.
+  IF swo_%return-code NE 0.
+    &1-handle = 0.
+  ENDIF.
+  swc_%sys_error_set swo_%return.
+END-OF-DEFINITION.
+
+* Create Object Reference via Dialog RFC destination if available, the key has the current version
+* Parameters: P1   Object Reference to be created,  Output
+*             P2   Type of the Object, Input
+*             P3   Key of the Object, Input
+*             P4   Object Location (logical system), Input
+DEFINE swc_create_remote_dialg_object.
+  swo_%objid-objtype = &2.
+  swo_%objid-objkey  = &3.
+  swo_%objid-logsys  = &4.
+  &1-header          = 'OBJH'.
+  &1-type            = 'SWO '.
+  CALL FUNCTION 'SWO_CREATE'
+       EXPORTING
+            objtype        = swo_%objid-objtype
+            objkey         = swo_%objid-objkey
+            logical_system = swo_%objid-logsys
+            use_dialog_rfc = 'X'
+       IMPORTING
+            object         = &1-handle
+            return         = swo_%return.
+  IF swo_%return-code NE 0.
+    &1-handle = 0.
+  ENDIF.
+  swc_%sys_error_set swo_%return.
+END-OF-DEFINITION.
+
+* Create Object Reference, the version is defined in the key
+* Parameters: P1   Object Reference to be created,  Output
+*             P2   Type of the Object, Input
+*             P3   Key of the Object, Input
+*             P4   Object Location (logical system), Input
+*             P5   'X' <=> Use dialog RFC if possible
+DEFINE swc_create_remote_legacy_obj.
+  swo_%objid-objtype = &2.
+  swo_%objid-objkey  = &3.
+  swo_%objid-logsys  = &4.
+  &1-header          = 'OBJH'.
+  &1-type            = 'SWO '.
+  CALL FUNCTION 'SWO_CREATE'
+       EXPORTING
+            objtype        = swo_%objid-objtype
+            objkey         = swo_%objid-objkey
+            logical_system = swo_%objid-logsys
+            set_current_key_version = abap_false
+            use_dialog_rfc          = &5
+       IMPORTING
+            object         = &1-handle
+            return         = swo_%return.
+  IF swo_%return-code NE 0.
+    &1-handle = 0.
+  ENDIF.
+  swc_%sys_error_set swo_%return.
+END-OF-DEFINITION.
+
+* Create Object Reference, the version is defined explicitely
+* Parameters: P1   Object Reference to be created,  Output
+*             P2   Type of the Object, Input
+*             P3   Key of the Object, Input
+*             P4   Version of the key
+*             P5   Object Location (logical system), Input
+*             P6   'X' <=> Use dialog RFC if possible
+DEFINE swc_create_remote_obj_w_vers.
+  swo_%objid-objtype    = &2.
+  swo_%objid-objkey     = &3.
+  swo_%objid-logsys     = &5.
+  &1-header             = 'OBJH'.
+  &1-type               = 'SWO '.
+  CALL FUNCTION 'SWO_CREATE'
+       EXPORTING
+            objtype                 = swo_%objid-objtype
+            objkey                  = swo_%objid-objkey
+            logical_system          = swo_%objid-logsys
+            set_current_key_version = abap_false
+            set_key_version         = &4
+            use_dialog_rfc          = &6
+       IMPORTING
+            object         = &1-handle
+            return         = swo_%return.
+  IF swo_%return-code NE 0.
+    &1-handle = 0.
+  ENDIF.
+  swc_%sys_error_set swo_%return.
+END-OF-DEFINITION.
+
+* Create Object Reference, the key is passed as a structure
+* Parameters: P1   Object Reference to be created,  Output
+*             P2   Type of the Object, Input
+*             P3   Key structure of the Object, Input
+*             P4   Version of the key
+*             P5   Object Location (logical system), Input
+*             P6   'X' <=> Use dialog RFC if possible
+DEFINE swc_create_remote_obj_from_key.
+  TRY.
+    cl_swo_key_handling=>get_instance( )->get_object_key(
+      EXPORTING
+        i_logsys      = &5
+        i_object_type = &2
+        i_logical_key = &3
+        i_key_version = &4
+      RECEIVING
+        r_object_key  = swo_%objkey ).
+
+      swo_%objid-objtype    = &2.
+      swo_%objid-objkey     = swo_%objkey.
+      swo_%objid-logsys     = &5.
+      &1-header             = 'OBJH'.
+      &1-type               = 'SWO '.
+      CALL FUNCTION 'SWO_CREATE'
+           EXPORTING
+                objtype                 = swo_%objid-objtype
+                objkey                  = swo_%objid-objkey
+                logical_system          = swo_%objid-logsys
+                set_current_key_version = abap_false
+                set_caller_version      = &4
+                use_dialog_rfc          = &6
+           IMPORTING
+                object         = &1-handle
+                return         = swo_%return.
+      IF swo_%return-code NE 0.
+        &1-handle = 0.
+      ENDIF.
+      swc_%sys_error_set swo_%return.
+
+    CATCH cx_swo_runtime_error INTO swo_%runtime_exception.
+      &1-handle = 0.
+      swo_%return = swo_%runtime_exception->get_system_error( ).
+      swc_%sys_error_set swo_%return.
+  ENDTRY.
+
+END-OF-DEFINITION.
+
+* Create Object Reference, the key has the current version
+* Parameters: P1   Object Reference to be created,  Output
+*             P2   Type of the Object, Input
+*             P3   Key of the Object, Input
+DEFINE swc_create_object.
+
+  swc_create_remote_object &1 &2 &3 space.
+
+END-OF-DEFINITION.
+
+* Create Object Reference, the version is defined in the key
+* Parameters: P1   Object Reference to be created,  Output
+*             P2   Type of the Object, Input
+*             P3   Key of the Object, Input
+DEFINE swc_create_legacy_object.
+
+  swc_create_remote_legacy_obj &1 &2 &3 space space.
+
+END-OF-DEFINITION.
+
+* Create Object Reference, the key is passed as a structure
+* Parameters: P1   Object Reference to be created,  Output
+*             P2   Type of the Object, Input
+*             P3   Key structure of the Object, Input
+DEFINE swc_create_object_from_key.
+
+  swo_%key_version = cl_swo_key_handling=>get_instance( )->get_current_key_version( &2 ).
+
+  swc_create_remote_obj_from_key &1 &2 &3 swo_%key_version space space.
+
+END-OF-DEFINITION.
+
+
+* Free Object Reference
+* Parameters: P1   Object Reference to be freed,  Input
+DEFINE swc_free_object.
+  CALL FUNCTION 'SWO_FREE'
+       EXPORTING
+            object  = &1-handle
+       IMPORTING
+            return  = swo_%return.
+  swc_%sys_error_set swo_%return.
+END-OF-DEFINITION.
+
+* Get Object Type
+* Parameters: P1   Object Reference , Input
+*             P2   Name of the Objecttype, Output
+DEFINE swc_get_object_type.
+  CALL FUNCTION 'SWO_OBJECT_ID_GET'
+       EXPORTING
+            object  = &1-handle
+       IMPORTING
+            return  = swo_%return
+            objid   = swo_%objid.
+  swc_%sys_error_set swo_%return.
+  &2 = swo_%objid-objtype.
+END-OF-DEFINITION.
+
+* Get Object Key
+* Parameters: P1   Object Reference,  Input
+*             P2   Object Key without key version information, Output
+DEFINE swc_get_object_key.
+  CALL FUNCTION 'SWO_OBJECT_ID_GET'
+       EXPORTING
+            object  = &1-handle
+       IMPORTING
+            return  = swo_%return
+            objid   = swo_%objid.
+  swc_%sys_error_set swo_%return.
+  &2 = swo_%objid-objkey.
+END-OF-DEFINITION.
+
+* Get Object Key
+* Parameters: P1   Object Reference,  Input
+*             P2   Object Key with key version information (if available), Output
+DEFINE swc_get_object_key_w_version.
+  CALL FUNCTION 'SWO_OBJECT_ID_GET'
+    EXPORTING
+      object = &1-handle
+      keep_object_version_info = abap_true
+    IMPORTING
+      return = swo_%return
+      objid  = swo_%objid.
+  swc_%sys_error_set swo_%return.
+  &2 = swo_%objid-objkey.
+END-OF-DEFINITION.
+
+* Get Property
+* Parameters: P1   Object Reference,  Input
+*             P2   Attribute Name, Input
+*             P3   Value of the attribute, Output
+DEFINE swc_get_property.
+  swc_create_container swo_%container.
+  CALL FUNCTION 'SWO_INVOKE'
+       EXPORTING
+            access     = 'G'
+            object     = &1-handle
+            verb       = &2
+            persistent = ' '
+       IMPORTING
+            return     = swo_%return
+            verb       = swo_%verb
+       TABLES
+            container  = swo_%container.
+  swc_%sys_error_set swo_%return.
+  IF sy-subrc = 0.
+    swc_get_element swo_%container swo_%verb &3.
+  ENDIF.
+END-OF-DEFINITION.
+
+* Get Table Property
+* Parameters: P1   Object Reference,  Input
+*             P2   Table Attribute Name, Input
+*             P3   Value of the table attribute, Output
+DEFINE swc_get_table_property.
+  swc_create_container swo_%container.
+  CALL FUNCTION 'SWO_INVOKE'
+       EXPORTING
+            access     = 'G'
+            object     = &1-handle
+            verb       = &2
+            persistent = ' '
+       IMPORTING
+            return     = swo_%return
+            verb       = swo_%verb
+       TABLES
+            container  = swo_%container.
+  swc_%sys_error_set swo_%return.
+  IF sy-subrc = 0.
+    swc_get_table swo_%container swo_%verb &3.
+  ENDIF.
+END-OF-DEFINITION.
+
+* Invoke Method
+* Parameters: P1   Object Reference,  Input
+*             P2   Method Name, Input
+*             P3   Container with Import and Export parameters, In/Out
+DEFINE swc_call_method.
+  CALL FUNCTION 'SWO_INVOKE'
+       EXPORTING
+            access     = 'C'
+            object     = &1-handle
+            verb       = &2
+            persistent = ' '
+       IMPORTING
+            return     = swo_%return
+       TABLES
+            container  = &3.
+  swc_%sys_error_set swo_%return.
+END-OF-DEFINITION.
+
+* Invoke Method asynchronously
+* Parameters: P1   Object Reference,  Input
+*             P2   Method Name, Input
+*             P3   Container with Import and Export parameters, In/Out
+DEFINE swc_call_method_async.
+  CALL FUNCTION 'SWO_INVOKE'
+       EXPORTING
+            access     = 'C'
+            object     = &1-handle
+            verb       = &2
+            persistent = ' '
+            synchron   = ' '
+            no_arfc    = 'X'
+       IMPORTING
+            return     = swo_%return
+       TABLES
+            container  = &3.
+  swc_%sys_error_set swo_%return.
+END-OF-DEFINITION.
+
+* Refresh Object Properties
+* Parameters: P1   Object Reference,  Input
+DEFINE swc_refresh_object.
+  CALL FUNCTION 'SWO_OBJECT_REFRESH'
+       EXPORTING
+            object       = &1
+       EXCEPTIONS
+            error_create = 02.
+END-OF-DEFINITION.
+***************** Events ***********************************************
+* Raise Event
+* Parameters: P1   Objectreference, Input
+*             P2   Event Name, Input
+*             P3   Event container with export parameters, Input
+DEFINE swc_raise_event.
+  IF &1-handle > 0.
+    swc_create_container swo_%container.
+    LOOP AT &3.
+      swo_%container = &3.
+      APPEND swo_%container.
+    ENDLOOP.
+*   Make container a persistent
+    CALL FUNCTION 'SWC_CONT_PERSISTENT_CONVERT'
+       EXPORTING
+            from_persistent = ' '
+            to_persistent   = 'X'
+       IMPORTING
+            return          = swo_%return
+       TABLES
+            container       = swo_%container
+       EXCEPTIONS
+            OTHERS          = 1.
+    IF swo_%return-code = 0.
+*     Raise event
+      swc_get_object_type &1 swo_%objid-objtype.
+      swc_get_object_key &1 swo_%objid-objkey.
+      CALL FUNCTION 'SWE_EVENT_CREATE'
+         EXPORTING
+              objtype              = swo_%objid-objtype
+              objkey               = swo_%objid-objkey
+              event                = &2
+         TABLES
+              event_container      = swo_%container
+         EXCEPTIONS
+              objtype_not_found    = 1
+              OTHERS               = 2.
+    ELSE.
+      swc_%sys_error_set swo_%return.
+    ENDIF.
+  ELSE.
+    sy-subrc = 4.
+  ENDIF.
+END-OF-DEFINITION.
+
+************ Converting containers *************************************
+* Convert persistent container to runtime format
+* Parameters: P1   Container, In/Out
+*             P2   from persistent,  In
+*             P3   to persistent,    In
+DEFINE swc_container_convert.
+  CALL FUNCTION 'SWC_CONT_PERSISTENT_CONVERT'
+     EXPORTING
+          from_persistent = &2
+          to_persistent   = &3
+     IMPORTING
+          return          = swo_%return
+     TABLES
+          container       = &1
+     EXCEPTIONS
+          OTHERS          = 1.
+  swc_%sys_error_set swo_%return.
+END-OF-DEFINITION.
+* Convert persistent container to runtime format
+* Parameters: P1   Container, In/Out
+DEFINE swc_container_to_runtime.
+  swc_container_convert &1 'X' ' '.
+END-OF-DEFINITION.
+* Make container persistent
+* Parameters: P1   Container, In/Out
+DEFINE swc_container_to_persistent.
+  swc_container_convert &1 ' ' 'X'.
+END-OF-DEFINITION.
+
+* Convert handle to persistent object reference
+* Parameters:   P1   object handle,   In
+*               P2   persistent object reference (SWOTOBJID),   Out
+DEFINE swc_object_to_persistent.
+  CALL FUNCTION 'SWO_OBJECT_ID_GET'
+       EXPORTING
+            object  = &1-handle
+       IMPORTING
+            return  = swo_%return
+            objid   = swo_%objid.
+  swc_%sys_error_set swo_%return.
+  &2 = swo_%objid.
+END-OF-DEFINITION.
+
+* Convert persistent object reference to runtime handle
+* Parameters:   P1   persistent object reference (SWOTOBJID),   Out
+*               P2   object handle,   In
+DEFINE swc_object_from_persistent.
+  swc_create_legacy_object &2 &1-objtype &1-objkey.
+END-OF-DEFINITION.
+
+* Compress container
+* Parameters:   P   container,     Changing
+DEFINE swc_container_compress.
+  CALL FUNCTION 'SWC_CONT_COMPRESS'
+    TABLES
+      container       = &1.
+END-OF-DEFINITION.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754

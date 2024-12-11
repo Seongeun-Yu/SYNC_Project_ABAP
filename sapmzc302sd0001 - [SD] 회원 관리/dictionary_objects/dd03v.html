@@ -1,0 +1,544 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=EUC-KR" />
+<title>Dictionary object- DD03V</title>
+<style type="text/css">
+  th{text-align:left}
+  .cell{
+     font-family:"Courier New", Courier, monospace;
+     color:#000;
+     font-size:12px;
+     background-color:#F2F4F7;
+  }
+  .cell td { border: thin solid #ccc; }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+  <table class="outerTable">
+    <tr>
+      <td><h2>Table: DD03V</h2>
+  <h3>Description: Table fields view</h3></td>
+    </tr>
+    <tr>
+      <td><!--This is where our main table begins  -->
+<table class="innerTable">
+<tr>
+  <th>Row</th>
+  <th>Field name</th>
+  <th>Position</th>
+  <th>Key</th>
+  <th>Data element</th>
+  <th>Domain</th>
+  <th>Datatype</th>
+  <th>Length</th>
+  <th>Lowercase</th>
+  <th>Domain text</th>
+</tr>
+<tr class="cell">
+  <td> 1</td>
+  <td>TABNAME</td>
+  <td>1</td>
+  <td>X</td>
+  <td>TABNAME</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Table Name</td>
+</tr>
+<tr class="cell">
+  <td> 2</td>
+  <td>FIELDNAME</td>
+  <td>2</td>
+  <td>X</td>
+  <td>FIELDNAME</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Field Name</td>
+</tr>
+<tr class="cell">
+  <td> 3</td>
+  <td>DDLANGUAGE</td>
+  <td>3</td>
+  <td>X</td>
+  <td>DDLANGUAGE</td>
+  <td>SPRAS</td>
+  <td>LANG</td>
+  <td>1</td>
+  <td>X</td>
+  <td>Language Key</td>
+</tr>
+<tr class="cell">
+  <td> 4</td>
+  <td>POSITION</td>
+  <td>4</td>
+  <td>X</td>
+  <td>TABFDPOS</td>
+  <td>AS4POS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Position of the field in the table</td>
+</tr>
+<tr class="cell">
+  <td> 5</td>
+  <td>KEYFLAG</td>
+  <td>5</td>
+  <td>&nbsp;</td>
+  <td>KEYFLAG</td>
+  <td>KEYFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Identifies a key field of a table</td>
+</tr>
+<tr class="cell">
+  <td> 6</td>
+  <td>MANDATORY</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>MANDATORY</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Flag: Field is required (not blank)</td>
+</tr>
+<tr class="cell">
+  <td> 7</td>
+  <td>ROLLNAME</td>
+  <td>7</td>
+  <td>&nbsp;</td>
+  <td>ROLLNAME</td>
+  <td>ROLLNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Data element (semantic domain)</td>
+</tr>
+<tr class="cell">
+  <td> 8</td>
+  <td>CHECKTABLE</td>
+  <td>8</td>
+  <td>&nbsp;</td>
+  <td>CHECKTABLE</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Check table name of the foreign key</td>
+</tr>
+<tr class="cell">
+  <td> 9</td>
+  <td>ADMINFIELD</td>
+  <td>9</td>
+  <td>&nbsp;</td>
+  <td>ADMINFIELD</td>
+  <td>AS4FLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Nesting depth for includes</td>
+</tr>
+<tr class="cell">
+  <td>10</td>
+  <td>INTTYPE</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>INTTYPE</td>
+  <td>INTTYPE</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>X</td>
+  <td>ABAP data type (C,D,N,...)</td>
+</tr>
+<tr class="cell">
+  <td>11</td>
+  <td>INTLEN</td>
+  <td>11</td>
+  <td>&nbsp;</td>
+  <td>INTLEN</td>
+  <td>DDLENG</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Internal Length in Bytes</td>
+</tr>
+<tr class="cell">
+  <td>12</td>
+  <td>REFTABLE</td>
+  <td>12</td>
+  <td>&nbsp;</td>
+  <td>REFTABLE</td>
+  <td>AS4TAB</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Reference Table for Field</td>
+</tr>
+<tr class="cell">
+  <td>13</td>
+  <td>PRECFIELD</td>
+  <td>13</td>
+  <td>&nbsp;</td>
+  <td>PRECFIELD</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Name of included table</td>
+</tr>
+<tr class="cell">
+  <td>14</td>
+  <td>REFFIELD</td>
+  <td>14</td>
+  <td>&nbsp;</td>
+  <td>REFFIELD</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Reference Field for Currency and Quantity Fields</td>
+</tr>
+<tr class="cell">
+  <td>15</td>
+  <td>CONROUT</td>
+  <td>15</td>
+  <td>&nbsp;</td>
+  <td>CONROUT</td>
+  <td>CHAR10</td>
+  <td>CHAR</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Check or generating module for fields</td>
+</tr>
+<tr class="cell">
+  <td>16</td>
+  <td>NOTNULL</td>
+  <td>16</td>
+  <td>&nbsp;</td>
+  <td>NOTNULL</td>
+  <td>NOTNULL</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Indicator for initial values in database fields</td>
+</tr>
+<tr class="cell">
+  <td>17</td>
+  <td>DATATYPE</td>
+  <td>17</td>
+  <td>&nbsp;</td>
+  <td>DATATYPE_D</td>
+  <td>DATATYPE</td>
+  <td>CHAR</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Data Type in ABAP Dictionary</td>
+</tr>
+<tr class="cell">
+  <td>18</td>
+  <td>LENG</td>
+  <td>18</td>
+  <td>&nbsp;</td>
+  <td>DDLENG</td>
+  <td>DDLENG</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Length (No. of Characters)</td>
+</tr>
+<tr class="cell">
+  <td>19</td>
+  <td>DECIMALS</td>
+  <td>19</td>
+  <td>&nbsp;</td>
+  <td>DECIMALS</td>
+  <td>DDLENG</td>
+  <td>NUMC</td>
+  <td>6</td>
+  <td>&nbsp;</td>
+  <td>Number of Decimal Places</td>
+</tr>
+<tr class="cell">
+  <td>20</td>
+  <td>DDTEXT</td>
+  <td>20</td>
+  <td>&nbsp;</td>
+  <td>DDTEXT</td>
+  <td>DDTEXT</td>
+  <td>CHAR</td>
+  <td>60</td>
+  <td>X</td>
+  <td>Explanatory Short Text</td>
+</tr>
+<tr class="cell">
+  <td>21</td>
+  <td>DOMNAME</td>
+  <td>21</td>
+  <td>&nbsp;</td>
+  <td>DOMNAME</td>
+  <td>DOMNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Domain name</td>
+</tr>
+<tr class="cell">
+  <td>22</td>
+  <td>SHLPORIGIN</td>
+  <td>22</td>
+  <td>&nbsp;</td>
+  <td>SHLPORIGIN</td>
+  <td>SHLPORIGIN</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Origin of an Input Help</td>
+</tr>
+<tr class="cell">
+  <td>23</td>
+  <td>SHLPNAME</td>
+  <td>23</td>
+  <td>&nbsp;</td>
+  <td>SHLPNAME</td>
+  <td>SHLPNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Name of a Search Help</td>
+</tr>
+<tr class="cell">
+  <td>24</td>
+  <td>SHLPFIELD</td>
+  <td>24</td>
+  <td>&nbsp;</td>
+  <td>SHLPFIELD</td>
+  <td>FDNAME</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Name of a search help parameter</td>
+</tr>
+<tr class="cell">
+  <td>25</td>
+  <td>TABLETYPE</td>
+  <td>25</td>
+  <td>&nbsp;</td>
+  <td>DDTABTYPE</td>
+  <td>DDFLAG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Flag if it is a table</td>
+</tr>
+<tr class="cell">
+  <td>26</td>
+  <td>DEPTH</td>
+  <td>26</td>
+  <td>&nbsp;</td>
+  <td>TYPEDEPTH</td>
+  <td>TYPEDEPTH</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>DD: Depth for structured types</td>
+</tr>
+<tr class="cell">
+  <td>27</td>
+  <td>COMPTYPE</td>
+  <td>27</td>
+  <td>&nbsp;</td>
+  <td>COMPTYPE</td>
+  <td>COMPTYPE</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Component Type</td>
+</tr>
+<tr class="cell">
+  <td>28</td>
+  <td>GROUPNAME</td>
+  <td>28</td>
+  <td>&nbsp;</td>
+  <td>DDGROUP</td>
+  <td>DDGROUP</td>
+  <td>CHAR</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>Group name for named includes</td>
+</tr>
+<tr class="cell">
+  <td>29</td>
+  <td>REFTYPE</td>
+  <td>29</td>
+  <td>&nbsp;</td>
+  <td>DDREFTYPE</td>
+  <td>DDREFTYPE</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Type of Object Referenced</td>
+</tr>
+<tr class="cell">
+  <td>30</td>
+  <td>PROXYTYPE</td>
+  <td>30</td>
+  <td>&nbsp;</td>
+  <td>DDPROXYTY</td>
+  <td>DDPROXYTY</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Is a generated proxy object</td>
+</tr>
+<tr class="cell">
+  <td>31</td>
+  <td>LANGUFLAG</td>
+  <td>31</td>
+  <td>&nbsp;</td>
+  <td>DDLANGUFLG</td>
+  <td>DDLANGUFLG</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Indicator for a Language Field</td>
+</tr>
+<tr class="cell">
+  <td>32</td>
+  <td>DBPOSITION</td>
+  <td>32</td>
+  <td>&nbsp;</td>
+  <td>TABFDPOS</td>
+  <td>AS4POS</td>
+  <td>NUMC</td>
+  <td>4</td>
+  <td>&nbsp;</td>
+  <td>Position of the field in the table</td>
+</tr>
+<tr class="cell">
+  <td>33</td>
+  <td>ANONYMOUS</td>
+  <td>33</td>
+  <td>&nbsp;</td>
+  <td>DDANONYM</td>
+  <td>DDANONYM</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Anonymization Indicator (for User Fields)</td>
+</tr>
+<tr class="cell">
+  <td>34</td>
+  <td>OUTPUTSTYLE</td>
+  <td>34</td>
+  <td>&nbsp;</td>
+  <td>OUTPUTSTYLE</td>
+  <td>OUTPUTSTYLE</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>DD: Output Style (Output Style) for Decfloat Types</td>
+</tr>
+<tr class="cell">
+  <td>35</td>
+  <td>AMPMFORMAT</td>
+  <td>35</td>
+  <td>&nbsp;</td>
+  <td>DDAMPMFORMAT</td>
+  <td>DDAMPMFORMAT</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Indicator whether an AM/PM time format is desired</td>
+</tr>
+<tr class="cell">
+  <td>36</td>
+  <td>STREAMORLOC</td>
+  <td>36</td>
+  <td>&nbsp;</td>
+  <td>DDSTRORLOC</td>
+  <td>DDSTRORLOC</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>DD: Indicator whether a stream or locator exists</td>
+</tr>
+<tr class="cell">
+  <td>37</td>
+  <td>STRORLOCPOS</td>
+  <td>37</td>
+  <td>&nbsp;</td>
+  <td>DDSTRORLOCPO</td>
+  <td>DDSTRORLOCPO</td>
+  <td>NUMC</td>
+  <td>2</td>
+  <td>&nbsp;</td>
+  <td>DD: Indicator about level whether a stream/locator exists</td>
+</tr>
+<tr class="cell">
+  <td>38</td>
+  <td>SQL_PASSVALUE</td>
+  <td>38</td>
+  <td>&nbsp;</td>
+  <td>DDSQLPASSVALUE</td>
+  <td>&nbsp;</td>
+  <td>CHAR</td>
+  <td>1</td>
+  <td>&nbsp;</td>
+  <td>Pass value in select instead of variable</td>
+</tr>
+<tr class="cell">
+  <td>39</td>
+  <td>SRS_ID</td>
+  <td>39</td>
+  <td>&nbsp;</td>
+  <td>SRS_ID_NUMC</td>
+  <td>SRS_ID_NUMC</td>
+  <td>NUMC</td>
+  <td>10</td>
+  <td>&nbsp;</td>
+  <td>Spatial Reference System</td>
+</tr>
+      </table>
+     </td>
+   </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.4.6 - E.G.Mellodew. 1998-2024. Sap Release 754</td>
+   </tr>
+</table>
+</body>
+</html>
